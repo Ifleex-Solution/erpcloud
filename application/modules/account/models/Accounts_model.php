@@ -2229,7 +2229,7 @@ public function journal()
 // get old all financial Year
     public function get_old_financialyear(){
        return $oldyear = $this->db->select('id,yearName')
-                       ->from('financial_year')->where('status',1)->order_by('endDate','DESC')->get()->result();
+                       ->from('financial_year')->where('status',0)->order_by('endDate','DESC')->get()->result();
 
     }
 
