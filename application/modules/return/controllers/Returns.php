@@ -108,6 +108,7 @@ class Returns extends MX_Controller {
 
             redirect("invoice_return_details/".$invoice_id);
         }
+       
     }
 
     public function autoapprove($invoice_id){
@@ -126,6 +127,9 @@ class Returns extends MX_Controller {
 
         public function invoice_return_details($return_id = null){
             $invoice_detail = $this->return_model->retrieve_invoice_html_data($return_id);
+
+            
+            $invoice_detail[0]['customer_name'];
             
             $taxfield = $this->db->select('*')
                     ->from('tax_settings')

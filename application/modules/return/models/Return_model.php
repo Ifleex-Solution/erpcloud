@@ -42,6 +42,7 @@ class Return_model extends CI_Model {
         $this->db->join('product_information d', 'd.product_id = e.product_id');
         $this->db->where('c.return_id', $return_id);
         $query = $this->db->get();
+
         if ($query->num_rows() > 0) {
             return $query->result_array();
         }
@@ -118,6 +119,7 @@ class Return_model extends CI_Model {
             $data1 = array(
                 'invoice_details_id'=> $this->occational->generator(15),
                 'invoice_id'        => $dbinv_id,
+                'ret_invoice_id'     => $invoice_id,
                 'product_id'        => $product_id,
                 'quantity'          => -$product_quantity,
                 'rate'              => $product_rate,
@@ -157,77 +159,77 @@ class Return_model extends CI_Model {
         }
         // product return part end
 
-        // new product add part start
+        // // new product add part start
 
-        $prodquantity        = $this->input->post('product_quantity',TRUE);
-        $prodrate            = $this->input->post('product_rate',TRUE);
-        $prodp_id            = $this->input->post('product_id',TRUE);
-        $prodtotal_amount    = $this->input->post('total_price',TRUE);
-        $proddiscount_rate   = $this->input->post('discountvalue',TRUE);
-        $discount_per        = $this->input->post('discount',TRUE);
-        $vat_amnt            = $this->input->post('vatvalue',TRUE);
-        $vat_amnt_pcnt       = $this->input->post('vatpercent',TRUE);
-        $tax_amount          = $this->input->post('tax',TRUE);
-        $invoice_description = $this->input->post('desc',TRUE);
-        $prodserial_n        = $this->input->post('serial_no',TRUE);
-        $paidamount          = $this->input->post('paid_amount',TRUE);
+        // $prodquantity        = $this->input->post('product_quantity',TRUE);
+        // $prodrate            = $this->input->post('product_rate',TRUE);
+        // $prodp_id            = $this->input->post('product_id',TRUE);
+        // $prodtotal_amount    = $this->input->post('total_price',TRUE);
+        // $proddiscount_rate   = $this->input->post('discountvalue',TRUE);
+        // $discount_per        = $this->input->post('discount',TRUE);
+        // $vat_amnt            = $this->input->post('vatvalue',TRUE);
+        // $vat_amnt_pcnt       = $this->input->post('vatpercent',TRUE);
+        // $tax_amount          = $this->input->post('tax',TRUE);
+        // $invoice_description = $this->input->post('desc',TRUE);
+        // $prodserial_n        = $this->input->post('serial_no',TRUE);
+        // $paidamount          = $this->input->post('paid_amount',TRUE);
 
-        for ($i = 0, $n = count($p_id); $i < $n; $i++) {
-            $product_quantity = $prodquantity[$i];
-            $product_rate     = $prodrate[$i];
-            $product_id       = $prodp_id[$i];
-            $serial_no        = (!empty($prodserial_n[$i])?$prodserial_n[$i]:null);
-            $total_price      = $prodtotal_amount[$i];
-            $supplier_rate    = $this->supplier_price($product_id);
-            $disper           = $discount_per[$i];
-            $discount         = $proddiscount_rate[$i];
-            $vatper           = $vat_amnt_pcnt[$i];
-            $vatanmt          = $vat_amnt[$i];
-            $tax              = ($tax_amount?$tax_amount[$i]:0);
-            $description      = (!empty($invoice_description)?$invoice_description[$i]:null);
+        // for ($i = 0, $n = count($p_id); $i < $n; $i++) {
+        //     $product_quantity = $prodquantity[$i];
+        //     $product_rate     = $prodrate[$i];
+        //     $product_id       = $prodp_id[$i];
+        //     $serial_no        = (!empty($prodserial_n[$i])?$prodserial_n[$i]:null);
+        //     $total_price      = $prodtotal_amount[$i];
+        //     $supplier_rate    = $this->supplier_price($product_id);
+        //     $disper           = $discount_per[$i];
+        //     $discount         = $proddiscount_rate[$i];
+        //     $vatper           = $vat_amnt_pcnt[$i];
+        //     $vatanmt          = $vat_amnt[$i];
+        //     $tax              = ($tax_amount?$tax_amount[$i]:0);
+        //     $description      = (!empty($invoice_description)?$invoice_description[$i]:null);
         
-            $data3 = array(
-                'invoice_details_id' => $this->occational->generator(15),
-                'ret_invoice_id'     => $invoice_id,
-                'product_id'         => $product_id,
-                'serial_no'          => '',
-                'batch_id'           => $serial_no,
-                'quantity'           => $product_quantity,
-                'rate'               => $product_rate,
-                'discount'           => $discount,
-                'description'        => $description,
-                'discount_per'       => $disper,
-                'vat_amnt'           => $vatanmt,
-                'vat_amnt_per'       => $vatper,
-                'tax'                => $tax,
-                'paid_amount'        => $paidamount,
-                'due_amount'         => $this->input->post('due_amount',TRUE),
-                'supplier_rate'      => $supplier_rate,
-                'total_price'        => $total_price,
-                'status'             => 1
-            );
-            if (!empty($quantity)) {
-                $this->db->insert('invoice_details', $data3);
-            }
+        //     $data3 = array(
+        //         'invoice_details_id' => $this->occational->generator(15),
+        //         'ret_invoice_id'     => $invoice_id,
+        //         'product_id'         => $product_id,
+        //         'serial_no'          => '',
+        //         'batch_id'           => $serial_no,
+        //         'quantity'           => $product_quantity,
+        //         'rate'               => $product_rate,
+        //         'discount'           => $discount,
+        //         'description'        => $description,
+        //         'discount_per'       => $disper,
+        //         'vat_amnt'           => $vatanmt,
+        //         'vat_amnt_per'       => $vatper,
+        //         'tax'                => $tax,
+        //         'paid_amount'        => $paidamount,
+        //         'due_amount'         => $this->input->post('due_amount',TRUE),
+        //         'supplier_rate'      => $supplier_rate,
+        //         'total_price'        => $total_price,
+        //         'status'             => 1
+        //     );
+        //     if (!empty($quantity)) {
+        //         $this->db->insert('invoice_details', $data3);
+        //     }
 
-        }
+        // }
         // new product add part end
 
         //insert paid amount start
 
         $multipayamount     = $this->input->post('pamount_by_method',TRUE);
         $multipaytype       = $this->input->post('multipaytype',TRUE);
-        $paidamount          = $this->input->post('paid_amount',TRUE);
+       // $paidamount          = $this->input->post('paid_amount',TRUE);
         $predefine_account  = $this->db->select('*')->from('acc_predefine_account')->get()->row();
         $Narration          = "Sales Return Voucher";
         $Comment            = "Sales Return Voucher for customer";
         $reVID              = $predefine_account->salesCode;
 
         $ret_adjust_amnt = array(
-            'returnable_amount'   => $this->input->post('n_total',TRUE),
-            'ret_adjust_amnt'     => $paidamount,
+            // 'returnable_amount'   => $this->input->post('n_total',TRUE),
+           // 'ret_adjust_amnt'     => $paidamount,
         );
-        $this->db->where('invoice_id', $invoice_id)->update('invoice', $ret_adjust_amnt);
+    //    $this->db->where('invoice_id', $invoice_id)->update('invoice', $ret_adjust_amnt);
         
 
         if($multipaytype && $multipayamount){
