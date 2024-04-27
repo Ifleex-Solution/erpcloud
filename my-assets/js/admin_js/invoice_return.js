@@ -410,9 +410,9 @@ $(document).on('click','#add_invoice',function(){
 
     var gtotal=$("#paidAmount").val();
     if (total != gtotal) {
-      toastr.error('Paid Amount Should Equal To Payment Amount')
+    //   toastr.error('Paid Amount Should Equal To Payment Amount')
 
-      return false;
+    //   return false;
     }
   });
 
