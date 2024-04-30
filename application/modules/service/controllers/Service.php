@@ -303,6 +303,7 @@ class Service extends MX_Controller {
             redirect("add_service_invoice");
         }else {
             $invoice_id = $this->service_model->invoice_entry();
+           
             $mailsetting = $this->db->select('*')->from('email_config')->get()->result_array();
 
             $setting_data = $this->db->select('is_autoapprove_v')->from('web_setting')->where('setting_id', 1)->get()->result_array();

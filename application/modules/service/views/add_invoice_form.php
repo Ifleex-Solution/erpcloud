@@ -13,35 +13,33 @@
             <?php echo form_open_multipart('service/service/insert_service_invoice', array('class' => 'form-vertical', 'id' => '', 'name' => '')) ?>
             <div class="panel-body">
                 <div class="row">
-
-                    <div class="col-sm-8" id="payment_from_1">
+                    <div class="col-sm-4" id="payment_from_1">
                         <div class="form-group row">
-                            <label for="customer_name" class="col-sm-2 col-form-label"><?php
+                            <label for="customer_name" class="col-sm-4 col-form-label"><?php
                                 echo display('customer_name').'/'.display('phone');
                                 ?> <i class="text-danger">*</i></label>
-                             
+                         <div class="col-sm-8">
 
-                              <div class="col-sm-2">
-                               
-
-                            <select name="cmbCode" class="form-control" id="cmbCode" required>
+                            <select name="customer_id" class="form-control" id="cmbCode"  required>
                                     <option value="">Select Bank</option>
                                     <?php  foreach($customer_dropdown as $customer) { echo $customer->customer_id; ?>
                                     <option value="<?php echo $customer->customer_id ;?>"><?php echo $customer->customer_name ."|". $customer->customer_mobile;?></option>
 
                                     <?php  }   ?>
                             </select>
-                                    </div>
-                            <?php if($this->permission1->method('add_customer','create')->access()){ ?>
-                            <div class=" col-sm-3">
+                           <!-- // if($this->permission1->method('add_customer','create')->access()) -->
+                            <!-- <div class=" col-sm-3">
                                 <a href="#" class="client-add-btn btn btn-success" aria-hidden="true"
                                     data-toggle="modal" data-target="#cust_info"><i class="ti-plus m-r-2"></i></a>
-                            </div>
-                            <?php } ?>
-                            </div>
-                         
+                            </div> -->
+                       <!-- }   -->
+                            
+                            </div>                      
                         </div>
                     </div>
+                </div>
+                <div class="row">
+
                     <div class="col-sm-4">
                         <div class="form-group row">
                             <label for="employee" class="col-sm-4 col-form-label"><?php
@@ -59,8 +57,9 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-sm-8" id="payment_from_2">
+                </div>
+                <div class="row">
+                    <div class="col-sm-4" id="payment_from_2">
                         <div class="form-group row">
                             <label for="customer_name_others"
                                 class="col-sm-3 col-form-label"><?php echo display('customer_name') ?> <i
@@ -96,10 +95,9 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group row">
+                    <div  class="col-sm-4">
+                        <div class="form-group row" >
                             <label for="date" class="col-sm-4 col-form-label"><?php echo display('hanging_over') ?> <i
                                     class="text-danger">*</i></label>
                             <div class="col-sm-8">
@@ -328,7 +326,7 @@
 
                                     <input type="text" id="pamount_by_method" class="form-control number pay "
                                         name="pamount_by_method[]" value="" onkeyup="changedueamount()"
-                                        placeholder="0" />
+                                        placeholder="0" required />
 
                                 </div>
                             </div>
@@ -362,3 +360,78 @@
     </div>
 
 </div>
+
+
+<script>
+            var MyJSStringVar = "<?php Print($customer_dropdown); ?>";
+            console.log(MyJSStringVar)
+
+    function invoice_serviceList(cName) {
+
+
+    //         var priceClass = 'price_item'+cName;
+    // var service_vatClass = 'vat_percent_'+cName;
+    // var discount_type = 'discount_type_'+cName;
+    // var tax = 'total_tax_'+cName;
+    // var tax2 = 'total_tax2_'+cName;
+    // var tax3 = 'total_tax3_'+cName;
+    // $( ".serviceSelection" ).autocomplete(
+    // {
+    //     source: MyJSStringVar,
+    //     delay:300,
+    //     focus: function(event, ui) {
+    //         $(this).parent().find(".autocomplete_hidden_value").val(ui.item.value);
+    //         $(this).val(ui.item.label);
+    //         return false;
+    //     },
+    //     select: function(event, ui) {
+    //         $(this).parent().find(".autocomplete_hidden_value").val(ui.item.value);
+    //         $(this).val(ui.item.label);
+            
+    //         var id=ui.item.value;
+
+    //         var dataString = 'service_id='+ id;
+    //         var base_url = $('.baseUrl').val();
+
+    //         var csrf_test_name = $("[name=csrf_test_name]").val();
+    //         console.log("Thayaan")
+    //         // $.ajax
+    //         //    ({
+    //         //         type: "POST",
+    //         //         url: base_url+"service/service/retrieve_service_data_inv",
+    //         //         data: {service_id:id,csrf_test_name:csrf_test_name},
+    //         //         cache: false,
+    //         //         success: function(data)
+    //         //         {
+                        
+
+    //         //             var obj = jQuery.parseJSON(data);
+                        
+    //         //             var obj = jQuery.parseJSON(data);
+    //         //             for (var i = 0; i < (obj.txnmber); i++) {
+    //         //                 var txam = obj.taxdta[i];
+    //         //                 var txclass = 'total_tax'+i+'_'+cName;
+    //         //                 $('.'+txclass).val(obj.taxdta[i]);
+    //         //             }
+    //         //             $('.'+priceClass).val(obj.price);
+    //         //             $('#txfieldnum').val(obj.txnmber);
+    //         //             $('#'+service_vatClass).val(obj.service_vat);
+    //         //             //This Function Stay on others.js page
+    //         //             console.log(obj.txnmber);
+    //         //             quantity_calculate(cName);
+                    
+                        
+                        
+    //         //         } 
+    //         //     });
+            
+    //         $(this).unbind("change");
+    //         return false;
+    //     }
+    // });
+    // $( ".serviceSelection" ).focus(function(){
+    //     $(this).change(APchange);
+    
+    // });
+}
+</script>

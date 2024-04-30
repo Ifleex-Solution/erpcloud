@@ -239,21 +239,25 @@ class Service_model extends CI_Model {
 
     public function invoice_entry(){
 
+        
+        
+
         $currency_details = $this->db->select('*')->from('web_setting')->get()->result_array();
         $tablecolumn      = $this->db->list_fields('tax_collection');
         $num_column       = count($tablecolumn)-4;
-        $employee         = $this->input->post('employee_id');
-        $employee_id      = implode(',' , $employee);
+        // $employee         = $this->input->post('employee_id');
+        // $employee_id      = implode(',' , $employee);
         $invoice_id       = $this->voucher_no_generator();
         $createby         = $this->session->userdata('id');
         $createdate       = date('Y-m-d H:i:s');
         $multipayamount   = $this->input->post('pamount_by_method',TRUE);
         $multipaytype     = $this->input->post('multipaytype',TRUE);
+       
 
-        if ($this->input->post('employee_id') == null ) {
-            $this->session->set_userdata(array('exception' => display('please_select_employee')));
-            redirect(base_url() . 'add_service_invoice');
-        }
+    //     if ($this->input->post('employee_id') == null ) {
+    //         $this->session->set_userdata(array('exception' => display('please_select_employee')));
+    //         redirect(base_url() . 'add_service_invoice');
+    //     }
         $customer_id = $this->input->post('customer_id',true);
 
         if ($customer_id == '' ) {
@@ -284,7 +288,7 @@ class Service_model extends CI_Model {
         }
         //Data inserting into invoice table
         $datainv = array(
-            'employee_id'     => $employee_id,
+            'employee_id'     => 0,
             'customer_id'     => $customer_id,
             'date'            => (!empty($this->input->post('invoice_date',true))?$this->input->post('invoice_date',true):date('Y-m-d')),
             'total_amount'    => $this->input->post('grand_total_price',true),
