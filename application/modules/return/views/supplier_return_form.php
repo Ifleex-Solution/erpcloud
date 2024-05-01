@@ -245,6 +245,8 @@
  <script>
 $(document).on('click','#add_invoice',function(){
     var total = 0;
+    var MyJSStringVar = "<?php Print($purchase_all_data[0]['is_credit']) ?>";
+    if(MyJSStringVar==0){
     $( ".pay" ).each( function(){
       total += parseFloat( $( this ).val() ) || 0;
     });
@@ -253,6 +255,40 @@ $(document).on('click','#add_invoice',function(){
     toastr.error('Paid Amount Should Equal To Payment Amount')
 
       return false;
-    }
+    }}
   });
+
+
+  function quantity_calculateSreturn(item) {
+    console.log(item)
+        var a = 0,o = 0 , d = 0,p = 0;
+       var sold_qty = $("#sold_qty_" + item).val();
+       var quantity = $("#total_qntt_" + item).val();
+       var price_item = $("#price_item_" + item).val();
+       var discount = $("#discount_" + item).val();
+       if(parseInt(sold_qty) < parseInt(quantity)){
+           alert("Purchase quantity less than quantity!");
+           $("#total_qntt_"+item).val("");
+       }
+       if (parseInt(quantity) > 0) {
+           var price = (quantity * price_item);
+           var dis = price * (discount / 100);
+           $("#all_discount_" + item).val(dis);
+
+           //Total price calculate per product
+           var temp = price - dis;
+           $("#total_price_" + item).val(temp);
+
+           $(".total_price").each(function () {
+               isNaN(this.value) || o == this.value.length || (a += parseFloat(this.value));
+           }),
+           $("#grandTotal").val(a.toFixed(2, 2));
+           $("#pamount_by_method").val(a.toFixed(2, 2));
+
+           $(".total_discount").each(function () {
+               isNaN(this.value) || p == this.value.length || (d += parseFloat(this.value));
+           }),
+                   $("#total_discount_ammount").val(d.toFixed(2, 2));     
+       }
+    }
   </script>

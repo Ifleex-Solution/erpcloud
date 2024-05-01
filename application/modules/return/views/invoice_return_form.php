@@ -230,17 +230,74 @@
         <script>
 
 $(document).on('click','#add_invoice',function(){
-    var total = 0;
+    var MyJSStringVar = "<?php Print($invoice_all_data[0]['is_credit']) ?>";
+    if(MyJSStringVar==0){
+  var total = 0;
     $( ".pay" ).each( function(){
       total += parseFloat( $( this ).val() ) || 0;
     });
+    
     var gtotal=$("#grandTotalret").val();
     if (total != gtotal) {
     toastr.error('Paid Amount Should Equal To Payment Amount')
 
       return false;
     }
+    }
+  
   });
+
+  function quantity_calculate(item) {
+         var a = 0,o = 0,m = 0,r = 0,d = 0,p = 0;
+        var sold_qty = $("#sold_qtyret_" + item).val();
+        var quantity = $("#total_qnttret_" + item).val();
+        var prod_tot_vat = $("#prod_wise_vat_" + item).val();
+        var price_item = $("#price_itemret_" + item).val();
+        var discount = $("#discountret_" + item).val();
+        if(parseInt(sold_qty) < parseInt(quantity)){
+            alert("Sold quantity less than quantity!");
+            $("#total_qnttret_"+item).val("");
+            $("#total_priceret_" + item).val("");
+            return false;
+        }
+        if (parseInt(quantity) > 0) {
+            var price = (quantity * price_item);
+            var dis = price * (discount / 100);
+            $("#all_discountret_" + item).val(dis);
+            var ttldis = $("#all_discountret_" + item).val();
+
+            // total vat calculate
+            var per_qty_vat = prod_tot_vat / sold_qty;
+            var ret_prod_vat = per_qty_vat * quantity;
+
+            $("#return_prod_vat_" + item).val(ret_prod_vat);//
+            //Total price calculate per product
+            var temp = price - ttldis;
+            $("#total_priceret_" + item).val(temp);//
+
+            $(".return_prod_vat").each(function () {
+                isNaN(this.value) || m == this.value.length || (r += parseFloat(this.value));
+            }),
+
+            $("#total_vat_ammount").val(r.toFixed(2, 2));
+
+            $(".total_priceret").each(function () {
+                isNaN(this.value) || o == this.value.length || (a += parseFloat(this.value));
+            }),
+                    $("#grandTotalret1").val(a+r.toFixed(2, 2));
+                    var grand_tot = a+r;
+                $("#grandTotalret").val(grand_tot.toFixed(2, 2));
+                $("#pamount_by_method").val(grand_tot.toFixed(2, 2));
+                
+
+                  $(".total_discountret").each(function () {
+                isNaN(this.value) || p == this.value.length || (d += parseFloat(this.value));
+            }),
+                    $("#total_discountret_ammount").val(d.toFixed(2, 2));
+        }
+
+    }
+
             function checkreturnamount() {
         // var vatamnt = 0;
         // var gt      = $("#grandTotal").val();
