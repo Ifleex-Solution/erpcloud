@@ -234,7 +234,7 @@ class Return_model extends CI_Model {
 
         if($multipaytype && $multipayamount){
 
-            $amnt_type = 'Debit';
+            $amnt_type = 'Credit';
             for ($i=0; $i < count($multipaytype); $i++) {
 
                 $COAID = $multipaytype[$i];
@@ -480,22 +480,29 @@ class Return_model extends CI_Model {
         $Comment            = "Purchase Return Voucher for supplier";
         $COAID              = $predefine_account->purchaseCode;
                
-        if($pay_method){
 
-            $amnt_type  = 'Credit';
-            $reVID      = $pay_method;
-            $amount_pay = $total;
-            $insrt_pay_amnt_vcher = $this->insert_purchase_debitvoucher_return($is_credit,$return_id,$COAID,$amnt_type,$amount_pay,$Narration,$Comment,$reVID);
+        $multipayamount     = $this->input->post('pamount_by_method',TRUE);
+        $multipaytype       = $this->input->post('multipaytype',TRUE);
+            if($multipaytype && $multipayamount){
+                for ($i=0; $i < count($multipaytype); $i++) {
+                    $amnt_type = 'Credit';
+                    $reVID = $multipaytype[$i];
+                    $amount_pay = $multipayamount[$i];
+                    $insrt_pay_amnt_vcher = $this->insert_purchase_debitvoucher_return($is_credit,$return_id,$COAID,$amnt_type,$amount_pay,$Narration,$Comment,$reVID);
+
+                    //$this->insert_sale_creditvoucher(0,$return_id,$COAID,$amnt_type,$amount_pay,$Narration,$Comment,$reVID);
+                    
+                }
                 
-        } else {
+            }else{
+                $amount_pay = $total;
+                $amnt_type  = 'Debit';
+                $reVID      = $predefine_account->supplierCode;
+                $subcode    = $this->db->select('*')->from('acc_subcode')->where('referenceNo', $supplier_id)->where('subTypeId', 4)->get()->row()->id;
+                $insrt_pay_amnt_vcher = $this->insert_purchase_debitvoucher_return($is_credit,$return_id,$COAID,$amnt_type,$amount_pay,$Narration,$Comment,$reVID,$subcode);
+            }
 
-            $amount_pay = $total;
-            $amnt_type  = 'Debit';
-            $reVID      = $predefine_account->supplierCode;
-            $subcode    = $this->db->select('*')->from('acc_subcode')->where('referenceNo', $supplier_id)->where('subTypeId', 4)->get()->row()->id;
-            $insrt_pay_amnt_vcher = $this->insert_purchase_debitvoucher_return($is_credit,$return_id,$COAID,$amnt_type,$amount_pay,$Narration,$Comment,$reVID,$subcode);
-
-        }
+        
         
         $quantity           = $this->input->post('product_quantity',TRUE);
         $available_quantity = $this->input->post('available_quantity',TRUE);

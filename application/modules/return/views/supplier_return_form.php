@@ -1,5 +1,7 @@
  <link href="<?php echo base_url('assets/css/return.css') ?>" rel="stylesheet" type="text/css" />
  <script src="<?php echo base_url() ?>my-assets/js/admin_js/supplier_return.js" type="text/javascript"></script>
+ <script src="<?php echo base_url() ?>my-assets/js/admin_js/invoice_return.js" type="text/javascript"></script>
+
 
  <div class="row">
      <div class="col-sm-12">
@@ -43,19 +45,7 @@
                      </div>
                  </div>
                  <input type="hidden"name="is_credit" value="<?php echo $purchase_all_data[0]['is_credit']?>"/>
-                <?php if($purchase_all_data[0]['is_credit'] != 1 ){?>
-                 <div class="row">
-                     <div class="col-sm-6">
-                         <div class="form-group row">
-                             <label for="product_name" class="col-sm-4 col-form-label"><?php echo display('payment_type') ?> <i
-                                     class="text-danger">*</i></label>
-                             <div class="col-sm-8">
-                                 <?php echo form_dropdown('pay_method',$all_pmethod,null,'required class="card_typesl postform resizeselect form-control "') ?>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-                 <?php }?>
+                
                  <div class="table-responsive">
                      <table class="table table-bordered table-hover" id="purchase">
                          <thead>
@@ -195,6 +185,46 @@
                          </tfoot>
                      </table>
                  </div>
+                 <?php if($purchase_all_data[0]['is_credit'] != 1 ){?>
+                 <div class="col-sm-6 table-bordered p-20">
+                        <div id="adddiscount" class="display-none">
+                            <div class="row no-gutters">
+                                <div class="form-group col-md-6">
+                                    <label for="payments"
+                                        class="col-form-label pb-2"><?php echo display('payment_type');?></label>
+
+                                    <?php 
+                                    $card_type=1020101; 
+                                    echo form_dropdown('multipaytype[]',$all_pmethod,(!empty($card_type)?$card_type:null),' onchange = "check_creditsale()" class="required card_typesl postform resizeselect form-control "') ?>
+
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="4digit"
+                                        class="col-form-label pb-2"><?php echo display('paid_amount');?></label>
+
+                                    <input type="text" id="pamount_by_method" class="form-control number pay "
+                                        name="pamount_by_method[]" value="" onkeyup="changedueamount()"
+                                        placeholder="0" />
+
+                                </div>
+                            </div>
+
+                            <div class="" id="add_new_payment">
+
+
+
+                            </div>
+                            <div class="form-group text-right">
+                                <div class="col-sm-12 pr-0">
+
+                                    <button type="button" id="add_new_payment_type"
+                                        class="btn btn-success w-md m-b-5"><?php echo display('new_p_method');?></button>
+                                </div>
+                            </div>
+
+                        </div>
+                </div>
+                <?php }?>
                  <div class="form-group row">
                      <label for="example-text-input" class=" col-form-label"></label>
                      <div class="col-sm-12 text-right">
@@ -210,3 +240,19 @@
          </div>
      </div>
  </div>
+
+
+ <script>
+$(document).on('click','#add_invoice',function(){
+    var total = 0;
+    $( ".pay" ).each( function(){
+      total += parseFloat( $( this ).val() ) || 0;
+    });
+    var gtotal=$("#grandTotal").val();
+    if (total != gtotal) {
+    toastr.error('Paid Amount Should Equal To Payment Amount')
+
+      return false;
+    }
+  });
+  </script>

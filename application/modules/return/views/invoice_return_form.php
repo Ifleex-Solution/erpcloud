@@ -170,6 +170,48 @@
                     <p hidden id="old-amount"><?php echo 0;?></p>
                     <p hidden id="pay-amount"></p>
                     <p hidden id="change-amount"></p>
+                    <?php if($invoice_all_data[0]['is_credit'] != 1 ){?>
+                    <div class="col-sm-6 table-bordered p-20">
+                        <div id="adddiscount" class="display-none">
+                            <div class="row no-gutters">
+                                <div class="form-group col-md-6">
+                                    <label for="payments"
+                                        class="col-form-label pb-2"><?php echo display('payment_type');?></label>
+
+                                    <?php 
+                                    $card_type=1020101; 
+                                    echo form_dropdown('multipaytype[]',$all_pmethod,(!empty($card_type)?$card_type:null),' onchange = "check_creditsale()" class="card_typesl postform resizeselect form-control "') ?>
+
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="4digit"
+                                        class="col-form-label pb-2"><?php echo display('paid_amount');?></label>
+
+                                    <input type="text" id="pamount_by_method" class="form-control number pay "
+                                        name="pamount_by_method[]" value="" onkeyup="changedueamount()"
+                                        placeholder="0" />
+
+                                </div>
+                            </div>
+
+                            <div class="" id="add_new_payment">
+
+
+
+                            </div>
+                            <div class="form-group text-right">
+                                <div class="col-sm-12 pr-0">
+
+                                    <button type="button" id="add_new_payment_type"
+                                        class="btn btn-success w-md m-b-5"><?php echo display('new_p_method');?></button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <?php }?>
+
+
                 </div>
                         <div class="form-group row">
                             <label for="example-text-input" class=" col-form-label"></label>
@@ -186,6 +228,19 @@
 
 
         <script>
+
+$(document).on('click','#add_invoice',function(){
+    var total = 0;
+    $( ".pay" ).each( function(){
+      total += parseFloat( $( this ).val() ) || 0;
+    });
+    var gtotal=$("#grandTotalret").val();
+    if (total != gtotal) {
+    toastr.error('Paid Amount Should Equal To Payment Amount')
+
+      return false;
+    }
+  });
             function checkreturnamount() {
         // var vatamnt = 0;
         // var gt      = $("#grandTotal").val();
