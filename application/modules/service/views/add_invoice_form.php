@@ -141,15 +141,16 @@
                         <tbody id="addinvoiceItem">
                             <tr>
                                 <td class="product_field">
-                                    <input type="text" name="service_name" onkeypress="invoice_serviceList(1);"
-                                        class="form-control serviceSelection"
-                                        placeholder='<?php echo display('service_name') ?>' required=""
-                                        id="service_name" tabindex="7">
 
-                                    <input type="hidden" class="autocomplete_hidden_value service_id_1"
-                                        name="service_id[]" id="SchoolHiddenId" />
+                                <select name="service_name[]" class="form-control" id="service_name_1"  onchange="quantity_calculate(1)"  required>
+                                    <option value="">Select Bank</option>
+                                    <?php  foreach($service_list as $services) { echo $services['service_id'] ; ?>
+                                    <option value="<?php echo $services['service_id'] ;?>"><?php echo $services['service_name'];?></option>
 
-                                    <input type="hidden" class="baseUrl" value="<?php echo base_url(); ?>" />
+                                    <?php  }   ?>
+                                 </select>
+
+                                    
                                 </td>
 
                                 <td>
@@ -361,77 +362,267 @@
 
 </div>
 
-
 <script>
-            var MyJSStringVar = "<?php Print($customer_dropdown); ?>";
-            console.log(MyJSStringVar)
+     function myFunction(count) {
+        var elementById = document.getElementById("price_item_3");
+        elementById.value=45;
 
-    function invoice_serviceList(cName) {
+     }
+     "use strict";
+     var service_list=[];
+     var countStringBuilder = [];
+     countStringBuilder.push(1);
+function addInputField(t) {
+    var row = $("#normalinvoice tbody tr").length;
+    var count = row + 1;
+       var tab1 = 0;
+       var tab2 = 0;
+       var tab3 = 0;
+       var tab4 = 0;
+       var tab5 = 0;
+       var tab6 = 0;
+       var tab7 = 0;
+       var tab8 = 0;
+       var tab9 = 0;
+       var tab10 = 0;
+       var tab11 = 0;
+       var tab12 = 0;
+    var limits = 500;
+    var taxnumber = $("#txfieldnum").val();
+    var tbfild ='';
+    for(var i=0;i<taxnumber;i++){
+        var taxincrefield = '<input id="total_tax'+i+'_'+count+'" class="total_tax'+i+'_'+count+'" type="hidden"><input id="all_tax'+i+'_'+count+'" class="total_tax'+i+'" type="hidden" name="tax[]">';
+         tbfild +=taxincrefield;
+    }
+    if (count == limits)
+        alert("You have reached the limit of adding " + count + " inputs");
+    else {
+        var a = "service_name" + count,
+                tabindex = count * 5,
+                e = document.createElement("tr");
+        tab1 = tabindex + 1;
+        tab2 = tabindex + 2;
+        tab3 = tabindex + 3;
+        tab4 = tabindex + 4;
+        tab5 = tabindex + 5;
+        tab6 = tabindex + 6;
+        tab7 = tabindex + 7;
+        tab8 = tabindex + 8;
+        tab9 = tabindex + 9;
+        tab10 = tabindex + 10;
+        tab11 = tabindex + 11;
+        tab12 = tabindex + 12;
+        
+
+       // console.log(echo $service_list);
+       var stringBuilder = [];
+        $(document).ready(function(){
+            $.ajax({
+                url: 'service/service/getservice_list', // PHP script to fetch data
+                type: 'GET',
+                success: function(response) {
+                    serviceList=JSON.parse(response);
+                 
+                   
+        //  "<td><input type='text' name='service_name' onkeypress='invoice_serviceList(" + count + 
+        // ");' class='form-control serviceSelection common_product' placeholder='Service Name' id='" + a + 
+        // "' required tabindex='" + tab1 + "'><input type='hidden' class='common_product autocomplete_hidden_value  service_id_" + count + 
+        // "' name='service_id[]' id='SchoolHiddenId'/></td> "+
+
+        var countA=count-1;
+
+        countStringBuilder.push(count);
+        console.log(countStringBuilder);
 
 
-    //         var priceClass = 'price_item'+cName;
-    // var service_vatClass = 'vat_percent_'+cName;
-    // var discount_type = 'discount_type_'+cName;
-    // var tax = 'total_tax_'+cName;
-    // var tax2 = 'total_tax2_'+cName;
-    // var tax3 = 'total_tax3_'+cName;
-    // $( ".serviceSelection" ).autocomplete(
-    // {
-    //     source: MyJSStringVar,
-    //     delay:300,
-    //     focus: function(event, ui) {
-    //         $(this).parent().find(".autocomplete_hidden_value").val(ui.item.value);
-    //         $(this).val(ui.item.label);
-    //         return false;
-    //     },
-    //     select: function(event, ui) {
-    //         $(this).parent().find(".autocomplete_hidden_value").val(ui.item.value);
-    //         $(this).val(ui.item.label);
+        stringBuilder.push("<td>  <select name='service_name[]' class='form-control' id='service_name_" + count + "'  onchange='quantity_calculate("+count+")'    required> <option value=''>"+
+        "Select Option</option>"+
+       " ");
+
+       
+
+       for (var service of serviceList) {
+          stringBuilder.push("<option value='"+service.service_id+"'>"+service.service_name+"</option>");
+        }
+
+       stringBuilder.push("</select></td><input type='text' name='product_quantity[]' required='required' onkeyup='quantity_calculate(" + count + 
+        ");' onchange='quantity_calculate(" + count + ");' id='total_qntt_" + count + "'value='1' class='common_qnt total_qntt_" + count + 
+        " form-control text-right'  placeholder='0.00' min='0' tabindex='" + tab2 + "'/></td><td><input type='text' name='product_rate[]' onkeyup='quantity_calculate(" + count + 
+        ");' onchange='quantity_calculate(" + count + ");' id='price_item_" + count + "' class='common_rate price_item" + count + 
+        " form-control text-right' required placeholder='0.00' min='0' tabindex='" + tab3 + "'/></td><td><input type='text' name='discount[]' onkeyup='quantity_calculate(" + count + 
+        ");' onchange='quantity_calculate(" + count + ");' id='discount_" + count + "' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab4 + 
+        "' /> <input type='hidden' value='' name='discount_type' id='discount_type_" + count + 
+        "' ></td><td><input type='text' name='discountvalue[]' readonly id='discount_value_" + count + "' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab10 + 
+        "' /></td><td><input type='text' name='vatpercent[]' onkeyup='quantity_calculate(" + count + 
+        ");' onchange='quantity_calculate(" + count + ");' id='vat_percent_" + count + "' class='form-control text-right common_discount' placeholder='0.00' min='0' tabindex='" + tab11 + 
+        "' /></td><td><input type='text' name='vatvalue[]' id='vat_value_" + count + "' class='form-control text-right total_vatamnt common_discount' readonly placeholder='0.00' min='0' tabindex='" + tab12 + 
+        "' /></td><td class='text-right'><input class='common_total_price total_price form-control text-right' type='text' name='total_price[]' id='total_price_" + count + 
+        "' value='0.00' readonly='readonly'/></td><td>"+tbfild+"<input type='hidden'  id='total_discount_" + count + "' /><input type='hidden' id='all_discount_" + count + 
+        "' class='total_discount dppr' name='discount_amount[]'/><button tabindex='" + tab5 + 
+        "' style='text-align: right;' class='btn btn-danger' type='button' value='Delete' onclick='deleteRow(this)'><i class='fa fa-close'></i></button></td>");
+              
+        e.innerHTML =stringBuilder,document.getElementById(t).appendChild(e),
+                document.getElementById(a).focus(),
+                document.getElementById("add_invoice_item").setAttribute("tabindex", tab6);
+        document.getElementById("paidAmount").setAttribute("tabindex", tab7);
+        document.getElementById("add_invoice").setAttribute("tabindex", tab9);
+
+                },
+                error:function(error){
+                    console.log(error)
+                }
+            });
+        });
+
+     
+       console.log(countStringBuilder)
+        count++
+    }
+}
+
+
+"use strict";
+function quantity_calculate(item) {
+    var   serviceLists = [];
+        $(document).ready(function(){
+            $.ajax({
+                url: 'service/service/getservice_list', // PHP script to fetch data
+                type: 'GET',
+                success: function(response) {
+                    serviceLists=JSON.parse(response);
+                    var quantity = $("#total_qntt_" + item).val();
+   
+               var service=    serviceLists.find(obj => obj.service_id ===  $("#service_name_" + item).val());
+               $("#price_item_" + item).val(service.charge);
+    $("#vat_percent_" + item).val(service.service_vat);
+   var price_item = $("#price_item_" + item).val();
+   var invoice_discount = $("#invoice_discount").val();
+   var discount = $("#discount_" + item).val();
+   var vat_percent = $("#vat_percent_" + item).val();
+   var taxnumber = $("#txfieldnum").val();
+   var total_discount = $("#total_discount_" + item).val();
+   var dis_type = $("#discount_type").val();
+
+
+   if (quantity > 0 || discount > 0 || vat_percent > 0) {
+       if (dis_type == 1) {
+           var price = quantity * price_item;
+
+           // Discount cal per product
+           var dis = +(price * discount / 100);
+           
+           $("#discount_value_" + item).val(dis);
+           $("#all_discount_" + item).val(dis);
+
+           //Total price calculate per product
+           var temp = price - dis;
+            // product wise vat start
+            var vat =+(temp * vat_percent / 100);
+            $("#vat_value_" + item).val(vat);
+            // product wise vat end
+           var ttletax = 0;
+           $("#total_price_" + item).val(temp);
+            for(var i=0;i<taxnumber;i++){
+          var tax = (temp) * $("#total_tax"+i+"_" + item).val();
+          ttletax += Number(tax);
+           $("#all_tax"+i+"_" + item).val(tax);
+           
+           }
+
+         
+       } else if (dis_type == 2) {
+           var price = quantity * price_item;
+
+           // Discount cal per product
+           var dis = (discount * quantity);
+           $("#discount_value_" + item).val(dis);
+           $("#all_discount_" + item).val(dis);
+
+           //Total price calculate per product
+           var temp = price - dis;
+           $("#total_price_" + item).val(temp);
+
+           // product wise vat start
+           var vat =+(temp * vat_percent / 100);
+           $("#vat_value_" + item).val(vat);
+           // product wise vat end
+           var ttletax = 0;
+            for(var i=0;i<taxnumber;i++){
+          var tax = (temp) * $("#total_tax"+i+"_" + item).val();
+          ttletax += Number(tax);
+           $("#all_tax"+i+"_" + item).val(tax);
+   }
+       } else if (dis_type == 3) {
+           var total_price = quantity * price_item;
+           
+           
+           // Discount cal per product
+           $("#discount_value_" + item).val(discount);
+           $("#all_discount_" + item).val(discount);
+           //Total price calculate per product
+           var price = (total_price - discount);
+           $("#total_price_" + item).val(price);
+
+            // product wise vat start
+           var vat =+(price * vat_percent / 100);
+           $("#vat_value_" + item).val(vat);
+           // product wise vat end
+            var ttletax = 0;
+            for(var i=0;i<taxnumber;i++){
+          var tax = (price) * $("#total_tax"+i+"_" + item).val();
+          ttletax += Number(tax);
+           $("#all_tax"+i+"_" + item).val(tax);
+   }
+       }
+   } else {
+       var n = quantity * price_item;
+       var c = quantity * price_item;
+       $("#total_price_" + item).val(n),
+               $("#all_tax_" + item).val(c)
+   }
+   calculateSum();
+   // invoice_paidamount();
+
+   var invoice_edit_page = $("#invoice_edit_page").val();
+   var preload_pay_view = $("#preload_pay_view").val();
+   var is_credit_edit = $('#is_credit_edit').val();
+   
+   $("#add_new_payment").empty();
+  
+   $("#pay-amount").text('0');
+   $("#dueAmmount").val(0);
+   if (invoice_edit_page == 1 ) {
+       var base_url = $('#base_url').val();
+       var csrf_test_name = $('[name="csrf_test_name"]').val();
+       var gtotal=$(".grandTotalamnt").val();
+       var url= base_url + "service/service/bdtask_showpaymentmodal";
+       $.ajax({
+           type: "post",
+           url: url,
+           data:{is_credit_edit:is_credit_edit,csrf_test_name:csrf_test_name},
+           success: function(data) {
+             
+             $($('#add_new_payment').append(data));
             
-    //         var id=ui.item.value;
+             $("#pamount_by_method").val(gtotal);
+             $("#preload_pay_view").val('1');
+             $("#add_new_payment_type").prop('disabled',false);
+             var card_typesl = $('.card_typesl').val();
+               if(card_typesl == 0){
+                   $("#add_new_payment_type").prop('disabled',true);
+               }
+           }
+         }); 
+      
+   }
 
-    //         var dataString = 'service_id='+ id;
-    //         var base_url = $('.baseUrl').val();
-
-    //         var csrf_test_name = $("[name=csrf_test_name]").val();
-    //         console.log("Thayaan")
-    //         // $.ajax
-    //         //    ({
-    //         //         type: "POST",
-    //         //         url: base_url+"service/service/retrieve_service_data_inv",
-    //         //         data: {service_id:id,csrf_test_name:csrf_test_name},
-    //         //         cache: false,
-    //         //         success: function(data)
-    //         //         {
-                        
-
-    //         //             var obj = jQuery.parseJSON(data);
-                        
-    //         //             var obj = jQuery.parseJSON(data);
-    //         //             for (var i = 0; i < (obj.txnmber); i++) {
-    //         //                 var txam = obj.taxdta[i];
-    //         //                 var txclass = 'total_tax'+i+'_'+cName;
-    //         //                 $('.'+txclass).val(obj.taxdta[i]);
-    //         //             }
-    //         //             $('.'+priceClass).val(obj.price);
-    //         //             $('#txfieldnum').val(obj.txnmber);
-    //         //             $('#'+service_vatClass).val(obj.service_vat);
-    //         //             //This Function Stay on others.js page
-    //         //             console.log(obj.txnmber);
-    //         //             quantity_calculate(cName);
-                    
-                        
-                        
-    //         //         } 
-    //         //     });
-            
-    //         $(this).unbind("change");
-    //         return false;
-    //     }
-    // });
-    // $( ".serviceSelection" ).focus(function(){
-    //     $(this).change(APchange);
-    
-    // });
+                },
+                error:function(error){
+                    console.log(error)
+                }
+            });
+        });
+       
+   
 }
 </script>

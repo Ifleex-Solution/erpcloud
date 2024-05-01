@@ -214,6 +214,7 @@ class Service extends MX_Controller {
         );
         $data["customer_dropdown"] = $this->service_model->customer_dropdown();
         $data['all_pmethod'] = $this->service_model->pmethod_dropdown();
+        $data['service_list'] = $this->service_model->service_list();
         $data['module']      = 'service';
         $vatortax            = $this->service_model->vat_tax_setting();
         if($vatortax->fixed_tax == 1){
@@ -224,6 +225,10 @@ class Service extends MX_Controller {
             $data['page']    = "add_invoice_form_dynamic"; 
         }
         echo modules::run('template/layout', $data);
+    }
+
+    public function getservice_list(){
+        echo json_encode($this->service_model->service_list());
     }
 
 
@@ -303,7 +308,7 @@ class Service extends MX_Controller {
             redirect("add_service_invoice");
         }else {
             $invoice_id = $this->service_model->invoice_entry();
-           
+
             $mailsetting = $this->db->select('*')->from('email_config')->get()->result_array();
 
             $setting_data = $this->db->select('is_autoapprove_v')->from('web_setting')->where('setting_id', 1)->get()->result_array();
