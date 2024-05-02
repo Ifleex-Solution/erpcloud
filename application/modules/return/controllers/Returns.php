@@ -34,27 +34,36 @@ class Returns extends MX_Controller {
         $invoice_id = trim($this->input->post('invoice_id',TRUE));
         $invid = $this->db->select('invoice_id')->from('invoice')->where('invoice', $invoice_id)->get()->row();
         $query = $this->db->select('invoice_id')->from('invoice')->where('invoice', $invoice_id)->get();
-        $query2 = $this->db->select('invoice_id')->from('product_return')->where('invoice_id', $invoice_id)->get();
+       // $query2 = $this->db->select('invoice_id')->from('product_return')->where('invoice_id', $invoice_id)->get();
 
         if ($query->num_rows() == 0) {
             $this->session->set_flashdata(array('exception' => display('please_input_correct_invoice_no')));
             redirect('return_form');
         }
 
-        if ($query2->num_rows() > 0) {
-            $this->session->set_flashdata(array('exception' => display('already_returned')));
-            redirect('return_form');
-        }
+        // if ($query2->num_rows() > 0) {
+        //     $this->session->set_flashdata(array('exception' => display('already_returned')));
+        //     redirect('return_form');
+        // }
 
         $invoice_detail = $this->return_model->invoice_return_data($invoice_id);
         
         $i = 0;
+        $totalQuantity=0;
         if (!empty($invoice_detail)) {
             foreach ($invoice_detail as $k => $v) {
                 $i++;
                 $invoice_detail[$k]['sl'] = $i;
+                  $totalQuantity=$invoice_detail[$k]['sum_quantity']+$totalQuantity;
+
             }
         }
+
+         if($totalQuantity==0){
+                  $this->session->set_flashdata(array('exception' => display('already_returned')));
+            redirect('return_form');
+        }
+
 
         $data = array(
             'title'         => display('invoice_return'),
