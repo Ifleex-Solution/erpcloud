@@ -464,6 +464,7 @@ class Report_model extends CI_Model {
         }
 
         ## Total number of records without filtering
+        $this->db->distinct();
         $this->db->select('count(*) as allcount');
         $this->db->from('invoice a');
         $this->db->join('invoice_details c', 'c.invoice_id = a.id');
@@ -478,6 +479,7 @@ class Report_model extends CI_Model {
         $totalRecords = $records[0]->allcount;
 
         ## Total number of record with filtering
+        $this->db->distinct();
         $this->db->select('count(*) as allcount');
         $this->db->from('invoice a');
         $this->db->join('invoice_details c', 'c.invoice_id = a.id');
@@ -492,6 +494,7 @@ class Report_model extends CI_Model {
         $totalRecordwithFilter = $records[0]->allcount;
 
         ## Fetch records
+        $this->db->distinct();
         $this->db->select("a.*,b.customer_id,b.customer_name");
         $this->db->from('invoice a');
         $this->db->join('invoice_details c', 'c.invoice_id = a.id');

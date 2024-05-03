@@ -25,6 +25,7 @@ class Return_model extends CI_Model {
             return $query->result_array();
         }
         return false;
+        
     }
 
     public function user_invoice_data($user_id){
@@ -249,7 +250,7 @@ class Return_model extends CI_Model {
             
         }else{
             $amount_pay = $total;
-            $amnt_type  = 'Debit';
+            $amnt_type  = 'Credit';
             //$subcode    = $this->db->select('*')->from('acc_subcode')->where('referenceNo', $supplier_id)->where('subTypeId', 4)->get()->row()->id;
             $COAID      = $predefine_account->customerCode;
             $this->insert_sale_creditvoucher(1,$return_id,$COAID,$amnt_type,$amount_pay,$Narration,$Comment,$reVID);
@@ -608,6 +609,7 @@ class Return_model extends CI_Model {
 
      // supplier return html data 
     public function supplier_return_html_data($purchase_id) {
+        $this->db->distinct();
         $this->db->select('c.total_ret_amount,
                         c.*,
                         c.product_rate as price,
