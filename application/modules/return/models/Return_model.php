@@ -244,6 +244,12 @@ class Return_model extends CI_Model {
                 
             }
             
+        }else{
+            $amount_pay = $total;
+            $amnt_type  = 'Debit';
+            //$subcode    = $this->db->select('*')->from('acc_subcode')->where('referenceNo', $supplier_id)->where('subTypeId', 4)->get()->row()->id;
+            $COAID      = $predefine_account->customerCode;
+            $this->insert_sale_creditvoucher(1,$return_id,$COAID,$amnt_type,$amount_pay,$Narration,$Comment,$reVID);
         }
         //insert paid amount end
 
