@@ -32,6 +32,7 @@ class Return_model extends CI_Model {
     }
 
     public function retrieve_invoice_html_data($return_id) {
+        $this->db->distinct();
         $this->db->select('c.return_id,c.invoice_id,b.customer_name,b.customer_mobile, d.*,a.ret_adjust_amnt,a.date,
         a.invoice_discount,a.total_discount,a.shipping_cost,a.prevous_due,a.total_amount,a.sales_by,a.invoice,e.*,
         e.ret_invoice_id as invoice_id,a.returnable_amount');
@@ -41,6 +42,8 @@ class Return_model extends CI_Model {
         $this->db->join('customer_information b', 'b.customer_id = c.customer_id');
         $this->db->join('product_information d', 'd.product_id = e.product_id');
         $this->db->where('c.return_id', $return_id);
+
+       
         $query = $this->db->get();
 
         if ($query->num_rows() > 0) {
