@@ -229,6 +229,8 @@ class Return_model extends CI_Model {
         $Comment            = "Sales Return Voucher for customer";
         $reVID              = $predefine_account->salesCode;
 
+        
+
         $ret_adjust_amnt = array(
             // 'returnable_amount'   => $this->input->post('n_total',TRUE),
            // 'ret_adjust_amnt'     => $paidamount,
@@ -255,10 +257,59 @@ class Return_model extends CI_Model {
             $COAID      = $predefine_account->customerCode;
             $this->insert_sale_creditvoucher(1,$return_id,$COAID,$amnt_type,$amount_pay,$Narration,$Comment,$reVID);
         }
+
+        $prinfo  = $this->db->select('product_id,Avg(rate) as product_rate')->from('product_purchase_details')->where_in('product_id',$p_id)->group_by('product_id')->get()->result(); 
+        $purchase_ave = [];
+        $i=0;
+        foreach ($prinfo as $avg) {
+            $purchase_ave [] =  $avg->product_rate*$quantity[$i];
+            $i++;
+        }
+        $sumval   = array_sum($purchase_ave);
+
+        $goodsCOAID     = $predefine_account->costs_of_good_solds;
+        $purchasevalue  = $sumval;
+        $goodsNarration = "Sales Return Voucher for Cost of Goods";
+        $goodsComment   = "Sales Return cost of goods Voucher for customer";
+        $goodsreVID     = $predefine_account->inventoryCode;
+
+        $this->insert_sale_inventory_voucher($return_id,$goodsCOAID,$purchasevalue,$goodsNarration,$goodsComment,$goodsreVID);
         //insert paid amount end
 
         return $return_id;
     }
+
+    public function insert_sale_inventory_voucher($invoice_id = null,$dbtid = null,$amnt = null,$Narration = null,$Comment = null,$reVID = null){
+
+        $fyear = financial_year();          
+        $VDate = date('Y-m-d');
+        $CreateBy=$this->session->userdata('id');
+        $createdate=date('Y-m-d H:i:s');
+        
+        // cost of goods sold voucher insert
+        $maxidforgoods = $this->getMaxFieldNumber('id','acc_vaucher','Vtype','JV','VNo');             
+        $vaucherNogoods = "JV-". ($maxidforgoods +1);
+        $debitinsert = array(
+            'fyear'          =>  $fyear,
+            'VNo'            =>  $vaucherNogoods,
+            'Vtype'          =>  'JV',
+            'referenceNo'    =>  $invoice_id,
+            'VDate'          =>  $VDate,
+            'COAID'          =>  $dbtid,     
+            'Narration'      =>  $Narration,     
+            'ledgerComment'  =>  $Comment,   
+            'Credit'          =>  $amnt,   
+            'RevCodde'       =>  $reVID,    
+            'isApproved'     =>  0,                      
+            'CreateBy'       =>  $CreateBy,
+            'CreateDate'     =>  $createdate,      
+            'status'         => 0,      
+        );
+        
+        $this->db->insert('acc_vaucher',$debitinsert);
+       
+	    return true;
+	}
 
     // insert sales debitvoucher
     public function insert_sale_creditvoucher($is_credit = null,$invoice_id = null,$dbtid = null,$amnt_type = null,$amnt = null,$Narration = null,$Comment = null,$reVID = null,$subcode = null){  

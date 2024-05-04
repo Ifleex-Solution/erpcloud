@@ -51,7 +51,6 @@
                                         <th><?php echo display('invoice_no') ?></th>
                                         <th><?php echo display('customer_name') ?></th>
                                         <th><?php echo display('date') ?></th>
-                                        <th><?php echo display('total_amount') ?></th>
                                         <th><?php echo display('action') ?></th>
                                     </tr>
                                 </thead>
@@ -75,7 +74,7 @@
                             </td>
 
                             <td><?php echo $returns['date_return']?></td>
-                            <td class="text-right"><?php echo (($position == 0) ? $currency.' '.$returns['net_total_amount']: $returns['net_total_amount'].' '.$currency) ?></td>
+                           
                                             <td>
                                     <center>
                                         <?php echo form_open() ?>
