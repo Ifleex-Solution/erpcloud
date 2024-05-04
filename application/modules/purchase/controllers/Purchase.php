@@ -56,12 +56,15 @@ class Purchase extends MX_Controller {
 
 public function bdtask_purchase_details($purchase_id = null){
           $purchase_detail = $this->purchase_model->purchase_details_data($purchase_id);
+          $total_discount_amount=0;
 
-        if (!empty($purchase_detail)) {
+          if (!empty($purchase_detail)) {
             $i = 0;
+            
             foreach ($purchase_detail as $k => $v) {
                 $i++;
                 $purchase_detail[$k]['sl'] = $i;
+                $total_discount_amount=$purchase_detail[$k]['discount_amnt']+$total_discount_amount;
             }
 
             foreach ($purchase_detail as $k => $v) {
@@ -86,6 +89,7 @@ public function bdtask_purchase_details($purchase_id = null){
             'ttl_val'          => number_format((!empty($purchase_detail[0]['total_vat_amnt'])?$purchase_detail[0]['total_vat_amnt']:0),2),
             'paid_amount'      => number_format($purchase_detail[0]['paid_amount'],2),
             'due_amount'      => number_format($purchase_detail[0]['due_amount'],2),
+            'product_discount' => number_format( $total_discount_amount,2),
             'purchase_all_data'=> $purchase_detail,
         );
         $data['module']     = "purchase";

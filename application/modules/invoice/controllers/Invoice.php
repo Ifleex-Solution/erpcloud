@@ -115,6 +115,7 @@ class Invoice extends MX_Controller {
             }
 
             $i = 0;
+            $total_discount_amount=0;
             foreach ($invoice_detail as $k => $v) {
                 $i++;
                 $invoice_detail[$k]['sl'] = $i;
@@ -136,6 +137,7 @@ class Invoice extends MX_Controller {
                 }
                 if(!empty($invoice_detail[$k]['discount'])){
                     $is_dis_val = $is_dis_val+1;
+                    $total_discount_amount=$invoice_detail[$k]['discount']+$total_discount_amount;
                     
                 }
                     if(!empty($invoice_detail[$k]['vat_amnt_per'])){
@@ -158,6 +160,7 @@ class Invoice extends MX_Controller {
         $data = array(
         'title'             => display('invoice_details'),
         'invoice_id'        => $invoice_detail[0]['invoice_id'],
+       
         'invoice_no'        => $invoice_detail[0]['invoice'],
         'customer_name'     => $invoice_detail[0]['customer_name'],
         'customer_address'  => $invoice_detail[0]['customer_address'],
@@ -191,6 +194,8 @@ class Invoice extends MX_Controller {
         'is_discount'       => $is_discount,
         'is_serial'         => $isserial,
         'is_unit'           => $isunit,
+        'invoice_discount'  => $invoice_detail[0]['invoice_discount'],
+        'product_discount' => number_format( $total_discount_amount,2),
         );
         $data['module']     = "invoice";
         $data['page']       = "invoice_html"; 
@@ -313,6 +318,7 @@ class Invoice extends MX_Controller {
 
     public function bdtask_invoice_pad_print($invoice_id){
            $invoice_detail = $this->invoice_model->retrieve_invoice_html_data($invoice_id);
+
          $taxfield = $this->db->select('*')
                 ->from('tax_settings')
                 ->where('is_show',1)
@@ -342,6 +348,7 @@ class Invoice extends MX_Controller {
             }
 
             $i = 0;
+            $total_discount_amount=0;
             foreach ($invoice_detail as $k => $v) {
                 $i++;
                 $invoice_detail[$k]['sl'] = $i;
@@ -363,6 +370,7 @@ class Invoice extends MX_Controller {
                 }
                 if(!empty($invoice_detail[$k]['discount'])){
                     $is_dis_val = $is_dis_val+1;
+                    $total_discount_amount=$invoice_detail[$k]['discount']+$total_discount_amount;
                     
                 }
                     if(!empty($invoice_detail[$k]['vat_amnt_per'])){
@@ -415,6 +423,7 @@ class Invoice extends MX_Controller {
         'is_desc'          => $descript,
         'is_serial'        => $isserial,
         'is_unit'          => $isunit,
+        'product_discount' => number_format( $total_discount_amount,2),
         );
 
         $data['module']     = "invoice";

@@ -291,6 +291,26 @@
                                         echo (($position == 0) ? $currency.' '.$itemprice : $itemprice.' '.$currency) ?>
                                     </td>
                                 </tr>
+                                <?php if($product_discount > 0){?>
+                                <tr>
+                                    <th><b>Product Discount:
+                                    </th>
+                                    <td class="text-right">
+                                       <?php echo (($position==0)?$currency.' '.$product_discount:$product_discount.' '.$currency) ?>
+                                    </td>
+                                </tr>
+                                
+                                <?php }?>
+                                <?php if($invoice_discount > 0){?>
+                                <tr>
+                                    <th><b>Sales Discount:
+                                    </th>
+                                    <td class="text-right">
+                                       <?php echo (($position==0)?$currency.' '.$invoice_discount:$invoice_discount.' '.$currency) ?>
+                                    </td>
+                                </tr>
+                                
+                                <?php }?>
                                 <?php }?>
                                 <?php
                                         if ($invoice_all_data[0]['total_discount'] != 0) {

@@ -219,6 +219,26 @@
                                     </td>
                                 </tr>
                                 <?php }?>
+                                <?php if($product_discount > 0){?>
+                                <tr>
+                                    <td ><b>Product Discount:
+                                    </td>
+                                    <td class="text-right">
+                                        <?php echo (($position==0)?$currency.' '.$product_discount:$product_discount.' '.$currency) ?></b>
+                                    </td>
+                                </tr>
+                                <?php }?>
+
+                                <?php if($invoice_discount > 0){?>
+                                <tr>
+                                    <td ><b>Service Discount:
+                                    </td>
+                                    <td class="text-right">
+                                        <?php echo (($position==0)?$currency.' '.$invoice_discount:$invoice_discount.' '.$currency) ?></b>
+                                    </td>
+                                </tr>
+                                <?php }?>
+
                                 <?php
                                         if ($invoice_detail[0]['total_discount'] != 0) {
                                             ?>
@@ -229,6 +249,7 @@
                                     </td>
                                 </tr>
                                 <?php }?>
+
                                 <tr>
                                     <th><?php echo 'Total Price After Discount' ?> :</th>
                                     <td class="text-right">

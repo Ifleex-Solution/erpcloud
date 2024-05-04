@@ -196,6 +196,15 @@
                                     </td>
                                 </tr>
                                 <?php }?>
+                                <?php if($product_discount > 0){?>
+                                <tr>
+                                    <td class="" colspan="8"><b>Product Discount:
+                                    </td>
+                                    <td class="text-right">
+                                        <b><?php echo (($position==0)?$currency.' '.$product_discount:$product_discount.' '.$currency) ?></b>
+                                    </td>
+                                </tr>
+                                <?php }?>
                                 <?php if($discount > 0){?>
                                 <tr>
                                     <td class="" colspan="8"><b><?php echo display('purchase_discount') ?>:

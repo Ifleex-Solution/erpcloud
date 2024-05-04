@@ -500,11 +500,14 @@ class Service extends MX_Controller {
         $subTotal_discount = 0;
         $subTotal_ammount = 0;
 
+        $total_discount_amount=0;
+
         if (!empty($service_inv_main)) {
             foreach ($service_inv_main as $k => $v) {
                 $service_inv_main[$k]['final_date'] = $this->occational->dateConvert($service_inv_main[$k]['date']);
                 $subTotal_quantity = $subTotal_quantity + $service_inv_main[$k]['qty'];
                 $subTotal_ammount = $subTotal_ammount + $service_inv_main[$k]['total'];
+                $total_discount_amount=$service_inv_main[$k]['discount_amount']+$total_discount_amount;
             }
 
             $i = 0;
@@ -546,6 +549,7 @@ class Service extends MX_Controller {
             'previous'      => number_format($service_inv_main[0]['previous'], 2, '.', ','),
             'previ_am'      => ($service_inv_main[0]['previous']),
             'tax_regno'     => $txregname,
+            'product_discount' =>$total_discount_amount
 
         );
         $data['module']     = 'service';

@@ -187,6 +187,16 @@
                                     </b></td>
                                     </tr>
                                     <?php }?>
+                                    <?php if($product_discount > 0){?>
+                                <tr>
+                                <td align="left"><nobr></nobr></td>
+                                    <td align="right" colspan="10"><b>Product Discount
+                                    </td>
+                                    <td align="right">
+                                        <b><?php echo (($position==0)?$currency.' '.$product_discount:$product_discount.' '.$currency) ?></b>
+                                    </td>
+                                </tr>
+                                <?php }?>
                                     <?php if($total_discount > 0){?>
                                     <tr>
                                         <td align="left"><nobr></nobr></td>
