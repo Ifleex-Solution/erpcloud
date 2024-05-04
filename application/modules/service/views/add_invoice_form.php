@@ -492,6 +492,7 @@ function quantity_calculate(item) {
                     serviceLists=JSON.parse(response);
                     var quantity = $("#total_qntt_" + item).val();
    
+                    
                var service=    serviceLists.find(obj => obj.service_id ===  $("#service_name_" + item).val());
                $("#price_item_" + item).val(service.charge);
     $("#vat_percent_" + item).val(service.service_vat);
