@@ -156,7 +156,7 @@
                                     </tr>
                                      <tr>
                                         <td align="left"><nobr></nobr></td>
-                                    <td align="right" colspan="10"><b><?php echo display('total') ?></b></td>
+                                    <td align="right" colspan="10"><b><?php  echo 'Total Price Before Discount' ?></b></td>
                                     <td align="right">
                                     <b>
                                         <?php if($position == 0){

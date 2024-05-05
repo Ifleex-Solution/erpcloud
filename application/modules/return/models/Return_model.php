@@ -256,6 +256,25 @@ class Return_model extends CI_Model {
             //$subcode    = $this->db->select('*')->from('acc_subcode')->where('referenceNo', $supplier_id)->where('subTypeId', 4)->get()->row()->id;
             $COAID      = $predefine_account->customerCode;
             $this->insert_sale_creditvoucher(1,$return_id,$COAID,$amnt_type,$amount_pay,$Narration,$Comment,$reVID);
+
+            $new_due_amount=0;
+            $this->db->select('due_amount');
+            $this->db->from('invoice');
+            $this->db->where('invoice_id', $invoice_id);
+            $query = $this->db->get();
+ 
+            $row = $query->row(); // Get the first row
+            $due_amount = $row->due_amount;
+
+            if($due_amount>0)
+            {
+              $new_due_amount=$due_amount-$total;
+              $updateData = array(
+                'due_amount' => $new_due_amount
+              );
+              $this->db->where('invoice_id', $invoice_id);
+              $this->db->update('invoice', $updateData);
+            }
         }
 
         $prinfo  = $this->db->select('product_id,Avg(rate) as product_rate')->from('product_purchase_details')->where_in('product_id',$p_id)->group_by('product_id')->get()->result(); 
@@ -561,6 +580,25 @@ class Return_model extends CI_Model {
                 $reVID      = $predefine_account->supplierCode;
                 $subcode    = $this->db->select('*')->from('acc_subcode')->where('referenceNo', $supplier_id)->where('subTypeId', 4)->get()->row()->id;
                 $insrt_pay_amnt_vcher = $this->insert_purchase_debitvoucher_return($is_credit,$return_id,$COAID,$amnt_type,$amount_pay,$Narration,$Comment,$reVID,$subcode);
+            
+                $new_due_amount=0;
+                $this->db->select('due_amount');
+                $this->db->from('product_purchase');
+                $this->db->where('purchase_id', $purchase_id);
+                $query = $this->db->get();
+     
+                $row = $query->row(); // Get the first row
+                $due_amount = $row->due_amount;
+    
+                if($due_amount>0)
+                {
+                  $new_due_amount=$due_amount-$total;
+                  $updateData = array(
+                    'due_amount' => $new_due_amount
+                  );
+                  $this->db->where('purchase_id', $purchase_id);
+                  $this->db->update('product_purchase', $updateData);
+                }
             }
 
         

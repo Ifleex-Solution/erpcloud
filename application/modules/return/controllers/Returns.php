@@ -36,6 +36,8 @@ class Returns extends MX_Controller {
         $query = $this->db->select('invoice_id')->from('invoice')->where('invoice', $invoice_id)->get();
        // $query2 = $this->db->select('invoice_id')->from('product_return')->where('invoice_id', $invoice_id)->get();
 
+
+
         if ($query->num_rows() == 0) {
             $this->session->set_flashdata(array('exception' => display('please_input_correct_invoice_no')));
             redirect('return_form');

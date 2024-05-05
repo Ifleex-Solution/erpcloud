@@ -183,7 +183,7 @@
                         <div class="col-xs-6 ">
                             <table class="table print-font-size">
                                 <tr>
-                                    <td class="" colspan="8"><b><?php echo display('total') ?>:</td>
+                                    <td class="" colspan="8"><b><?php echo   'Total Price Before Discount' ?>:</td>
                                     <td class="text-right">
                                         <b><?php echo (($position==0)?$currency.' '.$total:$total.' '.$currency) ?></b>
                                     </td>

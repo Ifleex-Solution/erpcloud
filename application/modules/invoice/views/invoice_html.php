@@ -316,7 +316,7 @@
                                         if ($invoice_all_data[0]['total_discount'] != 0) {
                                             ?>
                                 <tr>
-                                    <th><?php echo display('dis_val') ?> :</th>
+                                    <th><?php echo 'Total Discount' ?> :</th>
                                     <td class="text-right">
                                         <?php echo (($position == 0) ? $currency.' '.$total_discount : $total_discount.' '.$currency) ?>
                                     </td>
