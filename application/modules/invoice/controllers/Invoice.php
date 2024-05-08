@@ -417,6 +417,7 @@ class Invoice extends MX_Controller {
         'is_dis_val'       => $is_dis_val,
         'vat_amnt_per'     => $vat_amnt_per,
         'vat_amnt'         => $vat_amnt,
+        'total_before'            => number_format($invoice_detail[0]['paid_amount']+$invoice_detail[0]['total_discount'], 2, '.', ','),
         'is_discount'      => $is_discount,
         'users_name'       => $users->first_name.' '.$users->last_name,
         'tax_regno'        => $txregname,
@@ -524,7 +525,7 @@ class Invoice extends MX_Controller {
         'paid_amount'          => number_format($invoice_detail[0]['paid_amount'], 2, '.', ','),
         'due_amount'           => number_format($invoice_detail[0]['due_amount'], 2, '.', ','),
         'shipping_cost'        => number_format($invoice_detail[0]['shipping_cost'], 2, '.', ','),
-        
+        'total_before'            =>  number_format($purchase_detail[0]['paid_amount']+$purchase_detail[0]['total_discount'], 2),
         'invoice_all_data'     => $invoice_detail,
         'previous'             => number_format($invoice_detail[0]['prevous_due'], 2, '.', ','),
         'is_discount'          => $is_discount,

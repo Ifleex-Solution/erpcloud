@@ -159,11 +159,9 @@
                                     <td align="right" colspan="10"><b><?php  echo 'Total Price Before Discount' ?></b></td>
                                     <td align="right">
                                     <b>
-                                        <?php if($position == 0){
-                                       echo  $currency.' '.html_escape(number_format($s_total, 2, '.', ','));
-                                    }else{
-                                    echo html_escape(number_format($s_total, 2, '.', ',')).' '.$currency;
-                                    } ?>
+                                    <?php echo html_escape((($position == 0) ? $currency.' '.$total_before : $total_before.' '. $currency)) ?>
+
+
                                     </b>
                                     </td>
                                     </tr>
