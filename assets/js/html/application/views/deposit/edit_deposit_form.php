@@ -2,7 +2,10 @@
 <div class="form-container">
     <form class="form-vertical" action="<?=base_url()?>cdeposit/deposit_update" id="deposit_update" method="post"  name="deposit_update" enctype="multypart/formdata">
         <legend>Deposit detail</legend>
-		<?php $date = date('Y-m-d'); ?>
+		<?php
+                date_default_timezone_set('Asia/Colombo');
+
+        $date = date('Y-m-d'); ?>
         <div class="row-fluid">
             <div class="span3">
                 <div class="control-group">

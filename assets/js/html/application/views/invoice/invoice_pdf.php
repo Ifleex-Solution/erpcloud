@@ -1,4 +1,7 @@
-<?php $date = date('Y-m-d'); ?>
+<?php 
+        date_default_timezone_set('Asia/Colombo');
+
+$date = date('Y-m-d'); ?>
 <!-- Invoice pdf start -->
 <table class="table">
     <thead>

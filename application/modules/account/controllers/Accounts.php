@@ -1148,6 +1148,7 @@ $head_name =$id.'-'.$supplier_info->supplier_name;
     
     public function bank_reconciliation(){ 
         $this->permission1->method('bank_reconciliation','update')->access();
+        date_default_timezone_set('Asia/Colombo');
 
        $dtpFromDate         = $this->input->post('dtpFromDate')?$this->input->post('dtpFromDate'):date('Y-m-d',strtotime('first day of this month'));
        $dtpToDate           = $this->input->post('dtpToDate')?$this->input->post('dtpToDate'):date('Y-m-d');  
@@ -1187,6 +1188,8 @@ $head_name =$id.'-'.$supplier_info->supplier_name;
     }
 
     public function bank_reconciliation_report(){
+
+      date_default_timezone_set('Asia/Colombo');
 
       $this->permission1->method('bank_reconciliation','read')->access();
 

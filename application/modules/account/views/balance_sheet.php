@@ -12,6 +12,9 @@
             <div class="panel-body">
                 <?php echo form_open('balance_sheet', array('class' => 'form-inline', 'method' => 'post')) ?>
                 <?php
+
+           date_default_timezone_set('Asia/Colombo');
+
             $today = date('Y-m-d');
             ?>
                 <div class="form-group">

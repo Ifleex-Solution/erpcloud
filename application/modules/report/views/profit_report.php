@@ -5,7 +5,7 @@
 		        <div class="panel panel-default">
 		            <div class="panel-body"> 
 		                <?php echo form_open('profit_report',array('class' => 'form-inline','method' => 'get'))?>
-		                <?php date_default_timezone_set("Asia/Dhaka"); $today = date('Y-m-d'); ?>
+		                <?php         date_default_timezone_set('Asia/Colombo'); $today = date('Y-m-d'); ?>
 		                    <div class="form-group">
 		                        <label for="from_date"><?php echo display('start_date') ?>:</label>
 		                        <input type="text" name="from_date" class="form-control datepicker" id="from_date" value="<?php echo $from?>" placeholder="<?php echo display('start_date') ?>" >

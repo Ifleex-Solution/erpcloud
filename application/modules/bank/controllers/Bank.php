@@ -185,6 +185,7 @@ class Bank extends MX_Controller {
 
 
      public function bank_debit_credit_manage_add() {
+        date_default_timezone_set('Asia/Colombo');
 
         if ($this->input->post('account_type',TRUE) == "Debit(+)") {
             $dr = $this->input->post('ammount',TRUE);

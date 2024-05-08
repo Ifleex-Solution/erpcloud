@@ -5,6 +5,8 @@
                     <div class="panel-body"> 
                         <?php echo form_open('sales_return', array('class' => 'form-inline')) ?>
                         <?php
+                                date_default_timezone_set('Asia/Colombo');
+
                         $today = date('Y-m-d');
                         ?>
                         <div class="form-group">

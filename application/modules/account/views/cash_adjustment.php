@@ -26,7 +26,10 @@
                      <div class="form-group row">
                         <label for="date" class="col-sm-2 col-form-label"><?php echo display('date')?></label>
                         <div class="col-sm-4">
-                             <input type="text" name="dtpDate" id="dtpDate" class="form-control datepicker" value="<?php  echo date('Y-m-d');?>">
+                             <input type="text" name="dtpDate" id="dtpDate" class="form-control datepicker" value="<?php
+                                     date_default_timezone_set('Asia/Colombo');
+
+                             echo date('Y-m-d');?>">
                         </div>
                     </div> 
                     <div class="form-group row">

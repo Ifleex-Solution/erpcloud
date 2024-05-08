@@ -58,6 +58,8 @@
                     <div class="panel-body"> 
                         <?php echo form_open('Cretrun_m/datewise_invoic_return_list', array('class' => 'form-inline')) ?>
                         <?php
+                                date_default_timezone_set('Asia/Colombo');
+
                         $today = date('Y-m-d');
                         ?>
                         <div class="form-group">

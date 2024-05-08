@@ -42,7 +42,10 @@
                         <label for="CheckDate" class="col-sm-2 col-form-label"><?php echo "Check Date";?></label>
                         <div class="col-sm-4">
                             <input type="text" name="chequeDate" id="chequeDate"
-                                class="form-control datepicker financialyear" value="<?php  echo date('Y-m-d');?>">
+                                class="form-control datepicker financialyear" value="<?php 
+                                        date_default_timezone_set('Asia/Colombo');
+
+                                echo date('Y-m-d');?>">
                         </div>
                     </div>
                     <div class="form-group row">

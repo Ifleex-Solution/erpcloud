@@ -22,7 +22,10 @@
                         <div class="form-group row">
                             <label for="dtpToDate" class="col-sm-4 col-form-label"><?php echo display('to_date') ?></label>
                             <div class="col-sm-8">
-                                <input type="text"  name="dtpToDate" value="<?php echo  isset($dtpToDate)? $dtpToDate : date('Y-m-d'); ?>" placeholder="<?php echo display('date') ?>" class="datepicker form-control">
+                                <input type="text"  name="dtpToDate" value="<?php
+                                        date_default_timezone_set('Asia/Colombo');
+
+                                echo  isset($dtpToDate)? $dtpToDate : date('Y-m-d'); ?>" placeholder="<?php echo display('date') ?>" class="datepicker form-control">
                             </div>
                         </div>
                     </div><div class="col-sm-3">

@@ -6,6 +6,8 @@
                     <div class="panel-body"> 
                         <?php echo form_open('shipping_cost_report', array('class' => 'form-inline', 'method' => 'get')) ?>
                         <?php
+                                date_default_timezone_set('Asia/Colombo');
+
                         $today = date('Y-m-d');
                         ?>
                         <div class="form-group">

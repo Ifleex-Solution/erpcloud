@@ -60,6 +60,9 @@ function printDiv() {
 
                                  <?php echo form_open('Cexpense/expense_statement', array('class' => 'form-inline', 'method' => 'get')) ?>
                         <?php
+
+date_default_timezone_set('Asia/Colombo');
+
                         $today = date('Y-m-d');
                         ?>
                         <div class="form-group">

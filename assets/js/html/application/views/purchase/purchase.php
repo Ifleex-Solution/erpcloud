@@ -48,7 +48,10 @@
 		            	<div class="row">
 		            	<div class="col-sm-7">
 		             	<form action="<?php echo base_url('Cpurchase/manage_purchase_date_to_date')?>" class="form-inline" method="post" accept-charset="utf-8">
-		                <?php  $today = date('Y-m-d'); ?>
+		                <?php 
+						        date_default_timezone_set('Asia/Colombo');
+
+						$today = date('Y-m-d'); ?>
 		                    <div class="form-group">
 		                        <label class="" for="from_date"><?php echo display('from') ?></label>
 		                        <input type="text" name="from_date" class="form-control datepicker" id="from_date" value="<?php echo $today?>" placeholder="<?php echo display('start_date') ?>" >

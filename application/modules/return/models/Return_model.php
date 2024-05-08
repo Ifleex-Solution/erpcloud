@@ -92,6 +92,8 @@ class Return_model extends CI_Model {
         
 
         // product return part 
+        date_default_timezone_set('Asia/Colombo');
+
         $date          = date('Y-m-d');
         $createby      = $this->session->userdata('id');
         $createdate    = date('Y-m-d H:i:s');
@@ -299,6 +301,7 @@ class Return_model extends CI_Model {
     }
 
     public function insert_sale_inventory_voucher($invoice_id = null,$dbtid = null,$amnt = null,$Narration = null,$Comment = null,$reVID = null){
+        date_default_timezone_set('Asia/Colombo');
 
         $fyear = financial_year();          
         $VDate = date('Y-m-d');
@@ -332,6 +335,7 @@ class Return_model extends CI_Model {
 
     // insert sales debitvoucher
     public function insert_sale_creditvoucher($is_credit = null,$invoice_id = null,$dbtid = null,$amnt_type = null,$amnt = null,$Narration = null,$Comment = null,$reVID = null,$subcode = null){  
+        date_default_timezone_set('Asia/Colombo');
 
         $fyear = financial_year();          
         $VDate = date('Y-m-d');
@@ -471,7 +475,8 @@ class Return_model extends CI_Model {
     // insert purchase debitvoucher
     public function insert_purchase_debitvoucher_return($is_credit = null,$purchase_id = null,$dbtid = null,$amnt_type = null,$amnt = null,$Narration = null,$Comment = null,$reVID = null,$subcode = null){  
 
-        
+        date_default_timezone_set('Asia/Colombo');
+
         $fyear = financial_year();          
         $VDate = date('Y-m-d');
         $CreateBy=$this->session->userdata('id');
@@ -537,6 +542,9 @@ class Return_model extends CI_Model {
 
     ///#################### Supplier return  Entry ############///////////
     public function return_supplier_entry() {
+
+        date_default_timezone_set('Asia/Colombo');
+
         $purchase_id  = $this->input->post('purchase_id',TRUE);
         $dbpurs_id    = $this->input->post('dbpurs_id',TRUE);
         $total        = $this->input->post('grand_total_price',TRUE);

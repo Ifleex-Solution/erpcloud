@@ -358,6 +358,8 @@ $searchdate =(!empty($postdate)?$postdate:date('F Y'));
                         </thead>
                         <tbody>
                             <?php
+                                    date_default_timezone_set('Asia/Colombo');
+
                             $ttl_amount = $ttl_paid = $ttl_due = $ttl_discout = $ttl_receipt = 0;
                             $todays = date('Y-m-d');
                             if ($todays_purchase_due) {
@@ -450,6 +452,8 @@ $searchdate =(!empty($postdate)?$postdate:date('F Y'));
                         </thead>
                         <tbody>
                             <?php
+                                    date_default_timezone_set('Asia/Colombo');
+
                                          $ttl_amount = $ttl_paid = $ttl_due = $ttl_discout = $ttl_receipt = 0;
                                         $todays = date('Y-m-d');
                                         if ($todays_sales_report) {

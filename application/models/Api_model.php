@@ -804,6 +804,8 @@ class Api_model extends CI_Model {
 
     public function purchase_entry() {
 
+        date_default_timezone_set('Asia/Colombo');
+
             $purchase_id = date('YmdHis');
             $supplier_id = $this->input->post('supplier_id');
 
@@ -1067,6 +1069,8 @@ class Api_model extends CI_Model {
     }
 
     public function purchase_update() {
+
+        date_default_timezone_set('Asia/Colombo');
 
             $purchase_id = $this->input->post('purchase_id');
             $supplier_id = $this->input->post('supplier_id');
@@ -1496,6 +1500,8 @@ class Api_model extends CI_Model {
     }
     
     public function check_duration($device_id){
+        date_default_timezone_set('Asia/Colombo');
+
         $currdate = date('Y-m-d');
         $this->db->select('*');
         $this->db->from('payment_checkout');

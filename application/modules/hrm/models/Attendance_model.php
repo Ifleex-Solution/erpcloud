@@ -87,6 +87,8 @@ class Attendance_model extends CI_Model {
 
        //attendance List
     public function attendance_list() {
+        date_default_timezone_set('Asia/Colombo');
+
         $date = date('Y-m-d');
         $query =$this->db->select("count(DISTINCT(e.att_id)) as att_id,e.*,p.id,p.first_name,p.last_name")->join('employee_history p','e.employee_id = p.id','left')->where('e.date',$date)->group_by('e.att_id')->order_by('e.att_id', 'desc')->get('attendance e');
         if ($query->num_rows() > 0) {

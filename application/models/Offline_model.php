@@ -774,6 +774,8 @@ public function credit_customer_list($limit=null,$start=null) {
 
     }
   public function purchase_entry() {
+    date_default_timezone_set('Asia/Colombo');
+
         $purchase_id = date('YmdHis');
         $supplier_id = $this->input->post('supplier_id');
         $supinfo     = $this->db->select('*')->from('supplier_information')->where('supplier_id',$supplier_id)->get()->row();
@@ -1038,6 +1040,8 @@ public function delete_purchase($id = null){
 |_______________________________________________________
 */
   public function purchase_update() {
+    date_default_timezone_set('Asia/Colombo');
+
         $purchase_id = $this->input->post('purchase_id');
         $supplier_id = $this->input->post('supplier_id');
         $supinfo     = $this->db->select('*')->from('supplier_information')->where('supplier_id',$supplier_id)->get()->row();

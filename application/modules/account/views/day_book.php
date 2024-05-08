@@ -16,7 +16,10 @@
                         <div class="form-group row">
                             <label for="date" class="col-sm-4 col-form-label"><?php echo display('from_date') ?></label>
                             <div class="col-sm-8">
-                                <input type="text" name="dtpFromDate" value="<?php echo date('Y-m-d');?>"
+                                <input type="text" name="dtpFromDate" value="<?php
+                                        date_default_timezone_set('Asia/Colombo');
+
+                                echo date('Y-m-d');?>"
                                     placeholder="<?php echo display('date') ?>" class="datepicker form-control">
                             </div>
                         </div>
@@ -24,7 +27,10 @@
                         <div class="form-group row">
                             <label for="date" class="col-sm-4 col-form-label"><?php echo display('to_date') ?></label>
                             <div class="col-sm-8">
-                                <input type="text" name="dtpToDate" value="<?php echo date('Y-m-d');?>"
+                                <input type="text" name="dtpToDate" value="<?php 
+                                        date_default_timezone_set('Asia/Colombo');
+
+                                echo date('Y-m-d');?>"
                                     placeholder="<?php echo display('date') ?>" class="datepicker form-control">
                             </div>
                         </div>

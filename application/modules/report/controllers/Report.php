@@ -164,6 +164,8 @@ class Report extends MX_Controller {
 
      //    ============ its for todays_customer_receipt =============
     public function bdtask_todays_customer_received() {
+        date_default_timezone_set('Asia/Colombo');
+
         $today = date('Y-m-d');
         $all_customer = $this->db->select('*')->from('customer_information')->get()->result();
         $todays_customer_receipt = $this->report_model->todays_customer_receipt($today);
@@ -182,6 +184,8 @@ class Report extends MX_Controller {
 
     //    ============ its for todays_customer_receipt =============
        public function bdtask_customerwise_received() {
+        date_default_timezone_set('Asia/Colombo');
+
         $customer_id = $this->input->post('customer_id',TRUE);
         $from_date   = $this->input->post('from_date',TRUE);
         $today       = date('Y-m-d');

@@ -34,7 +34,10 @@
                 <div class="panel panel-default">
                     <div class="panel-body"> 
                         <?php echo form_open('Cpayment/custom_search_datewise', array('class' => 'form-inline',)) ?>
-                        <?php $today = date('Y-m-d'); ?>
+                        <?php
+                                date_default_timezone_set('Asia/Colombo');
+
+                        $today = date('Y-m-d'); ?>
                         <label class="select"><?php echo display('search_by_date') ?>: <?php echo display('from') ?></label>
                         <input type="text" name="from_date"  value="<?php echo $today; ?>" class="datepicker form-control"/>
                         <label class="select"><?php echo display('to') ?></label>
@@ -71,6 +74,8 @@
                             <div class="table-responsive" style="margin-top: 10px;">
                                 <p style="font-size: 17px; color: black; font-weight:bold">
                                     <?php
+                                            date_default_timezone_set('Asia/Colombo');
+
                                     echo display('company_name');
                                     echo "<br>";
 

@@ -33,6 +33,8 @@ class Salary_advance extends MX_Controller {
 
 	public function create_salary_advance()
 	{ 
+		date_default_timezone_set('Asia/Colombo');
+
 		$this->permission1->method('salary_advance_view','create')->access();
 
 		$data['title'] = display('salary_advance_view');
@@ -108,6 +110,7 @@ class Salary_advance extends MX_Controller {
 	}
 
 	public function update_salary_advance($id = null){
+        date_default_timezone_set('Asia/Colombo');
 
 		$this->permission1->method('salary_advance_view','update')->access();
 

@@ -3,7 +3,10 @@
                 <div class="panel panel-default">
                     <div class="panel-body"> 
                         <?php echo form_open('customer_ledgerdata', array('class' => '', 'id' => 'validate')) ?>
-                        <?php $today = date('Y-m-d'); ?>
+                        <?php
+                                date_default_timezone_set('Asia/Colombo');
+
+                        $today = date('Y-m-d'); ?>
                         <div class="row">
                        <div class="col-sm-4">
                         <div class="form-group row">

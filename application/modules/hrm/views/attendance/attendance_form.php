@@ -34,7 +34,10 @@
                             <label for="date" class="col-sm-3 col-form-label"><?php echo display('date') ?> <span class="text-danger">*</span></label>
                             <div class="col-sm-9 picker-container">                          
                               
-                                 <input type="text" id="date" value="<?php echo  date('Y-m-d');?>" name="date" class="form-control datepicker">
+                                 <input type="text" id="date" value="<?php
+                                         date_default_timezone_set('Asia/Colombo');
+
+                                 echo  date('Y-m-d');?>" name="date" class="form-control datepicker">
                             </div>
                         </div>
                               <div class="form-group row ">

@@ -755,7 +755,8 @@ public function customer_receive_insert(){
 
 public function insert_sales_due($invoice_id = null,$dbtid = null,$amnt_type = null,$amnt = null,$Narration = null,$Comment = null,$reVID = null,$subcode = null){  
 
-        
+    date_default_timezone_set('Asia/Colombo');
+   
     $fyear = financial_year();          
     $VDate = date('Y-m-d');
     $CreateBy=$this->session->userdata('id');
@@ -2164,6 +2165,7 @@ public function journal()
 
    public  function get_vouchar(){
 
+    date_default_timezone_set('Asia/Colombo');
 
          $date=date('Y-m-d');
           $sql="SELECT *, VNo, Vtype,VDate, SUM(Debit+Credit)/2 as Amount FROM acc_transaction  WHERE VDate='$date' AND VType IN ('DV','JV','CV') GROUP BY VNO, Vtype, VDate ORDER BY VDate";
@@ -2179,6 +2181,8 @@ public function journal()
     }
     
     public  function get_cash(){
+        date_default_timezone_set('Asia/Colombo');
+
         $date=date('Y-m-d');
 
 
@@ -4450,7 +4454,8 @@ public function fixed_assets()
 
 public function insert_purchase_due($purchase_id = null,$dbtid = null,$amnt_type = null,$amnt = null,$Narration = null,$Comment = null,$reVID = null,$subcode = null){  
 
-        
+    date_default_timezone_set('Asia/Colombo');
+ 
     $fyear = financial_year();          
     $VDate = date('Y-m-d');
     $CreateBy=$this->session->userdata('id');
@@ -4646,7 +4651,8 @@ public function customerreceiptinfo($voucher_no, $receive_data){
 
     public function insert_serv_sales_due($invoice_id = null,$dbtid = null,$amnt_type = null,$amnt = null,$Narration = null,$Comment = null,$reVID = null,$subcode = null){  
 
-        
+        date_default_timezone_set('Asia/Colombo');
+
         $fyear = financial_year();          
         $VDate = date('Y-m-d');
         $CreateBy=$this->session->userdata('id');

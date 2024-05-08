@@ -13,7 +13,10 @@
 		        <div class="panel panel-default">
 		            <div class="panel-body"> 
 		                <?php echo form_open('supplier_return_search',array('class' => 'form-inline'))?>
-		                <?php  $today = date('Y-m-d'); ?>
+		                <?php 
+						        date_default_timezone_set('Asia/Colombo');
+
+						$today = date('Y-m-d'); ?>
 		                    <div class="form-group">
 		                        <label class="" for="from_date"><?php echo display('start_date') ?></label>
 		                        <input type="text" name="from_date" class="form-control datepicker" id="from_date" value="<?php echo $today?>" placeholder="<?php echo display('start_date') ?>" >

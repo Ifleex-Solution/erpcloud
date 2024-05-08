@@ -34,12 +34,18 @@
                 </div>
                 <div class="form-group form-group-new">
                     <label for="dtpFromDate"><?php echo display('from_date')?> :</label>
-                    <input type="text" name="dtpFromDate" value="<?php echo   isset($dtpFromDate)? $dtpFromDate : date('Y-m-d'); ?>" class="datepicker form-control" />
+                    <input type="text" name="dtpFromDate" value="<?php
+                            date_default_timezone_set('Asia/Colombo');
+
+                    echo   isset($dtpFromDate)? $dtpFromDate : date('Y-m-d'); ?>" class="datepicker form-control" />
                 </div>
                 <div class="form-group form-group-new">
                     <label for="dtpToDate"><?php echo display('to_date')?> :</label>
                     <input type="text" class="datepicker form-control" name="dtpToDate"
-                        value="<?php echo  isset($dtpToDate)? $dtpToDate : date('Y-m-d'); ?>" />
+                        value="<?php 
+                                date_default_timezone_set('Asia/Colombo');
+
+                        echo  isset($dtpToDate)? $dtpToDate : date('Y-m-d'); ?>" />
                 </div>
                 <button type="submit" class="btn btn-success"><?php echo display('search') ?></button>
 

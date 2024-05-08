@@ -27,7 +27,8 @@
                     	<div class="form-group row">
                             <label for="date" class="col-sm-3 col-form-label"><?php echo display('date') ?> <i class="text-danger">*</i></label>
                             <div class="col-sm-6">
-                            <?php date_default_timezone_set("Asia/Dhaka"); $date = date('Y-m-d'); ?>
+                            <?php         date_default_timezone_set('Asia/Colombo');
+ $date = date('Y-m-d'); ?>
                                 <input type="text" class="form-control datepicker" name="date" id="date" required="" placeholder="<?php echo display('date') ?>" value="<?php echo $date; ?>" tabindex="1"/>
                             </div>
                         </div>

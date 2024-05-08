@@ -17,6 +17,9 @@
         </div>
         <div class="modal-body">
             <p><?php
+
+date_default_timezone_set('Asia/Colombo');
+
                 echo display('daily_reports') . display('account_name') . ':';
                 foreach ($marks as $row) {
                     

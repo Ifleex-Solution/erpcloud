@@ -155,6 +155,8 @@ class Report_model extends CI_Model {
     }
 
           public function cash_data_receipt() {
+            date_default_timezone_set('Asia/Colombo');
+
         //-----------
         $cash = 0;
         $datse = date('Y-m-d');
@@ -170,6 +172,8 @@ class Report_model extends CI_Model {
 
 
     public function cash_data() {
+        date_default_timezone_set('Asia/Colombo');
+
         //-----------
         $cash = 0;
         $datse = date('Y-m-d');
@@ -214,6 +218,8 @@ class Report_model extends CI_Model {
 
         //Retrieve todays_sales_report
     public function todays_sales_report() {
+        date_default_timezone_set('Asia/Colombo');
+
         $today = date('Y-m-d');
         $this->db->select("a.*,b.customer_id,b.customer_name");
         $this->db->from('invoice a');
@@ -339,6 +345,8 @@ class Report_model extends CI_Model {
 
         //Retrieve todays_purchase_report
        public function todays_purchase_report() {
+        date_default_timezone_set('Asia/Colombo');
+
         $today = date('Y-m-d');
         $this->db->select("a.*,b.supplier_id,b.supplier_name");
         $this->db->from('product_purchase a');
@@ -563,6 +571,8 @@ class Report_model extends CI_Model {
 
         //Retrieve todays_purchase_report
     public function bdtask_purchase_report($from_date, $to_date) {
+        date_default_timezone_set('Asia/Colombo');
+
         $today = date('Y-m-d');
         $this->db->select("a.*,b.supplier_id,b.supplier_name");
         $this->db->from('product_purchase a');

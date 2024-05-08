@@ -58,7 +58,10 @@ function printDiv(divName) {
 		        <div class="panel panel-default">
 		            <div class="panel-body"> 
 		               	<?php echo form_open('Cproduct/product_sales_supplier_rate/{product_id}',array('class' => 'form-inline', ))?>
-	               			<?php $today = date('Y-m-d'); $monthearlier= date('Y-m-d',strtotime('-30 days'));?>
+	               			<?php
+							        date_default_timezone_set('Asia/Colombo');
+
+							$today = date('Y-m-d'); $monthearlier= date('Y-m-d',strtotime('-30 days'));?>
 	               			<label class="text"><?php echo display('product_model') ?> </label>
 							<input type="text" name="product_name" onclick="producstList();" class="form-control productSelection" placeholder='<?php echo display('product_model') ?>' value="{product_model}" id="product_name" >
 							<input type="hidden" class="autocomplete_hidden_value" name="product_id"  value="{product_id}" id="SchoolHiddenId"/>

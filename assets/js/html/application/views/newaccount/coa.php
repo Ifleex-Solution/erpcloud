@@ -86,6 +86,8 @@
                         </thead>
                         <tbody>
                      <?php
+                             date_default_timezone_set('Asia/Colombo');
+
                      $date=date('Y-m-d');
                      ?>
                               <tr id="show_vouchar">

@@ -58,7 +58,8 @@
                                     class="text-danger">*</i></label>
                             <div class="col-sm-6">
                                 <?php
-                               
+                                       date_default_timezone_set('Asia/Colombo');
+
                                         $date = date('Y-m-d');
                                         ?>
                                 <input class="datepicker form-control" type="text" size="50" name="invoice_date"

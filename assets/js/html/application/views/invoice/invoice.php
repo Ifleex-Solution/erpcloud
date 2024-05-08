@@ -68,7 +68,8 @@
                         <div class="col-sm-7">
                         <?php echo form_open('Cinvoice/date_to_date_invoice', array('class' => 'form-inline', 'method' => 'get')) ?>
                         <?php
-                        date_default_timezone_set("Asia/Dhaka");
+                               date_default_timezone_set('Asia/Colombo');
+
                         $today = date('Y-m-d');
                         ?>
                         <div class="form-group">

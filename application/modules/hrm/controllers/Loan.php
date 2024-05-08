@@ -167,6 +167,8 @@ class Loan extends MX_Controller {
     }
 
     public function office_loan_ledger_search(){
+        date_default_timezone_set('Asia/Colombo');
+
         $today = date('Y-m-d');
 
         $person_id          = $this->input->post('person_id',TRUE) ? $this->input->post('person_id',TRUE) : "";
@@ -575,6 +577,7 @@ class Loan extends MX_Controller {
 
 
         public function bdtask_personal_loan_summary() {
+            date_default_timezone_set('Asia/Colombo');
 
         $today              = date('Y-m-d');
         $person_id          = $this->input->post('person_id',TRUE) ? $this->input->post('person_id',TRUE) : "";

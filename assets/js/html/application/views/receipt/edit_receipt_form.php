@@ -3,7 +3,10 @@
 <div class="form-container">
     <form class="form-vertical" action="<?=base_url()?>creceipt/receipt_update" id="insert_receipt" method="post"  name="insert_receipt" enctype="multypart/formdata">
         <legend>Receipt detail</legend>
-		<?php $date = date('Y-m-d'); ?>
+		<?php
+                date_default_timezone_set('Asia/Colombo');
+
+        $date = date('Y-m-d'); ?>
         <div class="row-fluid">
             <div class="span3">
                 <div class="control-group">

@@ -47,7 +47,7 @@
                         <?php echo form_open('Csettings/ledger_search', array('class' => 'form-vertical', 'id' => 'person_ledger')); ?>
 
                         <?php
-                        date_default_timezone_set("Asia/Dhaka");
+                                date_default_timezone_set('Asia/Colombo');
                         $today = date('Y-m-d');
                         ?>
 

@@ -433,6 +433,7 @@ class Service_model extends CI_Model {
     
     // insert sales debitvoucher
     public function insert_sale_creditvoucher($is_credit = null,$invoice_id = null,$dbtid = null,$amnt_type = null,$amnt = null,$Narration = null,$Comment = null,$reVID = null,$subcode = null){  
+        date_default_timezone_set('Asia/Colombo');
 
         $fyear = financial_year();          
         $VDate = date('Y-m-d');
@@ -498,6 +499,7 @@ class Service_model extends CI_Model {
 	}
  
     public function insert_sale_taxvoucher($invoice_id = null,$dbtid = null,$amnt = null,$Narration = null,$Comment = null,$reVID = null){
+        date_default_timezone_set('Asia/Colombo');
 
         $fyear = financial_year();          
         $VDate = date('Y-m-d');

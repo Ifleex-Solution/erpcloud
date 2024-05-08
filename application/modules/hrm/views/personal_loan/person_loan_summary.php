@@ -19,7 +19,8 @@
                         <?php echo form_open('personal_loan_summary', array('class' => 'form-vertical', 'id' => 'person_ledger')); ?>
 
                         <?php
-                       
+                               date_default_timezone_set('Asia/Colombo');
+
                         $today = date('Y-m-d');
                         ?>
 

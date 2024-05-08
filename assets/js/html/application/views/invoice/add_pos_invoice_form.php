@@ -177,7 +177,8 @@ button {
                                     <label for="invoice_date" class="col-sm-3 col-form-label"><?php echo display('date') ?> <i class="text-danger">*</i></label>
                                     <div class="col-sm-6">
                                         <?php
-                                       
+                                               date_default_timezone_set('Asia/Colombo');
+
                                         $date = date('Y-m-d');
                                         ?>
                                         <input class="form-control" type="text" size="50" id="invoice_date" name="invoice_date" required value="<?php echo $date; ?>" tabindex="2" />

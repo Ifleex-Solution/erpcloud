@@ -293,7 +293,8 @@ public function pmethod_dropdown_new(){
     }
 
     public function insert_purchase(){
-         
+        date_default_timezone_set('Asia/Colombo');
+
         $purchase_id = $this->number_generator();
         $p_id        = $this->input->post('product_id',TRUE);
         $supplier_id = $this->input->post('supplier_id',TRUE);
@@ -484,7 +485,8 @@ public function pmethod_dropdown_new(){
     // insert purchase debitvoucher
     public function insert_purchase_debitvoucher($is_credit = null,$purchase_id = null,$dbtid = null,$amnt_type = null,$amnt = null,$Narration = null,$Comment = null,$reVID = null,$subcode = null){  
 
-        
+        date_default_timezone_set('Asia/Colombo');
+
         $fyear = financial_year();
         $VDate = date('Y-m-d');
         $CreateBy=$this->session->userdata('id');

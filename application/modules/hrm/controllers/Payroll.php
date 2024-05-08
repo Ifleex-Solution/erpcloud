@@ -117,6 +117,8 @@ class Payroll extends MX_Controller {
 
 
 	public function create_s_setup(){ 
+		date_default_timezone_set('Asia/Colombo');
+
 		$data['title'] = display('selectionlist');
 		#-------------------------------#
 		$this->form_validation->set_rules('employee_id',display('employee_id'),'required|max_length[50]');
@@ -252,6 +254,8 @@ class Payroll extends MX_Controller {
 
 	public function create_salary_generate()
 	{ 
+		date_default_timezone_set('Asia/Colombo');
+
 		$data['title'] = display('selectionlist'); 
 		#-------------------------------# 
 		$this->form_validation->set_rules('name',display('salar_month'),'required|max_length[50]');
@@ -740,6 +744,7 @@ class Payroll extends MX_Controller {
 	}
 
 	public function employee_salary_generate(){
+        date_default_timezone_set('Asia/Colombo');
 
 		$this->permission1->method('employee_salary_generate','read')->access();
 		
@@ -990,6 +995,7 @@ class Payroll extends MX_Controller {
     }
 	public function employee_salary_generate_misor()
 	{ 
+        date_default_timezone_set('Asia/Colombo');
 
 		$this->permission1->method('employee_salary_generate','read')->access();
 		
@@ -1618,6 +1624,8 @@ class Payroll extends MX_Controller {
 
 	 public function isrt_pyrll_state_tax_jv($dbtid = null,$Damnt = null,$Narration = null,$Comment = null,$reVID = null){  
 
+		date_default_timezone_set('Asia/Colombo');
+
         $maxid = $this->Accounts_model->getMaxFieldNumber('id','acc_vaucher','Vtype','JV','VNo');             
         $vaucherNo = "JV-". ($maxid +1);
         $fyear = $this->session->userdata('fyear');
@@ -1648,6 +1656,9 @@ class Payroll extends MX_Controller {
 	}
 
     public function insert_payroll_journalvoucher($dbtid = null,$Damnt = null,$Narration = null,$Comment = null,$reVID = null){  
+
+
+		date_default_timezone_set('Asia/Colombo');
 
         $maxid = $this->Accounts_model->getMaxFieldNumber('id','acc_vaucher','Vtype','JV','VNo');             
         $vaucherNo = "JV-". ($maxid +1);
@@ -1680,6 +1691,9 @@ class Payroll extends MX_Controller {
 
 	// insert_payroll_debitvoucher
     public function insert_payroll_debitvoucher($dbtid = null,$amnt_type = null,$amnt = null,$Narration = null,$Comment = null,$reVID = null){  
+
+
+		date_default_timezone_set('Asia/Colombo');
 
         $maxid = $this->Accounts_model->getMaxFieldNumber('id','acc_vaucher','Vtype','DV','VNo');             
         $vaucherNo = "DV-". ($maxid +1);
@@ -1859,6 +1873,9 @@ class Payroll extends MX_Controller {
 	}
 
 	public function months_diff_between_two_date($recruited_date){
+
+
+		date_default_timezone_set('Asia/Colombo');
 
 		$date1 = $recruited_date;
 		$date2 = date('Y-m-d');

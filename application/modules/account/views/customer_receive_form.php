@@ -19,7 +19,10 @@
                             class="text-danger">*</i></label>
                     <div class="col-sm-4">
                         <input type="text" name="dtpDate" id="dtpDate" class="form-control datepicker"
-                            value="<?php  echo date('Y-m-d');?>" required>
+                            value="<?php 
+                                    date_default_timezone_set('Asia/Colombo');
+
+                            echo date('Y-m-d');?>" required>
                     </div>
                 </div>
 

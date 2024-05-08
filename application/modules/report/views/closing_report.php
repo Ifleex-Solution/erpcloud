@@ -6,7 +6,10 @@
                 <div class="panel panel-default">
                     <div class="panel-body"> 
                         <?php echo form_open('closing_report_search', array('class' => 'form-inline', 'method' => 'get')) ?>
-                        <?php $today = date('Y-m-d'); ?>
+                        <?php
+                                date_default_timezone_set('Asia/Colombo');
+
+                        $today = date('Y-m-d'); ?>
                         <label class="select"><?php echo display('search_by_date') ?>: <?php echo display('from') ?></label>
                         <input type="text" name="from_date"  value="<?php echo html_escape($today); ?>" class="datepicker form-control"/>
                         <label class="select"><?php echo display('to') ?></label>

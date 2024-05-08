@@ -17,7 +17,8 @@
                         <?php echo form_open('office_loan_person_ledgerdata', array('class' => 'form-vertical', 'id' => 'person_ledger')); ?>
 
                         <?php
-                        
+                                date_default_timezone_set('Asia/Colombo');
+
                         $today = date('Y-m-d');
                         ?>
 

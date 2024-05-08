@@ -92,7 +92,10 @@
                                         <i class="text-danger">*</i>
                                     </label>
                                     <div class="col-sm-8">
-                                        <?php $date = date('Y-m-d'); ?>
+                                        <?php 
+                                                date_default_timezone_set('Asia/Colombo');
+
+                                        $date = date('Y-m-d'); ?>
                                         <input type="text" tabindex="2" class="form-control datepicker" name="purchase_date"value="{purchase_date}" id="date" required />
                                           <input type="hidden" name="purchase_id" value="{purchase_id}">
 

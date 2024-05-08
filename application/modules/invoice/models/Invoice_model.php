@@ -540,6 +540,7 @@ public function invoice_taxinfo($invoice_id){
 
     // insert sales debitvoucher
     public function insert_sale_creditvoucher($is_credit = null,$invoice_id = null,$dbtid = null,$amnt_type = null,$amnt = null,$Narration = null,$Comment = null,$reVID = null,$subcode = null){  
+        date_default_timezone_set('Asia/Colombo');
 
         $fyear = financial_year();          
         $VDate = date('Y-m-d');
@@ -604,6 +605,7 @@ public function invoice_taxinfo($invoice_id){
 	    return true;
 	}
     public function insert_sale_inventory_voucher($invoice_id = null,$dbtid = null,$amnt = null,$Narration = null,$Comment = null,$reVID = null){
+        date_default_timezone_set('Asia/Colombo');
 
         $fyear = financial_year();          
         $VDate = date('Y-m-d');
@@ -635,6 +637,7 @@ public function invoice_taxinfo($invoice_id){
 	    return true;
 	}
     public function insert_sale_taxvoucher($invoice_id = null,$dbtid = null,$amnt = null,$Narration = null,$Comment = null,$reVID = null){
+        date_default_timezone_set('Asia/Colombo');
 
         $fyear = financial_year();          
         $VDate = date('Y-m-d');

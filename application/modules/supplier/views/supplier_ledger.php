@@ -4,7 +4,10 @@
                 <div class="panel panel-default">
                     <div class="panel-body"> 
                         <?php echo form_open('supplier_ledgerdata', array('class' => '', 'id' => 'validate')) ?>
-                        <?php $today = date('Y-m-d'); ?>
+                        <?php 
+                                date_default_timezone_set('Asia/Colombo');
+
+                        $today = date('Y-m-d'); ?>
                        <div class="col-sm-4">
                         <div class="form-group row">
                             <label for="supplier_name" class="col-sm-4 col-form-label"><?php echo display('supplier') ?> <i class="text-danger">*</i></label>

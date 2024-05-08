@@ -185,7 +185,8 @@
                                     <label for="date" class="col-sm-4 col-form-label"><?php echo display('date') ?> <i class="text-danger">*</i></label>
                                     <div class="col-sm-8">
                                         <?php
-                               
+                                       date_default_timezone_set('Asia/Colombo');
+
                                         $date = date('Y-m-d');
                                         ?>
                                         <input class="datepicker form-control" type="text" size="50" name="invoice_date" id="date" required value="<?php echo $date; ?>" tabindex="6" />

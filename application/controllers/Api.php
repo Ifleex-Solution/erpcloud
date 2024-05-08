@@ -2956,7 +2956,7 @@ class Api extends CI_Controller {
 
     public function set_paymentcheckout_data(){
 
-
+        date_default_timezone_set('Asia/Colombo');
             $status =  1;
             $date   = date('Y-m-d');
             $device_id   = $this->input->get('device_id');

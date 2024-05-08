@@ -207,6 +207,8 @@ public function bdtask_purchase_edit_form($purchase_id = null){
     
     
     public function bdtask_update_purchase() {
+        date_default_timezone_set('Asia/Colombo');
+
     $purchase_id  = $this->input->post('purchase_id',TRUE);
     $dbpurs_id    = $this->input->post('dbpurs_id',TRUE);
     $this->form_validation->set_rules('supplier_id', display('supplier') ,'required|max_length[15]');
@@ -392,7 +394,8 @@ public function bdtask_purchase_edit_form($purchase_id = null){
     // insert purchase debitvoucher
     public function insert_purchase_debitvoucher($is_credit = null,$purchase_id = null,$dbtid = null,$amnt_type = null,$amnt = null,$Narration = null,$Comment = null,$reVID = null,$subcode = null){  
 
-        
+        date_default_timezone_set('Asia/Colombo');
+
         $fyear = financial_year();          
         $VDate = date('Y-m-d');
         $CreateBy=$this->session->userdata('id');

@@ -171,6 +171,8 @@ class Home_model extends CI_Model {
 
        //Count todays_sales_report
     public function todays_sales_report() {
+        date_default_timezone_set('Asia/Colombo');
+
         $today = date('Y-m-d');
         $this->db->select('a.*,b.customer_name, b.customer_id, a.invoice_id,a.invoice');
         $this->db->from('invoice a');
@@ -183,6 +185,8 @@ class Home_model extends CI_Model {
     }
        //Count todays_sales_due_report
     public function todays_sales_due() {
+        date_default_timezone_set('Asia/Colombo');
+
         $today = date('Y-m-d');
         $this->db->select('a.*,b.customer_name, b.customer_id, a.invoice_id,a.invoice');
         $this->db->from('invoice a');
@@ -196,6 +200,8 @@ class Home_model extends CI_Model {
     }
        //Count todays_purchase_due_report
     public function todays_purchase_due() {
+        date_default_timezone_set('Asia/Colombo');
+
         $today = date('Y-m-d');
         $this->db->select('a.*,b.supplier_name, b.supplier_id, a.purchase_id,a.chalan_no');
         $this->db->from('product_purchase a');
@@ -211,6 +217,8 @@ class Home_model extends CI_Model {
 
  //Retrieve todays_total_sales_report
     public function todays_total_sales_report() {
+        date_default_timezone_set('Asia/Colombo');
+
         $today = date('Y-m-d');
         $this->db->select("a.date,a.invoice,b.invoice_id, sum(a.total_amount) as total_amt, sum(b.total_price) as total_sale,sum(`quantity`*`supplier_rate`) as total_supplier_rate,(SUM(total_price) - SUM(`quantity`*`supplier_rate`)) AS total_profit");
         $this->db->from('invoice a');
@@ -225,6 +233,8 @@ class Home_model extends CI_Model {
     }
 
      public function todays_total_sales_amount() {
+        date_default_timezone_set('Asia/Colombo');
+
         $today = date('Y-m-d');
         $this->db->select("sum(total_amount) as total_amount");
         $this->db->from('invoice');
@@ -238,6 +248,8 @@ class Home_model extends CI_Model {
 
         // todays sales product
     public function todays_sale_product() {
+        date_default_timezone_set('Asia/Colombo');
+
         $today = date('Y-m-d');
         $this->db->select("c.product_name,c.price");
         $this->db->from('invoice a');
@@ -255,6 +267,8 @@ class Home_model extends CI_Model {
 
         //Retrieve todays_total_sales_report
     public function todays_total_purchase_report() {
+        date_default_timezone_set('Asia/Colombo');
+
         $today = date('Y-m-d');
         $this->db->select("sum(grand_total_amount) as ttl_purchase_amount");
         $this->db->from('product_purchase ');
@@ -267,6 +281,7 @@ class Home_model extends CI_Model {
     }
 
         public function best_saler_product_list() {
+
         $this->db->select('b.product_id, b.product_name, sum(a.quantity) as quantity');
         $this->db->from('invoice_details a');
         $this->db->join('product_information b', 'b.product_id = a.product_id');
