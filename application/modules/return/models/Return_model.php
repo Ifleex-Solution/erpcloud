@@ -247,17 +247,18 @@ class Return_model extends CI_Model {
 
                 $COAID = $multipaytype[$i];
                 $amount_pay = $multipayamount[$i];
+                $subcode    = $this->db->select('*')->from('acc_subcode')->where('referenceNo', $customer_id)->where('subTypeId', 3)->get()->row()->id;
 
-                $this->insert_sale_creditvoucher(0,$return_id,$COAID,$amnt_type,$amount_pay,$Narration,$Comment,$reVID);
+                $this->insert_sale_creditvoucher(0,$return_id,$COAID,$amnt_type,$amount_pay,$Narration,$Comment,$reVID, $subcode );
                 
             }
             
         }else{
             $amount_pay = $total;
             $amnt_type  = 'Credit';
-            //$subcode    = $this->db->select('*')->from('acc_subcode')->where('referenceNo', $supplier_id)->where('subTypeId', 4)->get()->row()->id;
+            $subcode    = $this->db->select('*')->from('acc_subcode')->where('referenceNo', $customer_id)->where('subTypeId', 3)->get()->row()->id;
             $COAID      = $predefine_account->customerCode;
-            $this->insert_sale_creditvoucher(1,$return_id,$COAID,$amnt_type,$amount_pay,$Narration,$Comment,$reVID);
+            $this->insert_sale_creditvoucher(1,$return_id,$COAID,$amnt_type,$amount_pay,$Narration,$Comment,$reVID, $subcode);
 
             $new_due_amount=0;
             $this->db->select('due_amount');
