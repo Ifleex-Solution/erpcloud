@@ -496,7 +496,7 @@ class Product extends MX_Controller {
                             $this -> db -> insert('supplier_product', $supp_prd);
                         } else {
                             $supp_prd = array(
-                                'supplier_id'    => 1
+                                'supplier_id'    => 1,
                                 'supplier_price' => $insert_csv['supplier_price'],
                                 'products_model' => $insert_csv['product_model']
                             );
