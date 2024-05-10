@@ -189,25 +189,7 @@
                     </div>
                     <?php }?>
 
-                    <div class="col-sm-6">
-                        <div class="form-group row">
-                            <label for="category_id" class="col-sm-4 col-form-label"><?php echo display('supplier') ?>
-                                <i class="text-danger">*</i></label>
-                            <div class="col-sm-8">
-                                <select name="supplier_id[]" class="form-control" required="">
-                                        <option value=""> select Supplier</option>
-                                        <?php if ($supplier) { ?>
-                                        <?php foreach($supplier as $suppliers){?>
-                                        <option value="<?php echo $suppliers['supplier_id']?>"
-                                        <?php if($supplier_pr[0]['supplier_id']==$suppliers['supplier_id']){echo 'selected';}?>
-                                        >
-                                            <?php echo $suppliers['supplier_name']?></option>
-
-                                        <?php }} ?>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                 
                     
                     <?php 
                                  $i=0;

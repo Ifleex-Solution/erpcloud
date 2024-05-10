@@ -408,7 +408,7 @@ var options = {
       dataType: "json",
       data: {
         term: request.term,
-        supplier_id:$('#supplier_id').val(),
+        supplier_id:1,
         product_name:product_name,
         csrf_test_name:csrf_test_name
       },
@@ -443,7 +443,7 @@ var options = {
         $.ajax({
             type: "POST",
             url: base_url+"purchase/purchase/bdtask_retrieve_product_data",
-             data: {product_id:product_id,supplier_id:supplier_id,csrf_test_name:csrf_test_name},
+             data: {product_id:product_id,supplier_id:1,csrf_test_name:csrf_test_name},
             cache: false,
             success: function(data)
             {

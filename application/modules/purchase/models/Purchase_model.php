@@ -297,7 +297,7 @@ public function pmethod_dropdown_new(){
 
         $purchase_id = $this->number_generator();
         $p_id        = $this->input->post('product_id',TRUE);
-        $supplier_id = $this->input->post('supplier_id',TRUE);
+        $supplier_id = 1;
         $supinfo     = $this->db->select('*')->from('supplier_information')->where('supplier_id',$supplier_id)->get()->row();
         $sup_head    = $supinfo->supplier_id.'-'.$supinfo->supplier_name;
         $sup_coa     = $this->db->select('*')->from('acc_coa')->where('HeadName',$sup_head)->get()->row();

@@ -184,7 +184,7 @@ class Product extends MX_Controller {
 
         $product_id = (!empty($this->input->post('product_id',TRUE))?$this->input->post('product_id',TRUE):$this->generator(8));
         $sup_price = $this->input->post('supplier_price',TRUE);
-        $s_id      = $this->input->post('supplier_id',TRUE);
+       // $s_id      = $this->input->post('supplier_id',TRUE);
         $product_model = $this->input->post('model',TRUE);
         $taxfield = $this->db->select('tax_name,default_value')
                 ->from('tax_settings')
@@ -233,20 +233,21 @@ class Product extends MX_Controller {
             #if empty $id then insert data
             if (empty($id)) {
                 if ($this->product_model->create_product($postData)) {
-                    for ($i = 0, $n = count($s_id); $i < $n; $i++) {
+                    // for ($i = 0, $n = count($s_id); $i < $n; $i++) {
                         
-                        $supp_id = $s_id[$i];
+                    //    // $supp_id = $s_id[$i];
 
-                        $supp_prd = array(
-                            'product_id'     => $product_id,
-                            'supplier_id'    => $supp_id,
-                            'supplier_price' => $sup_price,
-                            'products_model' => $product_model,
-                        );
-
-                        $this->db->insert('supplier_product', $supp_prd);
-                    }
+                       
+                    // }
                     #set success message
+                    $supp_prd = array(
+                        'product_id'     => $product_id,
+                        'supplier_id'    => 1,
+                        'supplier_price' => $sup_price,
+                        'products_model' => $product_model,
+                    );
+
+                    $this->db->insert('supplier_product', $supp_prd);
                    $this->session->set_flashdata('message', display('save_successfully'));
                 } else {
                  $this->session->set_flashdata('exception', display('please_try_again'));
@@ -254,21 +255,23 @@ class Product extends MX_Controller {
                 redirect("product_list");
             } else {
             if ($this->product_model->update_product($postData)) {
-                $this->db->where('product_id', $id)
-                         ->delete("supplier_product");
-                for ($i = 0, $n = count($s_id); $i < $n; $i++) {
+                // $this->db->where('product_id', $id)
+                //          ->delete("supplier_product");
+                // for ($i = 0, $n = count($s_id); $i < $n; $i++) {
                    
-                    $supp_id = $s_id[$i];
+                //     //$supp_id = $s_id[$i];
 
-                    $supp_prd = array(
-                        'product_id'     => $id,
-                        'supplier_id'    => $supp_id,
-                        'supplier_price' => $sup_price,
-                        'products_model' => $product_model,
-                    );
+                // }
 
-                    $this->db->insert('supplier_product', $supp_prd);
-                }
+                
+                $supp_prd = array(
+                    'product_id'     => $id,
+                    'supplier_id'    => 1,
+                    'supplier_price' => $sup_price,
+                    'products_model' => $product_model,
+                );
+
+                $this->db->insert('supplier_product', $supp_prd);
 
                 $this->session->set_flashdata('message', display('update_successfully'));
             } else {
