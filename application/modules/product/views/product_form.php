@@ -154,6 +154,32 @@
                     </div>
                 </div>
                 <div class="row">
+                    
+               <div class="col-sm-6">
+                        <div class="form-group row">
+                            <label for="opening_stock" class="col-sm-4 col-form-label">Opening Stock
+                                </label>
+                            <div class="col-sm-8">
+                                <input class="form-control text-right" id="opening_stock" name="opening_stock" type="text"
+                                     placeholder="0.00" tabindex="5" min="0"
+                                    >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group row">
+                            <label for="opening_balance" class="col-sm-4 col-form-label">Opening Batch
+                                </label>
+                            <div class="col-sm-8">
+                                <input class="form-control" id="opening_batch" name="opening_batch" type="text"
+                                     placeholder="Opening Batch" 
+                                    >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group row">
                             <label for="image" class="col-sm-4 col-form-label"><?php echo display('image') ?> </label>
