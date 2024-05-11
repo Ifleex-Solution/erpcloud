@@ -8,7 +8,7 @@
 
                         <div class="col-xs-4">
                             <?php foreach($company_info as $company){?>
-                            <img src="<?php
+                            <img style="width: 210px; height:79px;" src="<?php
                                     if (isset($setting->invoice_logo)) {
                                         echo base_url().$setting->invoice_logo;
                                     }
