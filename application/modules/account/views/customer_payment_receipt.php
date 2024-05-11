@@ -81,8 +81,7 @@ td {
                                 if (isset($setting->invoice_logo)) {
                                     echo base_url().$setting->invoice_logo;
                                 }
-                                ?>" style="width: 200px;
-                                height: auto;
+                                ?>" style="width: 210px; height:79px;
                                 max-height: 70px;margin-bottom: 10px;" alt="">
                         <br>
                         <span

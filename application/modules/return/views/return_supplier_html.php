@@ -7,7 +7,7 @@
 	                        <div class="row">
 	                        	
 	                            <div class="col-sm-8 purchasedetails-address">
-								<img src="<?php if (isset($setting->invoice_logo)) {echo base_url().$setting->invoice_logo; }?>" class="img-bottom-m print-logo invoice-img-position" alt="">
+								<img style="width: 210px; height:79px;" src="<?php if (isset($setting->invoice_logo)) {echo base_url().$setting->invoice_logo; }?>" class="img-bottom-m print-logo invoice-img-position" alt="">
 	                                <br>
 	                                <span class="label label-success-outline m-r-15 p-10" ><?php echo display('billing_from') ?></span>
 	                                <address>

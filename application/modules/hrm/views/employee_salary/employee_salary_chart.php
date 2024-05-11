@@ -47,7 +47,7 @@ table.payrollDatatableReport td.noborder {
                     <thead>
                         <tr>
                             <td align="center" class="text-center" style="border:none;text-align: center;padding-bottom: 10px;">
-                                <img src="<?php echo base_url('/').$setting->logo;?>">
+                                <img style="width: 210px; height:79px;" src="<?php echo base_url('/').$setting->invoice_logo;?>">
                             </td>
                         </tr>
                         <tr>

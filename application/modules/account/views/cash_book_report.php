@@ -72,7 +72,7 @@
                             <!-- <table class="print-table print-font-size" width="100%">
                                 <tr>
                                     <td align="left" class="print-table-tr">
-                                        <img src="<?php echo base_url().$setting->logo;?>" class="img-bottom-m print-logo"  alt="logo">
+                                        <img src="<?php echo base_url().$setting->invoice_logo;?>" class="img-bottom-m print-logo"  alt="logo">
                                     </td>
                                     <td align="center" style="border-bottom: 2px #333 solid;">
                                     <strong class=""><?php echo html_escape($company_info[0]['company_name'])?></strong><br>
@@ -202,7 +202,7 @@
                                         <table class=" print-font-size" width="100%">
                                             <tr>
                                                 <td align="left" style="border-bottom: 2px #333 solid;">
-                                                    <img src="<?php echo base_url().$setting->logo;?>" class="img-bottom-m print-logo"
+                                                    <img style="width: 210px; height:79px;" src="<?php echo base_url().$setting->invoice_logo;?>" class="img-bottom-m print-logo"
                                                         alt="logo">
                                                 </td>
                                                 <td align="center" style="border-bottom: 2px #333 solid;">

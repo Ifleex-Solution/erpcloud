@@ -38,7 +38,7 @@
                                                 
                                                 <tr>
                                                     <td align="left" class="print-table-tr">
-                                                        <img src="<?php echo html_escape(base_url().$setting->logo);?>" alt="logo">
+                                                        <img style="width: 210px; height:79px;" src="<?php echo html_escape(base_url().$setting->invoice_logo);?>" alt="logo">
                                                     </td>
                                                     <td align="center" class="print-cominfo">
                                                         <span class="company-txt">

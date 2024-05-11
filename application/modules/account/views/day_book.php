@@ -62,7 +62,7 @@
                             <table class="print-table print-font-size" width="100%">
                                 <tr>
                                     <td align="left" class="print-table-tr" width="33%">
-                                        <img src="<?php echo base_url().$setting->logo;?>" class="img-bottom-m print-logo"
+                                        <img style="width: 210px; height:79px;" src="<?php echo base_url().$setting->invoice_logo;?>" class="img-bottom-m print-logo"
                                             alt="logo">
                                     </td>
                                     <td align="center" style="border-bottom: 2px #333 solid;" width="33%">

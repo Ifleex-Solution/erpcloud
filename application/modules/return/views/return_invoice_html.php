@@ -6,7 +6,7 @@
                     <div class="row">
 
                         <div class="col-sm-8 company-content">
-                            <img src="<?php if (isset($setting->invoice_logo)) {echo base_url().$setting->invoice_logo; }?>"
+                            <img style="width: 210px; height:79px;" src="<?php if (isset($setting->invoice_logo)) {echo base_url().$setting->invoice_logo; }?>"
                                 class="img-bottom-m print-logo invoice-img-position" alt="">
                             <br>
                             <span

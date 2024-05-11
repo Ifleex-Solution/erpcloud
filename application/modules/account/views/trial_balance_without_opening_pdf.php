@@ -13,7 +13,7 @@
 
                         <?php if(!empty($setting->logo)){?>
 
-                          <img src="<?php echo "./".$setting->logo;?>" alt="logo">
+                          <img style="width: 210px; height:79px;" src="<?php echo "./".$setting->invoice_logo;?>" alt="logo">
 
                         <?php }else{ ?>
 

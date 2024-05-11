@@ -44,7 +44,7 @@
                                 <table class="print-font-size" width="100%">
                                     <tr>
                                         <td align="left" style="border-bottom: 2px #333 solid;" width="33.333%">
-                                            <img src="<?php echo base_url().$setting->logo;?>"
+                                            <img style="width: 210px; height:79px;" src="<?php echo base_url().$setting->invoice_logo;?>"
                                                 class="img-bottom-m print-logo" alt="logo">
                                         </td>
                                         <td align="center" style="border-bottom: 2px #333 solid;" width="33.333%">
