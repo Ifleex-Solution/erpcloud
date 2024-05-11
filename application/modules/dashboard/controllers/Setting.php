@@ -173,7 +173,7 @@ class Setting extends MX_Controller {
 			$this->fileupload->do_resize(
 				$logo, 
 				210,
-				48
+				79
 			);
 		}
 		//if logo is not uploaded
@@ -190,7 +190,7 @@ class Setting extends MX_Controller {
 			$this->fileupload->do_resize(
 				$invoice_logo, 
 				210,
-				48
+				79
 			);
 		}
 		//if logo is not uploaded
