@@ -1,48 +1,50 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
- #------------------------------------    
-    # Author: Bdtask Ltd
-    # Author link: https://www.bdtask.com/
-    # Dynamic style php file
-    # Developed by :Isahaq
-    #------------------------------------    
+defined('BASEPATH') or exit('No direct script access allowed');
+#------------------------------------    
+# Author: Bdtask Ltd
+# Author link: https://www.bdtask.com/
+# Dynamic style php file
+# Developed by :Isahaq
+#------------------------------------    
 
-class Product extends MX_Controller {
+class Product extends MX_Controller
+{
 
     public function __construct()
     {
         parent::__construct();
-  
+
         $this->load->model(array(
-            'product_model','supplier/supplier_model')); 
+            'product_model', 'supplier/supplier_model'
+        ));
         $this->load->library('ciqrcode');
-        if (! $this->session->userdata('isLogIn'))
+        if (!$this->session->userdata('isLogIn'))
             redirect('login');
-          
     }
-   
-   // category part
-    function bdtask_category_list() {
+
+    // category part
+    function bdtask_category_list()
+    {
         $data['title']      = display('manage_category');
         $data['module']     = "product";
-        $data['page']       = "category_list"; 
+        $data['page']       = "category_list";
         $data["category_list"] = $this->product_model->category_list();
         echo modules::run('template/layout', $data);
     }
 
 
-      public function bdtask_category_form($id = null)
+    public function bdtask_category_form($id = null)
     {
         $data['title'] = display('add_category');
         #-------------------------------#
-        $this->form_validation->set_rules('category_name',display('category_name'),'required|max_length[200]');
-        $this->form_validation->set_rules('status', display('status') ,'max_length[2]');
+        $this->form_validation->set_rules('category_name', display('category_name'), 'required|max_length[200]');
+        $this->form_validation->set_rules('status', display('status'), 'max_length[2]');
         #-------------------------------#
         $data['category'] = (object)$postData = [
             'category_id'      => $id,
-            'category_name'    => $this->input->post('category_name',true),
-            'status'           => $this->input->post('status',true),
-        ]; 
+            'category_name'    => $this->input->post('category_name', true),
+            'status'           => $this->input->post('status', true),
+        ];
         #-------------------------------#
         if ($this->form_validation->run() === true) {
 
@@ -50,75 +52,76 @@ class Product extends MX_Controller {
             if (empty($id)) {
                 if ($this->product_model->create_category($postData)) {
                     #set success message
-                   $this->session->set_flashdata('message', display('save_successfully'));
+                    $this->session->set_flashdata('message', display('save_successfully'));
                 } else {
-                 $this->session->set_flashdata('exception', display('please_try_again'));
+                    $this->session->set_flashdata('exception', display('please_try_again'));
                 }
                 if (isset($_POST['add-another'])) {
-                redirect(base_url('category_form'));
-                exit;
-            }else{
-                redirect("category_list");
-            }
+                    redirect(base_url('category_form'));
+                    exit;
+                } else {
+                    redirect("category_list");
+                }
             } else {
                 if ($this->product_model->update_category($postData)) {
-                   $this->session->set_flashdata('message', display('update_successfully'));
+                    $this->session->set_flashdata('message', display('update_successfully'));
                 } else {
-                  $this->session->set_flashdata('exception', display('please_try_again'));
-                } 
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }
                 if (isset($_POST['add-another'])) {
-                redirect(base_url('category_form'));
-                exit;
-            }else{
-                redirect("category_list");
+                    redirect(base_url('category_form'));
+                    exit;
+                } else {
+                    redirect("category_list");
+                }
             }
-            }
-            } else { 
-                if(!empty($id)){
+        } else {
+            if (!empty($id)) {
                 $data['title']    = display('edit_category');
-                $data['category'] = $this->product_model->single_category_data($id);  
+                $data['category'] = $this->product_model->single_category_data($id);
             }
-            $data['module']   = "product";  
-            $data['page']     = "category_form";  
-            echo Modules::run('template/layout', $data); 
-           
-            } 
+            $data['module']   = "product";
+            $data['page']     = "category_form";
+            echo Modules::run('template/layout', $data);
+        }
     }
 
 
 
-    public function bdtask_deletecategory($id = null) {
+    public function bdtask_deletecategory($id = null)
+    {
         if ($this->product_model->delete_category($id)) {
-      $this->session->set_flashdata('message', display('delete_successfully'));
+            $this->session->set_flashdata('message', display('delete_successfully'));
         } else {
-       $this->session->set_flashdata('exception', display('please_try_again'));
+            $this->session->set_flashdata('exception', display('please_try_again'));
         }
 
         redirect("category_list");
     }
 
     // unit part
-        function bdtask_unit_list() {
+    function bdtask_unit_list()
+    {
         $data['title']      = display('manage_unit');
         $data['module']     = "product";
-        $data['page']       = "unit_list"; 
+        $data['page']       = "unit_list";
         $data["unit_list"] = $this->product_model->unit_list();
         echo modules::run('template/layout', $data);
     }
 
 
-      public function bdtask_unit_form($id = null)
+    public function bdtask_unit_form($id = null)
     {
         $data['title'] = display('add_unit');
         #-------------------------------#
-        $this->form_validation->set_rules('unit_name',display('unit_name'),'required|max_length[200]');
-        $this->form_validation->set_rules('status', display('status') ,'max_length[2]');
+        $this->form_validation->set_rules('unit_name', display('unit_name'), 'required|max_length[200]');
+        $this->form_validation->set_rules('status', display('status'), 'max_length[2]');
         #-------------------------------#
         $data['unit'] = (object)$postData = [
             'unit_id'      => $id,
-            'unit_name'    => $this->input->post('unit_name',true),
-            'status'       => $this->input->post('status',true),
-        ]; 
+            'unit_name'    => $this->input->post('unit_name', true),
+            'status'       => $this->input->post('status', true),
+        ];
         #-------------------------------#
         if ($this->form_validation->run() === true) {
 
@@ -126,107 +129,109 @@ class Product extends MX_Controller {
             if (empty($id)) {
                 if ($this->product_model->create_unit($postData)) {
                     #set success message
-                   $this->session->set_flashdata('message', display('save_successfully'));
+                    $this->session->set_flashdata('message', display('save_successfully'));
                 } else {
-                 $this->session->set_flashdata('exception', display('please_try_again'));
+                    $this->session->set_flashdata('exception', display('please_try_again'));
                 }
-                    if (isset($_POST['add-another'])) {
-                redirect(base_url('unit_form'));
-                exit;
-            }else{
-                redirect("unit_list");
-            }
-               
+                if (isset($_POST['add-another'])) {
+                    redirect(base_url('unit_form'));
+                    exit;
+                } else {
+                    redirect("unit_list");
+                }
             } else {
                 if ($this->product_model->update_unit($postData)) {
-                   $this->session->set_flashdata('message', display('update_successfully'));
+                    $this->session->set_flashdata('message', display('update_successfully'));
                 } else {
-                  $this->session->set_flashdata('exception', display('please_try_again'));
-                } 
-                          if (isset($_POST['add-another'])) {
-                redirect(base_url('unit_form'));
-                exit;
-            }else{
-                redirect("unit_list");
-            }
-            }
-            } else { 
-                if(!empty($id)){
-                $data['title']    = display('edit_unit');
-                $data['unit'] = $this->product_model->single_unit_data($id);  
+                    $this->session->set_flashdata('exception', display('please_try_again'));
                 }
-                $data['module']   = "product";  
-                $data['page']     = "unit_form";  
-                echo Modules::run('template/layout', $data); 
-           
-            } 
+                if (isset($_POST['add-another'])) {
+                    redirect(base_url('unit_form'));
+                    exit;
+                } else {
+                    redirect("unit_list");
+                }
+            }
+        } else {
+            if (!empty($id)) {
+                $data['title']    = display('edit_unit');
+                $data['unit'] = $this->product_model->single_unit_data($id);
+            }
+            $data['module']   = "product";
+            $data['page']     = "unit_form";
+            echo Modules::run('template/layout', $data);
+        }
     }
 
 
 
-    public function bdtask_deleteunit($id = null) {
+    public function bdtask_deleteunit($id = null)
+    {
         if ($this->product_model->delete_unit($id)) {
-      $this->session->set_flashdata('message', display('delete_successfully'));
+            $this->session->set_flashdata('message', display('delete_successfully'));
         } else {
-       $this->session->set_flashdata('exception', display('please_try_again'));
+            $this->session->set_flashdata('exception', display('please_try_again'));
         }
         redirect("unit_list");
     }
 
     // product part
-    public function bdtask_product_form($id = null){
-       $data['title'] = display('add_product');
+    public function bdtask_product_form($id = null)
+    {
+        $data['title'] = display('add_product');
+        $data['product_open']   = null;
         #-------------------------------#
-        $this->form_validation->set_rules('product_name',display('product_name'),'required|max_length[200]');
-        $this->form_validation->set_rules('model',display('model'),'max_length[200]');
-        $this->form_validation->set_rules('category_id',display('category'),'required|max_length[20]');
-        $this->form_validation->set_rules('price', display('price') ,'max_length[12]');
+        $this->form_validation->set_rules('product_name', display('product_name'), 'required|max_length[200]');
+        $this->form_validation->set_rules('model', display('model'), 'max_length[200]');
+        $this->form_validation->set_rules('category_id', display('category'), 'required|max_length[20]');
+        $this->form_validation->set_rules('price', display('price'), 'max_length[12]');
 
-        $product_id = (!empty($this->input->post('product_id',TRUE))?$this->input->post('product_id',TRUE):$this->generator(8));
-        $sup_price = $this->input->post('supplier_price',TRUE);
-       // $s_id      = $this->input->post('supplier_id',TRUE);
-        $product_model = $this->input->post('model',TRUE);
+        $product_id = (!empty($this->input->post('product_id', TRUE)) ? $this->input->post('product_id', TRUE) : $this->generator(8));
+        $sup_price = $this->input->post('supplier_price', TRUE);
+        // $s_id      = $this->input->post('supplier_id',TRUE);
+        $product_model = $this->input->post('model', TRUE);
         $taxfield = $this->db->select('tax_name,default_value')
-                ->from('tax_settings')
-                ->get()
-                ->result_array();
+            ->from('tax_settings')
+            ->get()
+            ->result_array();
 
 
-         $image_url = $this->fileupload->do_upload(
-            './my-assets/image/product/', 
+        $image_url = $this->fileupload->do_upload(
+            './my-assets/image/product/',
             'image'
 
         );
 
-         $image  = (!empty($image_url)?$image_url:$this->input->post('old_image',TRUE));
+        $image  = (!empty($image_url) ? $image_url : $this->input->post('old_image', TRUE));
         #-------------------------------#
         $data['product'] = (object)$postData = [
-            'product_id'     => (!empty($id)?$id:$product_id),
-            'product_name'   => $this->input->post('product_name',TRUE),
-            'category_id'    => $this->input->post('category_id',TRUE),
-            'unit'           => $this->input->post('unit',TRUE),
+            'product_id'     => (!empty($id) ? $id : $product_id),
+            'product_name'   => $this->input->post('product_name', TRUE),
+            'category_id'    => $this->input->post('category_id', TRUE),
+            'unit'           => $this->input->post('unit', TRUE),
             'tax'            => 0,
-            'serial_no'      => $this->input->post('serial_no',TRUE),
-            'price'          => $this->input->post('price',TRUE),
-            'product_model'  => $this->input->post('model',TRUE),
-            'product_details'=> $this->input->post('description',TRUE),
-            'product_vat'    => $this->input->post('product_vat',TRUE),
+            'serial_no'      => $this->input->post('serial_no', TRUE),
+            'price'          => $this->input->post('price', TRUE),
+            'product_model'  => $this->input->post('model', TRUE),
+            'product_details' => $this->input->post('description', TRUE),
+            'product_vat'    => $this->input->post('product_vat', TRUE),
             'image'          => (!empty($image) ? $image : 'my-assets/image/product.png'),
             'status'         => 1,
-        ]; 
+        ];
 
         $tablecolumn = $this->db->list_fields('tax_collection');
-        $num_column = count($tablecolumn)-4;
-        if($num_column > 0){
-       $txf = [];
-       for($i=0;$i<$num_column;$i++){
-        $txf[$i] = 'tax'.$i;
-       }
-       foreach ($txf as $key => $value) {
-        $postData[$value] = (!empty($this->input->post($value))?$this->input->post($value):0)/100;
-       }
-    }
-        
+        $num_column = count($tablecolumn) - 4;
+        if ($num_column > 0) {
+            $txf = [];
+            for ($i = 0; $i < $num_column; $i++) {
+                $txf[$i] = 'tax' . $i;
+            }
+            foreach ($txf as $key => $value) {
+                $postData[$value] = (!empty($this->input->post($value)) ? $this->input->post($value) : 0) / 100;
+            }
+        }
+        $logFilePath = 'logfile.log';
+        $fileHandle = fopen($logFilePath, 'a');
         #-------------------------------#
         if ($this->form_validation->run() === true) {
 
@@ -234,10 +239,10 @@ class Product extends MX_Controller {
             if (empty($id)) {
                 if ($this->product_model->create_product($postData)) {
                     // for ($i = 0, $n = count($s_id); $i < $n; $i++) {
-                        
+
                     //    // $supp_id = $s_id[$i];
 
-                       
+
                     // }
                     #set success message
                     $supp_prd = array(
@@ -252,47 +257,58 @@ class Product extends MX_Controller {
 
                     $data1 = array(
                         'product_id'         => $product_id,
-                        'quantity'           => $this->input->post('opening_stock',TRUE),
-                        'batch_id'           => $this->input->post('opening_batch',TRUE),
+                        'quantity'           => $this->input->post('opening_stock', TRUE),
+                        'batch_id'           => $this->input->post('opening_batch', TRUE),
                         'status'             => 1
                     );
                     $this->db->insert('product_purchase_details', $data1);
 
-                   $this->session->set_flashdata('message', display('save_successfully'));
+                    $this->session->set_flashdata('message', display('save_successfully'));
                 } else {
-                 $this->session->set_flashdata('exception', display('please_try_again'));
+                    $this->session->set_flashdata('exception', display('please_try_again'));
                 }
                 redirect("product_list");
             } else {
-            if ($this->product_model->update_product($postData)) {
-                // $this->db->where('product_id', $id)
-                //          ->delete("supplier_product");
-                // for ($i = 0, $n = count($s_id); $i < $n; $i++) {
-                   
-                //     //$supp_id = $s_id[$i];
 
-                // }
+                if ($this->product_model->update_product($postData)) {
+                    // $this->db->where('product_id', $id)
+                    //          ->delete("supplier_product");
+                    // for ($i = 0, $n = count($s_id); $i < $n; $i++) {
 
-                
-                $supp_prd = array(
-                    'product_id'     => $id,
-                    'supplier_id'    => 1,
-                    'supplier_price' => $sup_price,
-                    'products_model' => $product_model,
-                );
+                    //     //$supp_id = $s_id[$i];
 
-                $this->db->insert('supplier_product', $supp_prd);
+                    // }
 
-                $this->session->set_flashdata('message', display('update_successfully'));
-            } else {
-                $this->session->set_flashdata('exception', display('please_try_again'));
-            } 
-            redirect("product_list");
+
+                    // $supp_prd = array(
+                    //     'product_id'     => $id,
+                    //     'supplier_id'    => 1,
+                    //     'supplier_price' => $sup_price,
+                    //     'products_model' => $product_model,
+                    // );
+
+                    // $this->db->insert('supplier_product', $supp_prd);
+
+                    $supp_prd = array(
+                        'product_id'     =>$id,
+                        'supplier_id'    => 1,
+                        'supplier_price' => $sup_price,
+                        'products_model' => $product_model,
+                    );
+
+                     $this->db->where('product_id', $id)
+                    ->update('supplier_product', $supp_prd);
+
+                    $this->session->set_flashdata('message', display('update_successfully'));
+                } else {
+                    $this->session->set_flashdata('exception', display('please_try_again'));
+                }
+                redirect("product_list");
             }
-        } else { 
-            if(!empty($id)){
-            $data['title']         = display('edit_product');
-            $data['product']       = $this->product_model->single_product_data($id);  
+        } else {
+            if (!empty($id)) {
+                $data['title']         = display('edit_product');
+                $data['product']       = $this->product_model->single_product_data($id);
             }
             $data['supplier']      = $this->product_model->supplier_list();
             $data['vattaxinfo']    = $this->product_model->vat_tax_setting();
@@ -300,67 +316,73 @@ class Product extends MX_Controller {
             $data['category_list'] = $this->product_model->active_category();
             $data['unit_list']     = $this->product_model->active_unit();
             $data['supplier_pr']   = $this->product_model->supplier_product_list($id);
+            $data['product_open']   = $this->product_model->product_opening($id);
             $data['taxfield']      = $taxfield;
-            $data['module']        = "product";  
-            $data['page']          = "product_form";  
-            echo Modules::run('template/layout', $data); 
-        } 
+            $data['module']        = "product";
+            $data['page']          = "product_form";
+            echo Modules::run('template/layout', $data);
+        }
     }
 
 
 
 
-    public function bdtask_product_list(){
+    public function bdtask_product_list()
+    {
         $data['title']         = display('manage_product');
         $data['total_product'] = $this->db->count_all("product_information");
         $data['module']        = "product";
-        $data['page']          = "product_list"; 
+        $data['page']          = "product_list";
         echo modules::run('template/layout', $data);
     }
 
-    public function CheckProductList(){
+    public function CheckProductList()
+    {
         $postData = $this->input->post();
         $data = $this->product_model->getProductList($postData);
         echo json_encode($data);
-    } 
+    }
 
-        public function bdtask_deleteproduct($id = null) {
-            $check_calculation = $this->product_model->check_product($id);
-            if($check_calculation > 0){
-                $this->session->set_flashdata('exception', 'You can not Delete this product because it already engaged in calculation');
-                redirect("product_list");
-            }
+    public function bdtask_deleteproduct($id = null)
+    {
+        $check_calculation = $this->product_model->check_product($id);
+        if ($check_calculation > 0) {
+            $this->session->set_flashdata('exception', 'You can not Delete this product because it already engaged in calculation');
+            redirect("product_list");
+        }
         if ($this->product_model->delete_product($id)) {
-      $this->session->set_flashdata('message', display('delete_successfully'));
+            $this->session->set_flashdata('message', display('delete_successfully'));
         } else {
-       $this->session->set_flashdata('exception', display('please_try_again'));
+            $this->session->set_flashdata('exception', display('please_try_again'));
         }
 
         redirect("product_list");
     }
 
-    public function bdtask_csv_product(){
+    public function bdtask_csv_product()
+    {
         $data['title']         = display('add_product_csv');
         $data['module']        = "product";
-        $data['page']          = "add_product_csv"; 
+        $data['page']          = "add_product_csv";
         echo modules::run('template/layout', $data);
     }
 
 
-    function uploadCsv() {
+    function uploadCsv()
+    {
         $filename = $_FILES['upload_csv_file']['name'];
         $basenameAndExtension = explode('.', $filename);
         $ext = end($basenameAndExtension);
         if ($ext == 'csv') {
             $count = 0;
             $fp = fopen($_FILES['upload_csv_file']['tmp_name'], 'r') or die("can't open file");
-    
+
             if (($handle = fopen($_FILES['upload_csv_file']['tmp_name'], 'r')) !== FALSE) {
-    
+
                 while ($csv_line = fgetcsv($fp, 1024)) {
                     //keep this if condition if you want to remove the first row
                     for ($i = 0, $j = count($csv_line); $i < $j; $i++) {
-                        $product_id = $this -> generator(10);
+                        $product_id = $this->generator(10);
                         $insert_csv = array();
                         $insert_csv['supplier_id'] = (!empty($csv_line[1]) ? $csv_line[1] : null);
                         $insert_csv['product_name'] = (!empty($csv_line[2]) ? $csv_line[2] : null);
@@ -396,8 +418,8 @@ class Product extends MX_Controller {
                     //     $c_acc = $supplier_id.'-'.$insert_csv['supplier_id'];
                     //     $createby = $this -> session -> userdata('id');
                     //     $createdate = date('Y-m-d H:i:s');
-    
-    
+
+
                     //     $supplier_coa = [
                     //         'HeadCode'         => $headcode,
                     //         'HeadName'         => $c_acc,
@@ -414,25 +436,24 @@ class Product extends MX_Controller {
                     //         'CreateBy'         => $createby,
                     //         'CreateDate'       => $createdate,
                     //     ];
-    
+
                     //     if ($count > 0) {
                     //         $this -> db -> insert('acc_coa', $supplier_coa);
                     //     }
                     // }
-    
-                    $check_category = $this -> db -> select('*') -> from('product_category') -> where('category_name', $insert_csv['category_id']) -> get() -> row();
+
+                    $check_category = $this->db->select('*')->from('product_category')->where('category_name', $insert_csv['category_id'])->get()->row();
                     if (!empty($check_category)) {
-                        $category_id = $check_category -> category_id;
+                        $category_id = $check_category->category_id;
                     } else {
                         $categorydata = array(
                             'category_name'         => $insert_csv['category_id'],
                             'status'                => 1
                         );
                         if ($count > 0) {
-                            $this -> db -> insert('product_category', $categorydata);
-                            $category_id = $this -> db -> insert_id();
+                            $this->db->insert('product_category', $categorydata);
+                            $category_id = $this->db->insert_id();
                         }
-    
                     }
                     $data = array(
                         'product_id'    => $product_id,
@@ -442,98 +463,95 @@ class Product extends MX_Controller {
                         'price'         => $insert_csv['price'],
                         'unit'          => '',
                         'tax'           => '',
-                        'product_details'=> 'Csv Product',
+                        'product_details' => 'Csv Product',
                         'image'         => 'my-assets/image/product.png',
                         'status'        => 1
                     );
-    
+
                     if ($count > 0) {
-    
-                        $result = $this -> db -> select('*')
-                            -> from('product_information')
-                            -> where('product_name', $data['product_name'])
-                            -> where('product_model', $data['product_model'])
-                            -> where('category_id', $category_id)
-                            -> get()
-                            -> row();
+
+                        $result = $this->db->select('*')
+                            ->from('product_information')
+                            ->where('product_name', $data['product_name'])
+                            ->where('product_model', $data['product_model'])
+                            ->where('category_id', $category_id)
+                            ->get()
+                            ->row();
                         if (empty($result)) {
-                            $this -> db -> insert('product_information', $data);
+                            $this->db->insert('product_information', $data);
                             $product_id = $product_id;
                         } else {
-                            $product_id = $result -> product_id;
+                            $product_id = $result->product_id;
                             $udata = array(
-                                'product_id'     => $result -> product_id,
+                                'product_id'     => $result->product_id,
                                 'category_id'    => $category_id,
-                                'product_name'   => $result -> product_name,
+                                'product_name'   => $result->product_name,
                                 'product_model'  => $insert_csv['product_model'],
                                 'price'          => $insert_csv['price'],
                                 'unit'           => '',
                                 'tax'            => '',
-                                'product_details'=> 'Csv Uploaded Product',
+                                'product_details' => 'Csv Uploaded Product',
                                 'image'         => 'my-assets/image/product.png',
                                 'status'        => 1
                             );
-                            $this -> db -> where('product_id', $result -> product_id);
-                            $this -> db -> update('product_information', $udata);
-    
+                            $this->db->where('product_id', $result->product_id);
+                            $this->db->update('product_information', $udata);
                         }
-    
+
                         $supp_prd = array(
                             'product_id'     => $product_id,
                             'supplier_id'    => 1,
                             'supplier_price' => $insert_csv['supplier_price'],
                             'products_model' => $insert_csv['product_model'],
                         );
-    
-                        $splprd = $this -> db -> select('*')
-                            -> from('supplier_product')
-                            -> where('supplier_id', 1)
-                            -> where('product_id', $product_id)
-                            -> get()
-                            -> num_rows();
-    
+
+                        $splprd = $this->db->select('*')
+                            ->from('supplier_product')
+                            ->where('supplier_id', 1)
+                            ->where('product_id', $product_id)
+                            ->get()
+                            ->num_rows();
+
                         if ($splprd == 0) {
-                            $this -> db -> insert('supplier_product', $supp_prd);
+                            $this->db->insert('supplier_product', $supp_prd);
                         } else {
                             $supp_prd = array(
                                 'supplier_id'    => 1,
                                 'supplier_price' => $insert_csv['supplier_price'],
                                 'products_model' => $insert_csv['product_model']
                             );
-                            $this -> db -> where('product_id', $product_id);
-                            $this -> db -> where('supplier_id', 1);
-                            $this -> db -> update('supplier_product', $supp_prd);
+                            $this->db->where('product_id', $product_id);
+                            $this->db->where('supplier_id', 1);
+                            $this->db->update('supplier_product', $supp_prd);
                         }
 
 
-                        
-                    $data1 = array(
-                        'product_id'         => $product_id,
-                        'quantity'           => $insert_csv['opening_stock'],
-                        'batch_id'           =>  $insert_csv['opening_batch'],
-                        'status'             => 1
-                    );
-                    $this->db->insert('product_purchase_details', $data1);
-    
+
+                        $data1 = array(
+                            'product_id'         => $product_id,
+                            'quantity'           => $insert_csv['opening_stock'],
+                            'batch_id'           =>  $insert_csv['opening_batch'],
+                            'status'             => 1
+                        );
+                        $this->db->insert('product_purchase_details', $data1);
                     }
                     $count++;
                 }
-    
             }
-    
-            $this -> session -> set_flashdata(array('message'=> display('successfully_added')));
+
+            $this->session->set_flashdata(array('message' => display('successfully_added')));
             redirect(base_url('product_list'));
         } else {
-            $this -> session -> set_flashdata(array('error_message'=> 'Please Import Only Csv File'));
+            $this->session->set_flashdata(array('error_message' => 'Please Import Only Csv File'));
             redirect(base_url('bulk_products'));
         }
-    
     }
-    
-    
 
 
-        public function qrgenerator($product_id) {
+
+
+    public function qrgenerator($product_id)
+    {
         $config['cacheable'] = true; //boolean, the default is true
         $config['cachedir'] = ''; //string, the default is application/cache/
         $config['errorlog'] = ''; //string, the default is application/logs/
@@ -558,32 +576,34 @@ class Product extends MX_Controller {
             'qr_image'        => $image_name,
         );
         $data['module']        = "product";
-        $data['page']          = "barcode_print_page"; 
+        $data['page']          = "barcode_print_page";
         echo modules::run('template/layout', $data);
     }
 
 
     // bar code part
-    public function barcode_print($product_id){
+    public function barcode_print($product_id)
+    {
         $product_info = $this->product_model->bdtask_barcode_productdata($product_id);
 
         $data = array(
-                'title'           => display('barcode'),
-                'product_id'      => $product_id,
-                'product_name'    => $product_info[0]['product_name'],
-                'product_model'   => $product_info[0]['product_model'],
-                'price'           => $product_info[0]['price'],
-                'product_details' => $product_info[0]['product_details'],
-                
-            );
+            'title'           => display('barcode'),
+            'product_id'      => $product_id,
+            'product_name'    => $product_info[0]['product_name'],
+            'product_model'   => $product_info[0]['product_model'],
+            'price'           => $product_info[0]['price'],
+            'product_details' => $product_info[0]['product_details'],
+
+        );
 
         $data['module']        = "product";
-        $data['page']          = "barcode_print_page"; 
+        $data['page']          = "barcode_print_page";
         echo modules::run('template/layout', $data);
     }
 
-   
-public function bdtask_product_details($product_id = null){
+
+    public function bdtask_product_details($product_id = null)
+    {
         $details_info = $this->product_model->bdtask_barcode_productdata($product_id);
         $purchaseData = $this->product_model->product_purchase_info($product_id);
         $totalPurchase = 0;
@@ -610,7 +630,7 @@ public function bdtask_product_details($product_id = null){
         }
 
         $stock = ($totalPurchase - $totalSales);
-       $data = array(
+        $data = array(
             'title'               => display('product_details'),
             'product_name'        => $details_info[0]['product_name'],
             'product_model'       => $details_info[0]['product_model'],
@@ -626,12 +646,13 @@ public function bdtask_product_details($product_id = null){
         );
 
         $data['module']        = "product";
-        $data['page']          = "product_details"; 
+        $data['page']          = "product_details";
         echo modules::run('template/layout', $data);
-}
+    }
 
 
- public function generator($lenth) {
+    public function generator($lenth)
+    {
         $number = array("1", "2", "3", "4", "5", "6", "7", "8", "9", "0");
 
         for ($i = 0; $i < $lenth; $i++) {
@@ -647,4 +668,3 @@ public function bdtask_product_details($product_id = null){
         return $con;
     }
 }
-
