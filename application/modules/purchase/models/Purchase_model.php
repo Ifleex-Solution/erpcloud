@@ -293,11 +293,14 @@ public function pmethod_dropdown_new(){
     }
 
     public function insert_purchase(){
+
+
         date_default_timezone_set('Asia/Colombo');
 
         $purchase_id = $this->number_generator();
         $p_id        = $this->input->post('product_id',TRUE);
         $supplier_id = 1;
+        $supplier_id1 = $this->input->post('supplier_id',TRUE);
         $supinfo     = $this->db->select('*')->from('supplier_information')->where('supplier_id',$supplier_id)->get()->row();
         $sup_head    = $supinfo->supplier_id.'-'.$supinfo->supplier_name;
         $sup_coa     = $this->db->select('*')->from('acc_coa')->where('HeadName',$sup_head)->get()->row();
@@ -375,7 +378,7 @@ public function pmethod_dropdown_new(){
                 $amount_pay = $data['grand_total_amount'];
                 $amnt_type = 'Credit';
                 $reVID     = $predefine_account->supplierCode;
-                $subcode   = $this->db->select('*')->from('acc_subcode')->where('referenceNo', $supplier_id)->where('subTypeId', 4)->get()->row()->id;
+                $subcode   = $this->db->select('*')->from('acc_subcode')->where('referenceNo', $supplier_id1)->where('subTypeId', 4)->get()->row()->id;
                 $insrt_pay_amnt_vcher = $this->insert_purchase_debitvoucher($is_credit,$purchase_id,$COAID,$amnt_type,$amount_pay,$Narration,$Comment,$reVID,$subcode);
 
             }else {
