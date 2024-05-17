@@ -72,7 +72,7 @@
 					console.log(id)
 					if (confirm("Do You want to delete this record")) {
 						$.ajax({
-							url: $("#base_url").val() +" /purchase/purchase/deletePurchase/"+purchase_id+"_"+id,
+							url: $("#base_url").val() +"purchase/purchase/deletePurchase/"+purchase_id+"_"+id,
 							type: "GET",
 							dataType: "json",
 							success: function(data) {
