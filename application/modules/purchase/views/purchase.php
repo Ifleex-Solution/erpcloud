@@ -72,7 +72,7 @@
 					console.log(id)
 					if (confirm("Do You want to delete this record")) {
 						$.ajax({
-							url: "http://localhost/erpcloud/purchase/purchase/deletePurchase/"+purchase_id+"_"+id,
+							url: "https://ifleexsolutions.com/erpcloud/purchase/purchase/deletePurchase/"+purchase_id+"_"+id,
 							type: "GET",
 							dataType: "json",
 							success: function(data) {
