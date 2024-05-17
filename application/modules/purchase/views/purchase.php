@@ -68,18 +68,20 @@
 			</div>
 			<script src="<?php echo base_url() ?>my-assets/js/admin_js/purchase.js" type="text/javascript"></script>
 			<script>
-				function deletePurchase(id) {
+				function deletePurchase(purchase_id, id) {
+					console.log(id)
 					if (confirm("Do You want to delete this record")) {
 						$.ajax({
-							url: "http://localhost/erpcloud/purchase/purchase/deletePurchase/" + id,
+							url: "http://localhost/erpcloud/purchase/purchase/deletePurchase/"+purchase_id+"_"+id,
 							type: "GET",
 							dataType: "json",
 							success: function(data) {
-								if (data== "success") {
+								if (data == "success") {
 									alert("Purchase Record Deleted Successfully")
 									location.reload();
 								}
 								
+
 							},
 							error: function(jqXHR, textStatus, errorThrown) {
 								alert('Error get data from ajax');

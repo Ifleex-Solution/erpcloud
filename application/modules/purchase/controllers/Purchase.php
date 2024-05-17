@@ -162,17 +162,17 @@ class Purchase extends MX_Controller
 
     public function deletePurchase($purchase_id)
     {
-
-        $this->db->where('referenceNo', $purchase_id);
+        $parts = explode("_", $purchase_id);
+        $this->db->where('referenceNo', $parts[0]);
         $this->db->delete('acc_vaucher');
 
-        $this->db->where('referenceNo', $purchase_id);
+        $this->db->where('referenceNo', $parts[0]);
         $this->db->delete('acc_transaction');
 
-        $this->db->where('purchase_id', $purchase_id);
+        $this->db->where('purchase_id',$parts[1]);
         $this->db->delete('product_purchase_details');
 
-        $this->db->where('id', $purchase_id);
+        $this->db->where('id',$parts[1]);
         $this->db->delete('product_purchase');
 
         echo json_encode("success");
