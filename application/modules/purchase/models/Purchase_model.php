@@ -230,7 +230,8 @@ public function pmethod_dropdown_new(){
         $approve = $this->db->select('status,referenceNo')->from('acc_vaucher')->where('referenceNo', $record->purchase_id)->where('status', 1)->get()->num_rows();
         if ($approve == 0) {
             
-            $button .=' <a href="'.$base_url.'purchase_edit/'.$record->purchase_id.'" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="'. display('update').'"><i class="fa fa-pencil" aria-hidden="true"></i></a> ';
+            $button .=' <a href="'.$base_url.'purchase_edit/'.$record->purchase_id.'" class="btn btn-info btn-sm" data-toggle="tooltip" data-placement="left" title="'. display('update').'"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+            <button class="btn btn-danger btn-sm"  onclick="return deletePurchase(\'' . $record->purchase_id . '\')" title="Delete Vaucher"><i class="fa fa-trash"></i></button>  ';
         }
      }
 
