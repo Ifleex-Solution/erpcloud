@@ -47,6 +47,41 @@ class Purchase extends MX_Controller
         $this->load->view('purchase/newpaymentveiw', $data);
     }
 
+    public function bdtask_showpaymentmodal1($id = null)
+    {
+
+        $is_credit =  $this->input->post('is_credit_edit', TRUE);
+        $data['is_credit'] = $is_credit;
+        $data['id'] = $id;
+        if ($is_credit == 1) {
+            # code...
+            $data['all_pmethod'] = $this->purchase_model->pmethod_dropdown();
+        } else {
+
+            $data['all_pmethod'] = $this->purchase_model->pmethod_dropdown_new();
+        }
+        $this->load->view('purchase/newpaymentveiw', $data);
+    }
+
+    public function bdtask_typeofthepayment($id = null)
+    {
+        $data = $this->purchase_model->pmethodbyid($id);
+        echo json_encode($data);
+    }
+
+    public function getallcheques()
+    {
+        $this->db->select('cheque.id, cheque.chequeno, cheque.draftdate, cheque.effectivedate,cheque.description, cheque.amount, customer_information.customer_name,customer_information.customer_id');
+        $this->db->from('cheque');
+        $this->db->join('customer_information', 'customer_information.customer_id = cheque.receivedfrom');
+        $this->db->where('cheque.paidto', 0);
+        $this->db->where('cheque.status', 'Active');
+        $query = $this->db->get();
+        $result = $query->result_array();
+        echo json_encode($result);
+    }
+
+
     public function bdtask_purchase_list()
     {
         $data['title']      = display('manage_purchase');
@@ -169,10 +204,10 @@ class Purchase extends MX_Controller
         $this->db->where('referenceNo', $parts[0]);
         $this->db->delete('acc_transaction');
 
-        $this->db->where('purchase_id',$parts[1]);
+        $this->db->where('purchase_id', $parts[1]);
         $this->db->delete('product_purchase_details');
 
-        $this->db->where('id',$parts[1]);
+        $this->db->where('id', $parts[1]);
         $this->db->delete('product_purchase');
 
         echo json_encode("success");
@@ -204,6 +239,9 @@ class Purchase extends MX_Controller
             if ($this->form_validation->run() === true) {
 
                 $purchase_data = $this->purchase_model->insert_purchase();
+                $purchase_data = 1;
+
+
 
                 if ($purchase_data == 1) {
 
@@ -398,7 +436,7 @@ class Purchase extends MX_Controller
                     }
                 }
                 $setting_data = $this->db->select('is_autoapprove_v')->from('web_setting')->where('setting_id', 1)->get()->result_array();
-              
+
 
                 if ($setting_data[0]['is_autoapprove_v'] == 1) {
 
