@@ -288,14 +288,14 @@
                                         </div>
                                         <div class="form-group row">
                                             <label for="date" class="col-sm-4 col-form-label">Draft Date
-                                                <i class="text-danger">*</i>
+                                               
                                             </label>
                                             <div class="col-sm-8">
                                                 <?php
                                                 date_default_timezone_set('Asia/Colombo');
 
                                                 $date = date('Y-m-d'); ?>
-                                                <input type="date" required tabindex="2" class="form-control" name="draft_date[]" value="<?php echo $date; ?>" id="date" />
+                                                <input type="date"  tabindex="2" class="form-control" name="draft_date[]" value="" id="date" />
                                             </div>
                                         </div>
                                         <div class="form-group row">

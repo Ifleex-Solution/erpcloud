@@ -102,7 +102,12 @@ function calculate_store(sl) {
   var dis_type = $("#discount_type").val();
   var price_item = $("#product_rate_" + sl).val();
   var vat_percent = $("#vat_percent_" + sl).val();
+  $('#' + "che_0").hide();
+  $('#' + "myDiv_0" ).hide();
+  document.getElementById("your_dropdown_id").selectedIndex = -1;
+  document.getElementById("your_dropdown_id").value ="";
 
+  
   if (quantity > 0 || discount > 0 || vat_percent > 0) {
     if (dis_type == 1) {
       var price = quantity * price_item;

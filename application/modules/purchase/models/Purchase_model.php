@@ -503,27 +503,39 @@ class Purchase_model extends CI_Model
 
                     $input_date_obj = new DateTime($effectivedate[$i]);
                     $current_date_obj = new DateTime(date('Y-m-d'));
+                    $current_datetime_obj = new DateTime();
+
 
                     if ($headName != "3rd party cheque") {
+                       
                         $chequedata = array(
-                            'referenceNo'        => $purchase_id,
-                            'chequeno'           => $cheque_no,
+                            'purchase_no'        => $purchase_id,
+                            'cheque_no'           => $cheque_no,
                             'draftdate'          => $draftdate[$i],
                             'effectivedate'      => $effectivedate[$i],
                             'receivedfrom'       => 0,
                             'paidto'             => $supplier_id1,
+                            'coano'              => $multipaytype[$i],
                             'amount'             => $multipayamount[$i],
                             'type'               => 'Own',
-                            'status'             => $input_date_obj <= $current_date_obj ? "Active" : "Pending",
-                            'description'        => $description[$i]
+                            'status'             => "Transferred",
+                            'description'        => $description[$i],
+                            'createddate'        =>  $current_datetime_obj->format('Y-m-d H:i:s'),
+                            'transfered'        =>  $current_datetime_obj->format('Y-m-d H:i:s'),
+                            'updatedate'         =>  $current_datetime_obj->format('Y-m-d H:i:s')
                         );
                         $this->db->insert('cheque', $chequedata);
+
                     } else {
                         $chequedata = array(
                             'paidto'  => $supplier_id1,
+                            'purchase_no' => $purchase_id,
+                            'status'  => "Transferred",
+                            'transfered'=>  $current_datetime_obj->format('Y-m-d H:i:s'),
+                            'updatedate'=>  $current_datetime_obj->format('Y-m-d H:i:s')
                         );
 
-                        $this->db->where('chequeno', $cheque_no);
+                        $this->db->where('cheque_no', $cheque_no);
                         $this->db->update('cheque', $chequedata);
                     }
 

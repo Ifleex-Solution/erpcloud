@@ -36,14 +36,14 @@
              </div>
              <div class="form-group row">
                <label for="date" class="col-sm-4 col-form-label">Draft Date
-                 <i class="text-danger">*</i>
+                
                </label>
                <div class="col-sm-8">
                  <?php
                   date_default_timezone_set('Asia/Colombo');
 
                   $date = date('Y-m-d'); ?>
-                 <input type="date" required tabindex="2" class="form-control" name="draft_date[]" value="<?php echo $date; ?>" id="draft_date<?php echo $id; ?>" />
+                 <input type="date"  tabindex="2" class="form-control" name="draft_date[]" value="<?php echo $date; ?>" id="draft_date<?php echo $id; ?>" />
                </div>
              </div>
              <div class="form-group row">
@@ -55,7 +55,7 @@
                   date_default_timezone_set('Asia/Colombo');
 
                   $date = date('Y-m-d'); ?>
-                 <input type="date" required tabindex="2" class="form-control" name="effective_date[]" value="<?php echo $date; ?>" id="effective_date<?php echo $id; ?>" />
+                 <input type="date"  tabindex="2" class="form-control" name="effective_date[]" value="" id="effective_date<?php echo $id; ?>" />
                </div>
              </div>
              <div class="form-group row">

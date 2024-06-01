@@ -240,7 +240,9 @@
                                     <label for="payments" class="col-form-label pb-2"><?php echo display('payment_type'); ?></label>
 
                                     <?php $card_type = 111000001;
-                                    echo form_dropdown('multipaytype[]', $all_pmethod, (!empty($card_type) ? $card_type : null), 'onchange = "check_creditsale(0)" required class="card_typesl postform resizeselect form-control "') ?>
+                                    $default_option = array('' => 'Select an option'); // Default option
+                                    $all_pmethod = $default_option + $all_pmethod;
+                                    echo form_dropdown('multipaytype[]', $all_pmethod, (!empty($card_type) ? $card_type : null), 'onchange = "check_creditsale(0)" required id="your_dropdown_id" class="card_typesl postform resizeselect form-control "') ?>
 
                                 </div>
                                 <div class="form-group col-md-6">
@@ -266,14 +268,14 @@
                                         </div>
                                         <div class="form-group row">
                                             <label for="date" class="col-sm-4 col-form-label">Draft Date
-                                                <i class="text-danger">*</i>
+
                                             </label>
                                             <div class="col-sm-8">
                                                 <?php
                                                 date_default_timezone_set('Asia/Colombo');
 
                                                 $date = date('Y-m-d'); ?>
-                                                <input type="date" required tabindex="2" class="form-control" name="draft_date[]" value="<?php echo $date; ?>" id="draft_date0" />
+                                                <input type="date" tabindex="2" class="form-control" name="draft_date[]" value="" id="draft_date0" />
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -345,9 +347,9 @@
                         <tr>
                             <th>Cheque No</th>
                             <th>Customer Name</th>
-                            <th>Draft Date</th>
                             <th>Effective Date</th>
                             <th>Amount</th>
+                            <th>Status</th>
                             <th></th>
 
                         </tr>
@@ -428,8 +430,13 @@
 
         var elements = document.getElementsByName("cheque_no[]");
         const array = [];
+        var csrf_test_name = $('[name="csrf_test_name"]').val();
+        var is_credit_edit = $('#is_credit_edit').val();
+
+
 
         for (var i = 0; i < elements.length; i++) {
+            console.log(elements[i].value)
             if (elements[i].value != "") {
                 if (array.some(item => item === elements[i].value)) {
                     alert("Can't use 1 perticular cheque number 2 times ");
@@ -442,7 +449,32 @@
         }
 
 
+       // var elements2 = document.getElementsByName("multipaytype[]");
 
+        // for (var j = 0; j < elements2.length; j++) {
+        //     if(elements2[j].value ==""){
+        //         alert("Not valid payment type please check")
+        //     }
+        //     // (function(j) {
+        //     //     var url2 = $('#base_url').val() + "purchase/purchase/bdtask_typeofthepayment/" + elements2[j].value;
+        //     //     console.log(elements2[j].value);
+
+        //     //     $.ajax({
+        //     //         type: "post",
+        //     //         url: url2,
+        //     //         data: {
+        //     //             is_credit_edit: is_credit_edit,
+        //     //             csrf_test_name: csrf_test_name
+        //     //         },
+        //     //         success: function(data) {
+        //     //             var parsedData = JSON.parse(data);
+        //     //             if (parsedData[0].HeadName === '3rd party cheque') {
+        //     //                 console.log(elements[j].value); 
+        //     //             }
+        //     //         }
+        //     //     });
+        //     // })(j);
+        // }
         return true;
     }
 
@@ -476,8 +508,8 @@
         $('#effective_date' + id).prop('readonly', true);
 
 
-        $('#description' + id).val(description);
-        $('#description' + id).prop('readonly', true);
+        //    $('#description' + id).val(description);
+        // $('#description' + id).prop('readonly', true);
 
 
 
@@ -492,7 +524,7 @@
 
     function check_creditsale(id) {
         $('#cheque_no_' + id).prop('readonly', false);
-        $('#description' + id).prop('readonly', false);
+        // $('#description' + id).prop('readonly', false);
         $('#draft_date' + id).prop('readonly', false);
         $('#effective_date' + id).prop('readonly', false);
         if (id == 0) {
@@ -540,19 +572,19 @@
                                     "bDestroy": true,
                                     "data": parsedData1, // Use parsed data as the DataTable source
                                     "columns": [{
-                                            "data": "chequeno"
+                                            "data": "cheque_no"
                                         },
                                         {
                                             "data": "customer_name"
-                                        },
-                                        {
-                                            "data": "draftdate"
                                         },
                                         {
                                             "data": "effectivedate"
                                         },
                                         {
                                             "data": "amount"
+                                        },
+                                        {
+                                            "data": "status"
                                         },
                                         {
                                             "data": null,
@@ -564,7 +596,7 @@
                                                     // var draftDateString = row.draftdate.toISOString(); // or use any desired date format
                                                     // var effectiveDateString = row.effectivedate.toISOString();
 
-                                                    return '<button class="btn btn-primary" onclick="handleTableClick(' + row.id + ',' + row.customer_id + ',' + row.amount + ',' + id + ',\'' + row.chequeno + '\',\'' + row.draftdate + '\',\'' + row.effectivedate + '\',\'' + row.description + '\')">Call</button>';
+                                                    return '<button class="btn btn-primary" onclick="handleTableClick(' + row.id + ',' + row.customer_id + ',' + row.amount + ',' + id + ',\'' + row.cheque_no + '\',\'' + row.draftdate + '\',\'' + row.effectivedate + '\',\'' + row.description + '\')">Call</button>';
                                                 } else {
                                                     return ''; // Return empty string if row is null or undefined
                                                 }
@@ -582,7 +614,7 @@
                         $('#' + "myDiv_" + id).hide();
                         $('#cheque_no_' + id).val("");
                         $('#description' + id).val("");
-                        $('#draft_date' + id).val(new Date().toISOString().slice(0, 10));
+                        $('#draft_date' + id).val("");
                         $('#effective_date' + id).val(new Date().toISOString().slice(0, 10));
 
 
@@ -593,7 +625,7 @@
                         $('#' + "myDiv_" + id).hide();
                         $('#cheque_no_' + id).val("");
                         $('#description' + id).val("");
-                        $('#draft_date' + id).val(new Date().toISOString().slice(0, 10));
+                        $('#draft_date' + id).val("");
                         $('#effective_date' + id).val(new Date().toISOString().slice(0, 10));
 
 
@@ -650,6 +682,7 @@
         var purchase_edit_page = $("#purchase_edit_page").val();
         var is_credit_edit = $('#is_credit_edit').val();
         if (purchase_edit_page == 1 && card_typesl == 0) {
+
             $("#add_new_payment").empty();
             var base_url = $('#base_url').val();
             var csrf_test_name = $('[name="csrf_test_name"]').val();

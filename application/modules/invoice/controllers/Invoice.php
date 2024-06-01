@@ -767,6 +767,12 @@ class Invoice extends MX_Controller
                         $printdata       = $this->invoice_model->bdtask_invoice_pos_print_direct($invoice_id);
                         $data['details'] = $this->load->view('invoice/pos_print', $printdata, true);
                     }
+                    $base_url = base_url(); 
+
+                    echo '<script type="text/javascript">
+                    alert("Invoice details saved successfully");
+                    window.location.href = "' . $base_url . 'invoice_list";
+                   </script>';
                 } else {
                     $data['status']    = false;
                     $data['exception'] = 'Please Try Again';
@@ -776,7 +782,8 @@ class Invoice extends MX_Controller
                 $data['exception'] = validation_errors();
             }
         }
-        echo json_encode($data);
+       
+       
     }
 
     public function autoapprove($invoice_id)
@@ -809,10 +816,10 @@ class Invoice extends MX_Controller
     {
         $this->db->select('*');
         $this->db->from('cheque');
-        $this->db->where('chequeno', $chequeno);
+        $this->db->where('cheque_no', $chequeno);
         $query = $this->db->get();
         $result = $query->result_array();
-        echo  json_encode( $result);
+        echo  json_encode($result);
     }
 
 

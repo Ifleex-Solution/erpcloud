@@ -549,17 +549,22 @@ class Invoice_model extends CI_Model
                 $input_date_obj = new DateTime($effectivedate[$i]);
                 $current_date_obj = new DateTime(date('Y-m-d'));
 
+                $current_datetime_obj = new DateTime();
+
                 $chequedata = array(
-                    'referenceNo'        => $invoice_no,
-                    'chequeno'           => $cheque_no,
+                    'sales_no'        => $invoice_no,
+                    'cheque_no'           => $cheque_no,
                     'draftdate'          => $draftdate[$i],
                     'effectivedate'      => $effectivedate[$i],
                     'receivedfrom'       => $customer_id,
                     'paidto'             => 0,
+                    'coano'              => $multipaytype[$i],
                     'amount'             => $multipayamount[$i],
                     'type'               => '3rd Party',
-                    'status'             => $input_date_obj <= $current_date_obj ? "Active" : "Pending",
-                    'description'        => $description[$i]
+                    'status'             => $input_date_obj <= $current_date_obj ? "Valid" : "Pending",
+                    'description'        => $description[$i],
+                    'createddate'        =>  $current_datetime_obj->format('Y-m-d H:i:s'),
+                    'updatedate'         =>  $current_datetime_obj ->format('Y-m-d H:i:s')
                 );
                 $this->db->insert('cheque', $chequedata);
                 // if () {

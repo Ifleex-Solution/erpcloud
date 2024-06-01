@@ -43,7 +43,7 @@
                   date_default_timezone_set('Asia/Colombo');
 
                   $date = date('Y-m-d'); ?>
-                 <input type="date" required tabindex="2" class="form-control" name="draft_date[]" value="<?php echo $date; ?>" id="date" />
+                 <input type="date"  tabindex="2" class="form-control" name="draft_date[]" value="" id="date" />
                </div>
              </div>
              <div class="form-group row">
