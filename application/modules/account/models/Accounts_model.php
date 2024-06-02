@@ -755,6 +755,54 @@ class Accounts_model extends CI_Model
                 $data = $this->approved_vaucher($value->VNo, 'active');
             }
         }
+
+
+        $chequeno = $this->input->post('cheque_no', TRUE);
+        $effectivedate = $this->input->post('effective_date', TRUE);
+        $draftdate = $this->input->post('draft_date', TRUE);
+        $description = $this->input->post('description', TRUE);
+
+
+        $i = 0;
+        foreach ($chequeno as $cheque_no) {
+            if ($cheque_no != "") {
+
+                $input_date_obj = new DateTime($effectivedate[$i]);
+                $current_date_obj = new DateTime(date('Y-m-d'));
+
+                $current_datetime_obj = new DateTime();
+
+                $chequedata = array(
+                    'sales_no'        => $voucher_no,
+                    'cheque_no'           => $cheque_no,
+                    'draftdate'          => $draftdate[$i],
+                    'effectivedate'      => $effectivedate[$i],
+                    'receivedfrom'       => $customer_id,
+                    'paidto'             => 0,
+                    'coano'              => $multipaytype[$i],
+                    'amount'             => $multipayamount[$i],
+                    'type'               => '3rd Party',
+                    'status'             => $input_date_obj <= $current_date_obj ? "Valid" : "Pending",
+                    'description'        => $description[$i],
+                    'createddate'        =>  $current_datetime_obj->format('Y-m-d H:i:s'),
+                    'updatedate'         =>  $current_datetime_obj ->format('Y-m-d H:i:s')
+                );
+                $this->db->insert('cheque', $chequedata);
+                // if () {
+                //     $a= "Input date is less than or equal to the current date.";
+                // } else {
+                //     $a= "Input date is greater than the current date.";
+                // }
+
+                // $logFilePath = 'logfile.log';
+                // $fileHandle = fopen($logFilePath, 'a');
+                // fwrite($fileHandle, $multipayamount[$i] . "\n");
+                // fclose($fileHandle);
+            }
+            $i++;
+        }
+
+
         return $insrt_pay_amnt_vcher;
     }
 

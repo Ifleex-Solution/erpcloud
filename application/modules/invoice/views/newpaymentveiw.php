@@ -36,7 +36,7 @@
              </div>
              <div class="form-group row">
                <label for="date" class="col-sm-4 col-form-label">Draft Date
-                 <i class="text-danger">*</i>
+                 <!-- <i class="text-danger">*</i> -->
                </label>
                <div class="col-sm-8">
                  <?php

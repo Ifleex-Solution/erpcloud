@@ -105,7 +105,7 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="payments" class="col-form-label pb-2 text-white"><?php echo display('payment_type'); ?></label>
-                                    <button class="btn btn-danger" onclick="removeMethod(this,1)"><i class="fa fa-trash"></i></button>
+                                    <!-- <button class="btn btn-danger" onclick="removeMethod(this,1)"><i class="fa fa-trash"></i></button> -->
                                 </div>
                             </div>
                             <div class="form-group col-md-9">
@@ -463,7 +463,6 @@
     }
 
     function check_creditsale(id) {
-        console.log($('#card_type_'+id).val())
         $('#cheque_no_' + id).prop('readonly', false);
         // $('#description' + id).prop('readonly', false);
         $('#draft_date' + id).prop('readonly', false);

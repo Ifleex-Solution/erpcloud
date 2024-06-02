@@ -1,4 +1,4 @@
-       <?php $rand_num = rand(1, 20); ?>
+       <?php $rand_num = rand(1000, 2000); ?>
        <div class="row no-gutters" id="pmethod_<?php echo $rand_num; ?>">
          <div class="form-group col-md-5">
            <label for="payments" class="col-form-label pb-2"><?php echo display('payment_type'); ?></label>
@@ -15,7 +15,11 @@
          </div>
          <div class="form-group col-md-2">
            <label for="payments" class="col-form-label pb-2 text-white"><?php echo display('payment_type'); ?></label>
-           <button class="btn btn-danger" onclick="removeMethod(this,<?php echo $rand_num ?>)"><i class="fa fa-trash"></i></button>
+           <!-- <button class="btn btn-danger" onclick="removeMethod(this,
+           <?php
+            // echo $rand_num
+             ?>
+           )"><i class="fa fa-trash"></i></button> -->
          </div>
        </div>
        <div class="form-group col-md-9">
@@ -29,7 +33,7 @@
                  <i class="text-danger">*</i>
                </label>
                <div class="col-sm-8">
-                 <input type="text" tabindex="3" class="form-control" name="cheque_no[]" placeholder="Cheque No" id="cheque_no_<?php echo $rand_num; ?>" required />
+                 <input type="text" tabindex="3" class="form-control" name="cheque_no[]" placeholder="Cheque No" id="cheque_no_<?php echo $rand_num; ?>"  />
                </div>
              </div>
              <div class="form-group row">
@@ -41,7 +45,7 @@
                   date_default_timezone_set('Asia/Colombo');
 
                   $date = date('Y-m-d'); ?>
-                 <input type="date" tabindex="2" class="form-control" name="draft_date[]" value="<?php echo $date; ?>" id="draft_date<?php echo $rand_num; ?>" />
+                 <input type="date" tabindex="2" class="form-control" name="draft_date[]" value="" id="draft_date<?php echo $rand_num; ?>" />
                </div>
              </div>
              <div class="form-group row">
@@ -53,7 +57,7 @@
                   date_default_timezone_set('Asia/Colombo');
 
                   $date = date('Y-m-d'); ?>
-                 <input type="date" tabindex="2" class="form-control" name="effective_date[]" value="" id="effective_date<?php echo $rand_num; ?>" />
+                 <input type="date" tabindex="2" class="form-control" required name="effective_date[]" value="<?php echo $date; ?>" id="effective_date<?php echo $rand_num; ?>" />
                </div>
              </div>
              <div class="form-group row">

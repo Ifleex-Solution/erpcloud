@@ -21,7 +21,7 @@
             </div>
 
             <div class="panel-body">
-                <?php echo form_open_multipart('invoice/invoice/bdtask_manual_sales_insert', array('class' => 'form-vertical', 'id' => 'insert_sale', 'name' => 'insert_sale', 'onsubmit' => 'return validateForm()')) ?>
+                <?php echo form_open_multipart('invoice/invoice/bdtask_manual_sales_insert', array('class' => 'form-vertical', 'id' => 'insert_sale', 'name' => 'insert_sale', 'onsubmit' => 'return validateFormWrapper()')) ?>
                 <div class="row">
 
                     <div class="col-sm-6" id="payment_from_1">
@@ -288,14 +288,14 @@
                                         </div>
                                         <div class="form-group row">
                                             <label for="date" class="col-sm-4 col-form-label">Draft Date
-                                               
+
                                             </label>
                                             <div class="col-sm-8">
                                                 <?php
                                                 date_default_timezone_set('Asia/Colombo');
 
                                                 $date = date('Y-m-d'); ?>
-                                                <input type="date"  tabindex="2" class="form-control" name="draft_date[]" value="" id="date" />
+                                                <input type="date" tabindex="2" class="form-control" name="draft_date[]" value="" id="date" />
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -378,10 +378,10 @@
             },
             success: function(data) {
                 var parsedData = JSON.parse(data);
-            
+
                 if (parsedData.length > 0) {
                     $('#cheque_no_' + id).val('')
-                      alert("This Cheque Number already exsist")
+                    alert("This Cheque Number already exsist")
                 }
 
 
@@ -392,7 +392,40 @@
 
     var i = 0;
 
-    function validateForm() {
+    async function checkCheque(id) {
+        return new Promise((resolve, reject) => {
+            let url = $('#base_url').val() + "invoice/invoice/checkCheque/" + $('#cheque_no_' + id).val();
+            $.ajax({
+                type: "get",
+                url: url,
+                success: function(data) {
+                    var parsedData = JSON.parse(data);
+                    if (parsedData.length > 0) {
+                        alert($('#cheque_no_' + id).val() + " Cheque Number already exists");
+                        $('#cheque_no_' + id).val('');
+                        resolve(false);
+                    } else {
+                        resolve(true);
+                    }
+                },
+                error: function(err) {
+                    reject(err);
+                }
+            });
+        });
+    }
+
+    function validateFormWrapper() {
+        validateForm().then(function(result) {
+            if (result) {
+                document.getElementById('insert_sale').submit();
+            }
+        });
+        return false; // Prevent the form from submitting immediately
+    }
+
+    async function validateForm() {
+        const array = [];
         for (var j = 0; j < i + 1; j++) {
             let element = document.getElementById("myDiv_" + j);
             let displayProperty = element.style.display;
@@ -400,6 +433,20 @@
                 if ($('#cheque_no_' + j).val() === '') {
                     alert("Please enter the cheque no")
                     return false;
+                } else {
+
+                    let a = await checkCheque(j);
+                    if (!a) {
+                        return false;
+                    } else {
+                        if (array.some(item => item === $('#cheque_no_' + j).val())) {
+                            alert("Can't use 1 perticular cheque number 2 times ");
+                            return false;
+                        } else {
+                            array.push($('#cheque_no_' + j).val())
+                        }
+
+                    }
                 }
             }
         }
