@@ -192,6 +192,15 @@ function supplierRcvcalculation(sl) {
         });
 
         $("#grandTotal").val(gr_tot.toFixed(2,2));
+       
+
+        $("#add_new_payment").empty();
+        $('#' + "che_" + sl).hide();
+        $('#' + "myDiv_" + sl).hide();
+        $('#cheque_no_' + sl).val("");
+        $('#description' + sl).val("");
+        $('#draft_date' + sl).val("");
+        $('#effective_date' + sl).val(new Date().toISOString().slice(0, 10));
         var length = $(".number").length;
         $(".number:eq(0)").val(parseFloat(gr_tot.toFixed(2,2)));
     }
