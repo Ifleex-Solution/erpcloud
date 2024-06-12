@@ -1,0 +1,249 @@
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
+
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-bd lobidrag">
+            <input type="hidden" name="baseUrl" id="baseUrl" class="baseUrl" value="<?php echo base_url(); ?>" />
+
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered" cellspacing="0" width="100%" id="chequeList">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Cheque No</th>
+                                <th>Type</th>
+                                <th>Effective Date</th>
+                                <th>Received From</th>
+                                <th>Paid To</th>
+                                <th>Deposited Bank</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th></th>
+
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Cheque Detail</h4>
+            </div>
+            <div class="modal-body">
+                <div id="chequedetail"></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        "use strict";
+        // var csrf_test_name = $('#CSRF_TOKEN').val();
+        // var total_purchase_no = $("#total_purchase_no").val();
+        var base_url = $("#baseUrl").val();
+        var csrf_test_name = '';
+        var is_credit_edit = '';
+
+
+        $.ajax({
+            type: "post",
+            url: base_url + 'supplier/supplier/getallcheques',
+            data: {
+                csrf_test_name: csrf_test_name,
+                is_credit_edit: is_credit_edit
+            },
+            success: function(data1) {
+
+                var parsedData1 = JSON.parse(data1);
+                $('#chequeList').DataTable({
+                    "bDestroy": true,
+                    "data": parsedData1,
+                    responsive: true,
+
+                    "aaSorting": [
+                        [4, "desc"]
+                    ],
+                    "columnDefs": [{
+                            "bSortable": false,
+                            "aTargets": [0, 1, 2, 3, 5, 6]
+                        },
+
+                    ],
+                    'processing': true,
+                    dom: "'<'col-sm-4'l><'col-sm-4 text-center'><'col-sm-4'>Bfrtip",
+                    buttons: [{
+                        extend: "copy",
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5] //Your Colume value those you want
+                        },
+                        className: "btn-sm prints"
+                    }, {
+                        extend: "csv",
+                        title: "PurchaseLIst",
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5] //Your Colume value those you want print
+                        },
+                        className: "btn-sm prints"
+                    }, {
+                        extend: "excel",
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5] //Your Colume value those you want print
+                        },
+                        title: "PurchaseLIst",
+                        className: "btn-sm prints"
+                    }, {
+                        extend: "pdf",
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5] //Your Colume value those you want print
+                        },
+                        title: "PurchaseLIst",
+                        className: "btn-sm prints"
+                    }, {
+                        extend: "print",
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5] //Your Colume value those you want print
+                        },
+                        title: "<center> PurchaseLIst</center>",
+                        className: "btn-sm prints"
+                    }],
+                    "columns": [{
+                            data: 'id'
+                        },
+                        {
+                            data: 'cheque_no'
+                        },
+                        {
+                            data: 'type'
+                        },
+                        {
+                            data: 'effectivedate'
+                        },
+                        {
+                            data: 'customer_name'
+                        },
+                        {
+                            data: 'supplier_name'
+                        },
+                        {
+                            data: 'depositedbank'
+                        },
+                        {
+                            data: 'amount'
+                        },
+                        {
+                            data: 'chequestatus'
+                        },
+                        {
+                            "data": null,
+                            "render": function(data, type, row) {
+                                // Check if row exists
+                                if (row) {
+                                    // console.log(row.draftdate)
+                                    // // Encode row data to prevent errors in JSON stringification
+                                    // var draftDateString = row.draftdate.toISOString(); // or use any desired date format
+                                    // var effectiveDateString = row.effectivedate.toISOString();
+
+                                    return '<button  class="btn btn-success" onclick="handleTableClick(' + row.id + ')" data-toggle="tooltip" data-placement="left" title="View"><i class="pe-7s-note2" aria-hidden="true"></i></button>';
+                                } else {
+                                    return ''; // Return empty string if row is null or undefined
+                                }
+                            }
+                        }
+
+                    ]
+                });
+            }
+        });
+
+
+
+        // $('#btn-filter').click(function() {
+        //     purchasedatatable.ajax.reload();
+        // });
+
+    });
+
+    function handleTableClick(rowId) {
+        var base_url = $("#baseUrl").val();
+        $("#exampleModal").modal('show');
+        var csrf_test_name = 'jagan';
+        var is_credit_edit = 'magan';
+        $.ajax({
+            type: "post",
+            url: base_url + 'supplier/supplier/getchequebyid/' + rowId,
+            data: {
+                fromdate: '',
+                todate: ''
+            },
+            success: function(data) {
+                var parsedData = JSON.parse(data);
+                console.log(parsedData);
+
+
+                var chequedetail = document.getElementById("chequedetail");
+                chequedetail.innerHTML = "";
+
+
+                // Add the HTML string to the content container div
+                chequedetail.innerHTML += "<p><b>Cheque No</b> : " + parsedData[0].cheque_no + "</p>";
+                chequedetail.innerHTML += "<p><b>Cheque Type</b> : " + parsedData[0].type + "</p>";
+                if (parsedData[0].type != '3rd Party')
+                    chequedetail.innerHTML += "<p><b>Bank of the Cheque</b> : " + parsedData[0].HeadName + "</p>";
+                chequedetail.innerHTML += "<p><b>Draft Date</b> : " + parsedData[0].draftdate + "</p>";
+                chequedetail.innerHTML += "<p><b>Effective Date</b> : " + parsedData[0].effectivedate + "</p>";
+
+                if (parsedData[0].type == '3rd Party') {
+                    chequedetail.innerHTML += "<p><b>Received From</b> : " + parsedData[0].customer_name + "</p>";
+                    chequedetail.innerHTML += "<p><b>Sales Invoice No</b> : " + parsedData[0].invoice + "</p>";
+                    chequedetail.innerHTML += "<p><b>Sales Invoice Date</b> : " + parsedData[0].invoice_date + "</p>";
+                    chequedetail.innerHTML += "<p><b>Cheque Received Date</b> : " + parsedData[0].createddate + "</p>";
+
+                }
+
+                if (parsedData[0].chalan_no != null) {
+                    chequedetail.innerHTML += "<p><b>Transfered To</b> : " + parsedData[0].supplier_name + "</p>";
+                    chequedetail.innerHTML += "<p><b>Purchase Invoice No</b> : " + parsedData[0].chalan_no + "</p>";
+                    chequedetail.innerHTML += "<p><b>Purchase Invoice Date</b> : " + parsedData[0].purchase_date + "</p>";
+                    chequedetail.innerHTML += "<p><b>Cheque Transferred Date</b> : " + parsedData[0].transfered + "</p>";
+                }
+
+
+                chequedetail.innerHTML += "<p><b>Amount</b> : " + parsedData[0].amount + "</p>";
+
+                chequedetail.innerHTML += "<p><b>Cheque Status</b> : " + parsedData[0].chequestatus + "</p>";
+
+                if (parsedData[0].chequestatus === 'Bounced') {
+                    chequedetail.innerHTML += "<p><b>Bounced Date</b> : " + parsedData[0].updatedate + "</p>";
+                }
+                chequedetail.innerHTML += "<p><b>Last Updated Date</b> : " + parsedData[0].updatedate + "</p>";
+
+
+
+
+
+
+            }
+        });
+    }
+</script>

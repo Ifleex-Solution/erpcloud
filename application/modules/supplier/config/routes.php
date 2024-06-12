@@ -2,6 +2,8 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 $route['add_supplier']         = "supplier/supplier/bdtask_form";
 $route['supplier_list']        = "supplier/supplier/index";
+$route['managecheque']        = "supplier/supplier/index2";
+
 $route['edit_supplier/(:num)'] = 'supplier/supplier/bdtask_form/$1';
 $route['supplier_ledger']      = "supplier/supplier/bdtask_supplier_ledger";
 $route['supplier_ledger/(:num)']= "supplier/supplier/bdtask_supplier_ledger/$1";
