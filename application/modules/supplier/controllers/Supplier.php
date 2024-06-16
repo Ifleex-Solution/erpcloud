@@ -31,11 +31,24 @@ class Supplier extends MX_Controller
         echo modules::run('template/layout', $data);
     }
 
-    function index2()
+    function loadmanagecheque()
     {
         $data['title']      = "Manage Cheque";
         $data['module']     = "supplier";
         $data['page']       = "managecheque";
+        echo modules::run('template/layout', $data);
+    }
+
+    function chequeflowreport()
+    {
+        $logFilePath = 'logfile.log';
+        $fileHandle = fopen($logFilePath, 'a');
+        fwrite($fileHandle, "\nThayaan");
+        fclose($fileHandle);
+
+        $data['title']      = "Manage Cheque";
+        $data['module']     = "supplier";
+        $data['page']       = "chequeflow";
         echo modules::run('template/layout', $data);
     }
 
@@ -57,6 +70,41 @@ class Supplier extends MX_Controller
         echo json_encode($result);
     }
 
+    public function chequebydata()
+    {
+
+
+        $result = $this->db->select('cq.cheque_no, cq.type, cq.status AS chequestatus, ac.HeadName, cq.draftdate, cq.effectivedate, ci.customer_name, i.invoice, i.date as invoice_date, cq.createddate, si.supplier_name, pi.chalan_no, pi.purchase_date, cq.transfered, cq.amount, cq.updatedate')
+            ->from('cheque cq')
+            ->join('customer_information ci', 'ci.customer_id = cq.receivedfrom', 'left')
+            ->join('supplier_information si', 'si.supplier_id = cq.paidto', 'left')
+            ->join('invoice i', 'i.invoice_id = cq.sales_no', 'left')
+            ->join('product_purchase pi', 'pi.id = cq.purchase_no', 'left')
+            ->join('acc_coa ac', 'ac.HeadCode = cq.coano', 'left')
+            ->order_by('cq.updatedate', 'desc');
+
+        if ($this->input->post('fromdate', true) != "") {
+            $this->db->where('cq.updatedate >=', $this->input->post('fromdate', true));
+        }
+
+        if ($this->input->post('todate', true) != "") {
+            $this->db->where('cq.updatedate <=', $this->input->post('todate', true));
+        }
+        if ($this->input->post('status', true) != "All") {
+            $this->db->where('cq.status', $this->input->post('status', true));
+        }
+
+        if ($this->input->post('type', true) != "All") {
+            $this->db->where('cq.type', $this->input->post('type', true));
+        }
+
+
+
+        $result = $this->db->get()->result_array();
+
+        echo json_encode($result);
+    }
+
     public function getchequebyid($id)
     {
 
@@ -70,7 +118,7 @@ class Supplier extends MX_Controller
             ->join('product_purchase pi', 'pi.id = cq.purchase_no', 'left')
             ->join('acc_coa ac', 'ac.HeadCode = cq.coano', 'left')
             ->where('cq.id', $id)
-           
+
             ->get()
             ->result_array();
 
