@@ -2,12 +2,15 @@
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="your-generated-integrity-hash" crossorigin="anonymous">
 
 
 <div class="row">
     <div class="col-sm-12">
         <div class="panel panel-bd lobidrag">
             <input type="hidden" name="baseUrl" id="baseUrl" class="baseUrl" value="<?php echo base_url(); ?>" />
+            <button type="button" id="btn-refresh" class="btn btn-success" style="margin-left: 30px;margin-top:20px;"><i class="fas fa-sync-alt"></i> Refresh Cheques</button>
+
 
             <div class="panel-body">
                 <div class="table-responsive">
@@ -57,6 +60,28 @@
 </div>
 
 <script>
+    document.getElementById('btn-refresh').addEventListener('click', function() {
+
+        var base_url = $("#baseUrl").val();
+        var csrf_test_name = '';
+        var is_credit_edit = '';
+
+        $.ajax({
+            type: "post",
+            url: base_url + 'supplier/supplier/refreshallcheques',
+            data: {
+                csrf_test_name: csrf_test_name,
+                is_credit_edit: is_credit_edit
+            },
+            success: function(data1) {
+                console.log(data1);
+
+            }
+        });
+
+    });
+
+
     $(document).ready(function() {
         "use strict";
         // var csrf_test_name = $('#CSRF_TOKEN').val();

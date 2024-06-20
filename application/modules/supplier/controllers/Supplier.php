@@ -70,6 +70,64 @@ class Supplier extends MX_Controller
         echo json_encode($result);
     }
 
+    public function refreshallcheques()
+    {
+
+        // $query = $this->db->get();
+
+        $sixMonthsAgo = date('Y-m-d', strtotime('-6 months'));
+
+        $result = $this->db->select('cq.cheque_no,cq.effectivedate')
+            ->from('cheque cq')
+            ->join('customer_information ci', 'ci.customer_id = cq.receivedfrom', 'left')
+            ->join('supplier_information si', 'si.supplier_id = cq.paidto', 'left')
+            ->where('cq.type', '3rd Party')
+            ->where('cq.status', 'Pending')
+            ->order_by('cq.updatedate', 'desc')
+            ->get()
+            ->result_array();
+
+        foreach ($result as $row) {
+            $effectiveDate = strtotime($row['effectivedate']);
+            $currentDate = strtotime(date('Y-m-d')); // Current date without time component
+
+            if ($effectiveDate > $currentDate) {
+                // Update status as valid
+                $this->db->where('cheque_no', $row['cheque_no'])
+                    ->update('cheque', ['status' => 'Valid']);
+            }
+        }
+
+        $sixMonthsAgo = date('Y-m-d', strtotime('-6 months'));
+
+        // Fetch data from the database with effectivedate within the last 6 months
+        $result = $this->db->select('cq.cheque_no, cq.effectivedate')
+            ->from('cheque cq')
+            ->join('customer_information ci', 'ci.customer_id = cq.receivedfrom', 'left')
+            ->join('supplier_information si', 'si.supplier_id = cq.paidto', 'left')
+            ->where('cq.type', '3rd Party')
+            ->where('cq.status', 'Pending')
+            ->where('cq.effectivedate >=', $sixMonthsAgo) // Effectivedate within the last 6 months
+            ->order_by('cq.updatedate', 'desc')
+            ->get()
+            ->result_array();
+
+        // Process results
+        foreach ($result as $row) {
+            $effectiveDate = strtotime($row['effectivedate']);
+            $sixMonthsAgoTimestamp = strtotime($sixMonthsAgo);
+
+            if ($effectiveDate > $sixMonthsAgoTimestamp) {
+                // Update status as valid
+                $this->db->where('cheque_no', $row['cheque_no'])
+                    ->update('cheque', ['status' => 'InValid']);
+            }
+        }
+
+
+        echo json_encode($result);
+    }
+
     public function chequebydata()
     {
 
