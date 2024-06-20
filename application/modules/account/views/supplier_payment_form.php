@@ -119,7 +119,7 @@
                                                 <i class="text-danger">*</i>
                                             </label>
                                             <div class="col-sm-8">
-                                                <input type="text" tabindex="3" class="form-control" name="cheque_no[]" placeholder="Cheque No" id="cheque_no_1" required />
+                                                <input type="text" tabindex="3" class="form-control" name="cheque_no[]" placeholder="Cheque No" id="cheque_no_1"  />
                                             </div>
                                         </div>
                                         <div class="form-group row">

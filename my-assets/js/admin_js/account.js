@@ -193,7 +193,11 @@ function supplierRcvcalculation(sl) {
     $("#add_new_payment").empty();
     $('#' + "che_" + sl).hide();
     $('#' + "myDiv_" + sl).hide();
-    $('#cheque_no_' + sl).val("");
+
+    document.getElementById('#cheque_no_' + sl).selectedIndex = -1;
+    document.getElementById('#cheque_no_' + sl).value ="";
+
+    $('#card_type_1' + sl).val("");
     $('#description' + sl).val("");
     $('#draft_date' + sl).val("");
     $('#effective_date' + sl).val(new Date().toISOString().slice(0, 10));
