@@ -219,6 +219,8 @@
         $('#effectivedate' ).val("");
         $('#description' ).val("");
         $('#txtAmount_1' ).val("");
+        $("#myDiv").hide();
+
     
 
         var url = $('#base_url').val() + "purchase/purchase/bdtask_typeofthepayment/" + x;
