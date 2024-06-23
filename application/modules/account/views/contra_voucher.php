@@ -220,6 +220,7 @@
         $('#description' ).val("");
         $('#txtAmount_1' ).val("");
         $("#myDiv").hide();
+        $('#txtAmount_1' ).prop('readonly', false);
 
     
 
