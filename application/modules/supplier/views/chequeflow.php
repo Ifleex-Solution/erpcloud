@@ -96,6 +96,8 @@
                                     <th>Purchase Invoice Date</th>
                                     <th>Cheque Transferred Date</th>
                                     <th>Amount</th>
+                                    <th>Cheque Transferred Date</th>
+                                    <th>Amount</th>
                                     <th></th>
 
 
@@ -140,9 +142,6 @@
 
 
                 var parsedData1 = JSON.parse(data1);
-
-
-
                 $('#chequeList').DataTable({
                     "bDestroy": true,
                     "data": parsedData1,
@@ -254,6 +253,14 @@
 
                         },
                         {
+                            data: 'depositeddate',
+
+                        },
+                        {
+                            data: 'bank2',
+
+                        },
+                        {
                             data: 'updatedate',
 
                         },
@@ -294,6 +301,8 @@
                     '<th>Purchase Invoice Date</th>' +
                     '<th>Cheque Transferred Date</th>' +
                     '<th>Amount</th>' +
+                    '<th>Deposited Date </th>' +
+                    '<th>Deposited Bank</th>' +
                     '<th>Last Updated Date</th>' +
                     '<th></th>' +
                     '</tr>' +

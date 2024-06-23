@@ -23,7 +23,7 @@
                                 <th>Effective Date</th>
                                 <th>Received From</th>
                                 <th>Paid To</th>
-                                <th>Deposited Bank</th>
+                                <th>Deposited To</th>
                                 <th>Amount</th>
                                 <th>Status</th>
                                 <th></th>
@@ -74,7 +74,7 @@
                 is_credit_edit: is_credit_edit
             },
             success: function(data1) {
-                console.log(data1);
+                location.reload();
 
             }
         });
@@ -171,8 +171,9 @@
                             data: 'supplier_name'
                         },
                         {
-                            data: 'depositedbank'
+                            data: 'bank2'
                         },
+                        
                         {
                             data: 'amount'
                         },
@@ -261,6 +262,13 @@
                 if (parsedData[0].chequestatus === 'Bounced') {
                     chequedetail.innerHTML += "<p><b>Bounced Date</b> : " + parsedData[0].updatedate + "</p>";
                 }
+
+                if (parsedData[0].chequestatus === 'Deposited') {
+                    chequedetail.innerHTML += "<p><b>Deposited Date</b> : " + parsedData[0].depositeddate + "</p>";
+                    chequedetail.innerHTML += "<p><b>Deposited To</b> : " + parsedData[0].bank2 + "</p>";
+
+                }
+
                 chequedetail.innerHTML += "<p><b>Last Updated Date</b> : " + parsedData[0].updatedate + "</p>";
 
 

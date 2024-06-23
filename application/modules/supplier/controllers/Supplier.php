@@ -41,10 +41,6 @@ class Supplier extends MX_Controller
 
     function chequeflowreport()
     {
-        $logFilePath = 'logfile.log';
-        $fileHandle = fopen($logFilePath, 'a');
-        fwrite($fileHandle, "\nThayaan");
-        fclose($fileHandle);
 
         $data['title']      = "Manage Cheque";
         $data['module']     = "supplier";
@@ -58,10 +54,12 @@ class Supplier extends MX_Controller
         // $query = $this->db->get();
 
 
-        $result = $this->db->select('cq.*, ci.*, si.*, cq.status AS chequestatus')
+        $result = $this->db->select('cq.*, ci.*, si.*, cq.status AS chequestatus,ac1.HeadName as bank2')
             ->from('cheque cq')
             ->join('customer_information ci', 'ci.customer_id = cq.receivedfrom', 'left')
             ->join('supplier_information si', 'si.supplier_id = cq.paidto', 'left')
+            ->join('acc_coa ac1', 'ac1.HeadCode = cq.depositedbank', 'left')
+
             ->order_by('cq.updatedate', 'desc')
             ->get()
             ->result_array();
@@ -76,6 +74,33 @@ class Supplier extends MX_Controller
         // $query = $this->db->get();
 
         $sixMonthsAgo = date('Y-m-d', strtotime('-6 months'));
+        // Fetch data from the database with effectivedate within the last 6 months
+        $result = $this->db->select('cq.cheque_no, cq.effectivedate')
+            ->from('cheque cq')
+            ->join('customer_information ci', 'ci.customer_id = cq.receivedfrom', 'left')
+            ->join('supplier_information si', 'si.supplier_id = cq.paidto', 'left')
+            ->where('cq.type', '3rd Party')
+            ->where('cq.status', 'Pending')
+            ->where('cq.effectivedate <=', $sixMonthsAgo) // Effectivedate within the last 6 months
+            ->order_by('cq.updatedate', 'desc')
+            ->get()
+            ->result_array();
+
+        // Process results
+        foreach ($result as $row) {
+            $effectiveDate = strtotime($row['effectivedate']);
+            $sixMonthsAgoTimestamp = strtotime($sixMonthsAgo);
+            $logFilePath = 'logfile.log';
+            $fileHandle = fopen($logFilePath, 'a');
+            fwrite($fileHandle,"\nsix month : ".$sixMonthsAgoTimestamp);
+            fclose($fileHandle);
+           
+            if ($effectiveDate < $sixMonthsAgoTimestamp) {
+                // Update status as valid
+                $this->db->where('cheque_no', $row['cheque_no'])
+                    ->update('cheque', ['status' => 'InValid']);
+            }
+        }
 
         $result = $this->db->select('cq.cheque_no,cq.effectivedate')
             ->from('cheque cq')
@@ -91,38 +116,14 @@ class Supplier extends MX_Controller
             $effectiveDate = strtotime($row['effectivedate']);
             $currentDate = strtotime(date('Y-m-d')); // Current date without time component
 
-            if ($effectiveDate > $currentDate) {
+            if ($effectiveDate <= $currentDate) {
                 // Update status as valid
                 $this->db->where('cheque_no', $row['cheque_no'])
                     ->update('cheque', ['status' => 'Valid']);
             }
         }
 
-        $sixMonthsAgo = date('Y-m-d', strtotime('-6 months'));
-
-        // Fetch data from the database with effectivedate within the last 6 months
-        $result = $this->db->select('cq.cheque_no, cq.effectivedate')
-            ->from('cheque cq')
-            ->join('customer_information ci', 'ci.customer_id = cq.receivedfrom', 'left')
-            ->join('supplier_information si', 'si.supplier_id = cq.paidto', 'left')
-            ->where('cq.type', '3rd Party')
-            ->where('cq.status', 'Pending')
-            ->where('cq.effectivedate >=', $sixMonthsAgo) // Effectivedate within the last 6 months
-            ->order_by('cq.updatedate', 'desc')
-            ->get()
-            ->result_array();
-
-        // Process results
-        foreach ($result as $row) {
-            $effectiveDate = strtotime($row['effectivedate']);
-            $sixMonthsAgoTimestamp = strtotime($sixMonthsAgo);
-
-            if ($effectiveDate > $sixMonthsAgoTimestamp) {
-                // Update status as valid
-                $this->db->where('cheque_no', $row['cheque_no'])
-                    ->update('cheque', ['status' => 'InValid']);
-            }
-        }
+       
 
 
         echo json_encode($result);
@@ -132,13 +133,14 @@ class Supplier extends MX_Controller
     {
 
 
-        $result = $this->db->select('cq.cheque_no, cq.type, cq.status AS chequestatus, ac.HeadName, cq.draftdate, cq.effectivedate, ci.customer_name, i.invoice, i.date as invoice_date, cq.createddate, si.supplier_name, pi.chalan_no, pi.purchase_date, cq.transfered, cq.amount, cq.updatedate')
+        $result = $this->db->select('cq.cheque_no, cq.type, cq.status AS chequestatus, ac.HeadName, cq.draftdate, cq.effectivedate, ci.customer_name, i.invoice, i.date as invoice_date, cq.createddate, si.supplier_name, pi.chalan_no, pi.purchase_date, cq.transfered, cq.amount, cq.updatedate,cq.depositeddate,ac1.HeadName as bank2')
             ->from('cheque cq')
             ->join('customer_information ci', 'ci.customer_id = cq.receivedfrom', 'left')
             ->join('supplier_information si', 'si.supplier_id = cq.paidto', 'left')
             ->join('invoice i', 'i.invoice_id = cq.sales_no', 'left')
             ->join('product_purchase pi', 'pi.id = cq.purchase_no', 'left')
             ->join('acc_coa ac', 'ac.HeadCode = cq.coano', 'left')
+            ->join('acc_coa ac1', 'ac1.HeadCode = cq.depositedbank', 'left')
             ->order_by('cq.updatedate', 'desc');
 
         if ($this->input->post('fromdate', true) != "") {
@@ -168,13 +170,14 @@ class Supplier extends MX_Controller
 
         // $query = $this->db->get();
         // $postData = $this->input->post();
-        $result = $this->db->select('cq.cheque_no, cq.type, ac.HeadName, cq.draftdate, cq.effectivedate, ci.customer_name, i.invoice, i.date as invoice_date, cq.createddate, si.supplier_name, pi.chalan_no, pi.purchase_date, cq.transfered, cq.amount, cq.updatedate, cq.status AS chequestatus')
+        $result = $this->db->select('cq.cheque_no, cq.type, ac.HeadName, cq.draftdate, cq.effectivedate, ci.customer_name, i.invoice, i.date as invoice_date, cq.createddate, si.supplier_name, pi.chalan_no, pi.purchase_date, cq.transfered, cq.amount, cq.updatedate, cq.status AS chequestatus,cq.depositeddate,ac1.HeadName as bank2')
             ->from('cheque cq')
             ->join('customer_information ci', 'ci.customer_id = cq.receivedfrom', 'left')
             ->join('supplier_information si', 'si.supplier_id = cq.paidto', 'left')
             ->join('invoice i', 'i.invoice_id = cq.sales_no', 'left')
             ->join('product_purchase pi', 'pi.id = cq.purchase_no', 'left')
             ->join('acc_coa ac', 'ac.HeadCode = cq.coano', 'left')
+            ->join('acc_coa ac1', 'ac1.HeadCode = cq.depositedbank', 'left')
             ->where('cq.id', $id)
 
             ->get()

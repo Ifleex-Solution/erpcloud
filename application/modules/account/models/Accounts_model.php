@@ -785,7 +785,7 @@ class Accounts_model extends CI_Model
                     'status'             => $input_date_obj <= $current_date_obj ? "Valid" : "Pending",
                     'description'        => $description[$i],
                     'createddate'        =>  $current_datetime_obj->format('Y-m-d H:i:s'),
-                    'updatedate'         =>  $current_datetime_obj ->format('Y-m-d H:i:s')
+                    'updatedate'         =>  $current_datetime_obj->format('Y-m-d H:i:s')
                 );
                 $this->db->insert('cheque', $chequedata);
                 // if () {
@@ -1120,18 +1120,22 @@ class Accounts_model extends CI_Model
         $dAID = $this->input->post('cmbCode', true);
         $reVID = $this->input->post('cmbDebit', true);
         $Debit = $this->input->post('txtAmount', true);
-        $Credit = $this->input->post('txtAmountcr', true);
+        // $Credit = $this->input->post('txtAmountcr', true);
         $VDate = $this->input->post('dtpDate');
         $txtComment = $this->input->post('txtComment');
         $Narration = addslashes(trim($this->input->post('txtRemarks', true)));
         $CreateBy = $this->session->userdata('id');
         $createdate = date('Y-m-d H:i:s');
 
+       
+
+
+
 
         for ($i = 0; $i < count($dAID); $i++) {
             $dbtid = $dAID[$i];
             $Damnt = $Debit[$i];
-            $Camnt = $Credit[$i];
+            $Camnt = 0;
             $Comment = $txtComment[$i];
             $contrainsert = array(
                 'fyear'          =>  $fyear,
@@ -1158,6 +1162,29 @@ class Accounts_model extends CI_Model
 
             $this->db->insert('acc_vaucher', $contrainsert);
             addActivityLog("contra_vaucher", "create", $vaucherNo, "acc_vaucher", 1, $contrainsert);
+
+            $data = $this->db->select('HeadName')
+                ->from('acc_coa')
+                ->where('HeadCode', $reVID)
+                ->get()
+                ->row();
+
+            $headName = $data->HeadName;
+            $current_datetime_obj = new DateTime();
+            if ($headName == "3rd party cheque") {
+                $chequeno = $this->input->post('chequeno');
+                $description = $this->input->post('description');
+                $chequedata = array(
+                    'depositeddate'  => $current_datetime_obj->format('Y-m-d H:i:s'),
+                    'depositedbank' => $dbtid,
+                    'status'  => "Deposited",
+                    'description'=> $description,
+                    'updatedate'=>  $current_datetime_obj->format('Y-m-d H:i:s')
+                );
+
+                $this->db->where('cheque_no', $chequeno);
+                $this->db->update('cheque', $chequedata);
+            }
         }
         return true;
     }
