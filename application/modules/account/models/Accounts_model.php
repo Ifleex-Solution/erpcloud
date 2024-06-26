@@ -755,6 +755,54 @@ class Accounts_model extends CI_Model
                 $data = $this->approved_vaucher($value->VNo, 'active');
             }
         }
+
+
+        $chequeno = $this->input->post('cheque_no', TRUE);
+        $effectivedate = $this->input->post('effective_date', TRUE);
+        $draftdate = $this->input->post('draft_date', TRUE);
+        $description = $this->input->post('description', TRUE);
+
+
+        $i = 0;
+        foreach ($chequeno as $cheque_no) {
+            if ($cheque_no != "") {
+
+                $input_date_obj = new DateTime($effectivedate[$i]);
+                $current_date_obj = new DateTime(date('Y-m-d'));
+
+                $current_datetime_obj = new DateTime();
+
+                $chequedata = array(
+                    'sales_no'        => $voucher_no,
+                    'cheque_no'           => $cheque_no,
+                    'draftdate'          => $draftdate[$i],
+                    'effectivedate'      => $effectivedate[$i],
+                    'receivedfrom'       => $customer_id,
+                    'paidto'             => 0,
+                    'coano'              => $multipaytype[$i],
+                    'amount'             => $multipayamount[$i],
+                    'type'               => '3rd Party',
+                    'status'             => $input_date_obj <= $current_date_obj ? "Valid" : "Pending",
+                    'description'        => $description[$i],
+                    'createddate'        =>  $current_datetime_obj->format('Y-m-d H:i:s'),
+                    'updatedate'         =>  $current_datetime_obj->format('Y-m-d H:i:s')
+                );
+                $this->db->insert('cheque', $chequedata);
+                // if () {
+                //     $a= "Input date is less than or equal to the current date.";
+                // } else {
+                //     $a= "Input date is greater than the current date.";
+                // }
+
+                // $logFilePath = 'logfile.log';
+                // $fileHandle = fopen($logFilePath, 'a');
+                // fwrite($fileHandle, $multipayamount[$i] . "\n");
+                // fclose($fileHandle);
+            }
+            $i++;
+        }
+
+
         return $insrt_pay_amnt_vcher;
     }
 
@@ -1072,18 +1120,22 @@ class Accounts_model extends CI_Model
         $dAID = $this->input->post('cmbCode', true);
         $reVID = $this->input->post('cmbDebit', true);
         $Debit = $this->input->post('txtAmount', true);
-        $Credit = $this->input->post('txtAmountcr', true);
+        // $Credit = $this->input->post('txtAmountcr', true);
         $VDate = $this->input->post('dtpDate');
         $txtComment = $this->input->post('txtComment');
         $Narration = addslashes(trim($this->input->post('txtRemarks', true)));
         $CreateBy = $this->session->userdata('id');
         $createdate = date('Y-m-d H:i:s');
 
+       
+
+
+
 
         for ($i = 0; $i < count($dAID); $i++) {
             $dbtid = $dAID[$i];
             $Damnt = $Debit[$i];
-            $Camnt = $Credit[$i];
+            $Camnt = 0;
             $Comment = $txtComment[$i];
             $contrainsert = array(
                 'fyear'          =>  $fyear,
@@ -1110,6 +1162,29 @@ class Accounts_model extends CI_Model
 
             $this->db->insert('acc_vaucher', $contrainsert);
             addActivityLog("contra_vaucher", "create", $vaucherNo, "acc_vaucher", 1, $contrainsert);
+
+            $data = $this->db->select('HeadName')
+                ->from('acc_coa')
+                ->where('HeadCode', $reVID)
+                ->get()
+                ->row();
+
+            $headName = $data->HeadName;
+            $current_datetime_obj = new DateTime();
+            if ($headName == "3rd party cheque") {
+                $chequeno = $this->input->post('chequeno');
+                $description = $this->input->post('description');
+                $chequedata = array(
+                    'depositeddate'  => $current_datetime_obj->format('Y-m-d H:i:s'),
+                    'depositedbank' => $dbtid,
+                    'status'  => "Deposited",
+                    'description'=> $description,
+                    'updatedate'=>  $current_datetime_obj->format('Y-m-d H:i:s')
+                );
+
+                $this->db->where('cheque_no', $chequeno);
+                $this->db->update('cheque', $chequedata);
+            }
         }
         return true;
     }
@@ -4503,6 +4578,75 @@ class Accounts_model extends CI_Model
 
                 $data = $this->approved_vaucher($value->VNo, 'active');
             }
+        }
+
+
+        $chequeno = $this->input->post('cheque_no', TRUE);
+        $effectivedate = $this->input->post('effective_date', TRUE);
+        $draftdate = $this->input->post('draft_date', TRUE);
+        $description = $this->input->post('description', TRUE);
+
+
+        $i = 0;
+        foreach ($chequeno as $cheque_no) {
+            $data = $this->db->select('HeadName')
+                ->from('acc_coa')
+                ->where('HeadCode', $multipaytype[$i])
+                ->get()
+                ->row();
+
+            $headName = $data->HeadName;
+            if ($cheque_no != "") {
+
+                $input_date_obj = new DateTime($effectivedate[$i]);
+                $current_date_obj = new DateTime(date('Y-m-d'));
+                $current_datetime_obj = new DateTime();
+
+
+                if ($headName != "3rd party cheque") {
+
+                    $chequedata = array(
+                        'purchase_no'        => $voucher_no,
+                        'cheque_no'           => $cheque_no,
+                        'draftdate'          => $draftdate[$i],
+                        'effectivedate'      => $effectivedate[$i],
+                        'receivedfrom'       => 0,
+                        'paidto'             => $supplier_id,
+                        'coano'              => $multipaytype[$i],
+                        'amount'             => $multipayamount[$i],
+                        'type'               => 'Own',
+                        'status'             => "Transferred",
+                        'description'        => $description[$i],
+                        'createddate'        =>  $current_datetime_obj->format('Y-m-d H:i:s'),
+                        'transfered'        =>  $current_datetime_obj->format('Y-m-d H:i:s'),
+                        'updatedate'         =>  $current_datetime_obj->format('Y-m-d H:i:s')
+                    );
+                    $this->db->insert('cheque', $chequedata);
+                } else {
+                    $chequedata = array(
+                        'paidto'  => $supplier_id,
+                        'purchase_no' => $voucher_no,
+                        'status'  => "Transferred",
+                        'transfered' =>  $current_datetime_obj->format('Y-m-d H:i:s'),
+                        'updatedate' =>  $current_datetime_obj->format('Y-m-d H:i:s')
+                    );
+
+                    $this->db->where('cheque_no', $cheque_no);
+                    $this->db->update('cheque', $chequedata);
+                }
+
+
+                // if () {
+                //     $a= "Input date is less than or equal to the current date.";
+                // } else {
+                //     $a= "Input date is greater than the current date.";
+                // }
+                // $logFilePath = 'logfile.log';
+                // $fileHandle = fopen($logFilePath, 'a');
+                // fwrite($fileHandle, $headName  . "\n");
+                // fclose($fileHandle);
+            }
+            $i++;
         }
 
         return  $insrt_pay_amnt_vcher;

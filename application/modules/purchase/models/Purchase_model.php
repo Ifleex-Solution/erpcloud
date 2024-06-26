@@ -49,6 +49,19 @@ class Purchase_model extends CI_Model
             return false;
         }
     }
+
+
+    public function pmethodbyid($id)
+    {
+        $data = $this->db->select('*')
+            ->from('acc_coa')
+            ->where('HeadCode', $id)
+            ->get()
+            ->result();
+
+        return $data;
+    }
+
     public function pmethod_dropdown_new()
     {
         $data = $this->db->select('*')
@@ -234,7 +247,7 @@ class Purchase_model extends CI_Model
             $base_url = base_url();
             $jsaction = "return confirm('Are You Sure ?')";
 
-           
+
 
 
             $button .= '  <a href="' . $base_url . 'purchase_details/' . $record->purchase_id . '" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="left" title="' . display('purchase_details') . '"><i class="fa fa-window-restore" aria-hidden="true"></i></a>';
@@ -309,8 +322,6 @@ class Purchase_model extends CI_Model
 
     public function insert_purchase()
     {
-
-
         date_default_timezone_set('Asia/Colombo');
 
         $purchase_id = $this->number_generator();
@@ -332,6 +343,7 @@ class Purchase_model extends CI_Model
         $multipaytype = $this->input->post('multipaytype', TRUE);
 
         $multiamnt = array_sum($multipayamount);
+
 
         if ($multiamnt == $paid_amount) {
 
@@ -472,6 +484,74 @@ class Purchase_model extends CI_Model
                 $new = $this->autoapprove($purchase_id);
             }
 
+            $chequeno = $this->input->post('cheque_no', TRUE);
+            $effectivedate = $this->input->post('effective_date', TRUE);
+            $draftdate = $this->input->post('draft_date', TRUE);
+            $description = $this->input->post('description', TRUE);
+
+
+            $i = 0;
+            foreach ($chequeno as $cheque_no) {
+                $data = $this->db->select('HeadName')
+                    ->from('acc_coa')
+                    ->where('HeadCode', $multipaytype[$i])
+                    ->get()
+                    ->row();
+
+                $headName = $data->HeadName;
+                if ($cheque_no != "") {
+
+                    $input_date_obj = new DateTime($effectivedate[$i]);
+                    $current_date_obj = new DateTime(date('Y-m-d'));
+                    $current_datetime_obj = new DateTime();
+
+
+                    if ($headName != "3rd party cheque") {
+                       
+                        $chequedata = array(
+                            'purchase_no'        => $purchase_id,
+                            'cheque_no'           => $cheque_no,
+                            'draftdate'          => $draftdate[$i],
+                            'effectivedate'      => $effectivedate[$i],
+                            'receivedfrom'       => 0,
+                            'paidto'             => $supplier_id1,
+                            'coano'              => $multipaytype[$i],
+                            'amount'             => $multipayamount[$i],
+                            'type'               => 'Own',
+                            'status'             => "Transferred",
+                            'description'        => $description[$i],
+                            'createddate'        =>  $current_datetime_obj->format('Y-m-d H:i:s'),
+                            'transfered'        =>  $current_datetime_obj->format('Y-m-d H:i:s'),
+                            'updatedate'         =>  $current_datetime_obj->format('Y-m-d H:i:s')
+                        );
+                        $this->db->insert('cheque', $chequedata);
+
+                    } else {
+                        $chequedata = array(
+                            'paidto'  => $supplier_id1,
+                            'purchase_no' => $purchase_id,
+                            'status'  => "Transferred",
+                            'transfered'=>  $current_datetime_obj->format('Y-m-d H:i:s'),
+                            'updatedate'=>  $current_datetime_obj->format('Y-m-d H:i:s')
+                        );
+
+                        $this->db->where('cheque_no', $cheque_no);
+                        $this->db->update('cheque', $chequedata);
+                    }
+
+
+                    // if () {
+                    //     $a= "Input date is less than or equal to the current date.";
+                    // } else {
+                    //     $a= "Input date is greater than the current date.";
+                    // }
+                    // $logFilePath = 'logfile.log';
+                    // $fileHandle = fopen($logFilePath, 'a');
+                    // fwrite($fileHandle, $headName  . "\n");
+                    // fclose($fileHandle);
+                }
+                $i++;
+            }
             return 1;
         } else {
 

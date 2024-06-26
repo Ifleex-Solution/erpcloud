@@ -21,74 +21,48 @@ function voucher_due(id) {
     });
 }
 
-function changedueamount() {
-    var inputval = parseFloat(0);
-    var maintotalamount = $('#grandTotal').val();
 
-    $(".number").each(function() {
-        var inputdata = parseFloat($(this).val());
-        inputval = inputval + inputdata;
-
-        if (parseFloat(maintotalamount) < parseFloat(inputval)) {
-            toastr["error"]('You Can not Pay More than Total Amount');
-            $(this).val(0)
-            return false;
-        }
-
-    });
-
-
-
-    var restamount = (parseFloat(maintotalamount)) - (parseFloat(inputval));
-    var changes = restamount.toFixed(3);
-    if (changes <= 0) {
-        $("#pay-amount").text(0);
-    } else {
-        $("#pay-amount").text(changes);
-    }
-
-}
 
 // ******* new payment add start *******
-$(document).on('click', '#add_new_payment_type', function() {
-    var base_url = $('#base_url').val();
-    var csrf_test_name = $('[name="csrf_test_name"]').val();
-    var gtotal = $("#grandTotal").val();
+// $(document).on('click', '#add_new_payment_type', function() {
+//     var base_url = $('#base_url').val();
+//     var csrf_test_name = $('[name="csrf_test_name"]').val();
+//     var gtotal = $("#grandTotal").val();
 
-    var total = 0;
-    $(".pay").each(function() {
-        total += parseFloat($(this).val()) || 0;
-    });
-
-
-    if (total >= gtotal) {
-        toastr.error("Paid amount is exceed to Total amount.");
-
-        return false;
-    }
-
-    var url = base_url + "account/accounts/bdtask_showpaymentmodal";
-    $.ajax({
-        type: "GET",
-        url: url,
-        data: {
-            csrf_test_name: csrf_test_name
-        },
-        success: function(data) {
-            $($('#add_new_payment').append(data)).show("slow", function() {});
-            var length = $(".number").length;
-            $(".number:eq(" + (length - 1) + ")").val(parseFloat($("#pay-amount").text()));
-            var total2 = 0;
-            $(".number").each(function() {
-                total2 += parseFloat($(this).val()) || 0;
-            });
+//     var total = 0;
+//     $(".pay").each(function() {
+//         total += parseFloat($(this).val()) || 0;
+//     });
 
 
+//     if (total >= gtotal) {
+//         toastr.error("Paid amount is exceed to Total amount.");
+
+//         return false;
+//     }
+
+//     var url = base_url + "account/accounts/bdtask_showpaymentmodal";
+//     $.ajax({
+//         type: "GET",
+//         url: url,
+//         data: {
+//             csrf_test_name: csrf_test_name
+//         },
+//         success: function(data) {
+//             $($('#add_new_payment').append(data)).show("slow", function() {});
+//             var length = $(".number").length;
+//             $(".number:eq(" + (length - 1) + ")").val(parseFloat($("#pay-amount").text()));
+//             var total2 = 0;
+//             $(".number").each(function() {
+//                 total2 += parseFloat($(this).val()) || 0;
+//             });
 
 
-        }
-    });
-});
+
+
+//         }
+//     });
+// });
 
 function removeMethod(rmdiv, sl) {
     var contain_val = $("#pamount_by_method_" + sl).val();
@@ -96,6 +70,12 @@ function removeMethod(rmdiv, sl) {
     var firstval = $(".number:eq(0)").val();
     var effetval = (contain_val ? parseFloat(contain_val) : 0) + (firstval ? parseFloat(firstval) : 0);
     $(".number:eq(0)").val(effetval.toFixed(2, 2));
+    $('#' + "che_" + sl).hide();
+    $('#' + "myDiv_" + sl).hide();
+    $('#cheque_no_' + sl).val("");
+    $('#description' + sl).val("");
+    $('#draft_date' + sl).val("");
+    $('#effective_date' + sl).val(new Date().toISOString().slice(0, 10));
     changedueamount();
 }
 

@@ -400,54 +400,7 @@ $(document).on('click','#add_invoice',function(){
     }
   });
 
-// ******* new payment add start *******
-$(document).on('click','#add_new_payment_type',function(){
-    var base_url = $('#base_url').val();
-    var csrf_test_name = $('[name="csrf_test_name"]').val();
-    var gtotal=$("#paidAmount").val();
-    
-    var total = 0;
-    $( ".pay" ).each( function(){
-      total += parseFloat( $( this ).val() ) || 0;
-    });
-    
-   
-    var is_credit_edit = $('#is_credit_edit').val();
-    if(total>=gtotal){
-      alert("Paid amount is exceed to Total amount.");
-      
-      return false;
-    }
-      
-    var url= base_url + "invoice/invoice/bdtask_showpaymentmodal";
-    $.ajax({
-      type: "post",
-      url: url,
-      data:{is_credit_edit:is_credit_edit, csrf_test_name:csrf_test_name},
-      success: function(data) {
-        $($('#add_new_payment').append(data)).show("slow", function(){
-          });
-        var length = $(".number").length;
 
-        var total3 = 0;
-        $( ".pay" ).each( function(){
-          total3 += parseFloat( $( this ).val() ) || 0;
-        });
-
-        var nextamnt = gtotal -total3;
-
-
-        $(".number:eq("+(length-1)+")").val(nextamnt.toFixed(2,2));
-        var total2 = 0;
-        $( ".number" ).each( function(){
-          total2 += parseFloat( $( this ).val() ) || 0;
-        });
-        var dueamnt = parseFloat(gtotal) - total2
-        
-        
-      }
-    }); 
-  });
 
   
   function changedueamount(){
@@ -762,55 +715,55 @@ $(document).ready(function(){
 
 
 
-     $(document).ready(function() {
-    "use strict";
-    var frm = $("#insert_sale");
-    var output = $("#output");
-    frm.on('submit', function(e) {
-         e.preventDefault(); 
-               $.ajax({
-            url : $(this).attr('action'),
-            method : $(this).attr('method'),
-            dataType : 'json',
-            data : frm.serialize(),
-            success: function(data) 
-            {
+//      $(document).ready(function() {
+//     "use strict";
+//     var frm = $("#insert_sale");
+//     var output = $("#output");
+//     frm.on('submit', function(e) {
+//          e.preventDefault(); 
+//                $.ajax({
+//             url : $(this).attr('action'),
+//             method : $(this).attr('method'),
+//             dataType : 'json',
+//             data : frm.serialize(),
+//             success: function(data) 
+//             {
                 
-                if (data.status == true) {
-                   toastr["success"](data.message);
-                               swal({
-        title: "Success!",
-        showCancelButton: true,
-        cancelButtonText: "NO",
-        confirmButtonText: "Yes",
-        text: "Do You Want To Print ?",
-        type: "success",
+//                 if (data.status == true) {
+//                    toastr["success"](data.message);
+//                                swal({
+//         title: "Success!",
+//         showCancelButton: true,
+//         cancelButtonText: "NO",
+//         confirmButtonText: "Yes",
+//         text: "Do You Want To Print ?",
+//         type: "success",
         
        
-      }, function(inputValue) {
-          if (inputValue===true) {
-      $("#normalinvoice tbody tr").remove();
-                $('#insert_sale').trigger("reset");
+//       }, function(inputValue) {
+//           if (inputValue===true) {
+//       $("#normalinvoice tbody tr").remove();
+//                 $('#insert_sale').trigger("reset");
 
-       printRawHtml(data.details);
-  } else {
-    location.reload();
-  }
+//        printRawHtml(data.details);
+//   } else {
+//     location.reload();
+//   }
     
-      });
-                   if(data.status == true && event.keyCode == 13) {
-        }
-                } else {
-                    toastr["error"](data.exception);
-                }
-            },
-            error: function(xhr)
-            {
-                alert('failed!');
-            }
-        });
-    });
-     });
+//       });
+//                    if(data.status == true && event.keyCode == 13) {
+//         }
+//                 } else {
+//                     toastr["error"](data.exception);
+//                 }
+//             },
+//             error: function(xhr)
+//             {
+//                 alert('failed!');
+//             }
+//         });
+//     });
+//      });
 
     $(document).ready(function() {
         $("#default_payment_id").empty();
@@ -985,43 +938,6 @@ $(document).ready(function(){
 
     }
 
-    function check_creditsale(){
-        var card_typesl = $('.card_typesl').val();
-        if(card_typesl == 0){
-            $("#add_new_payment").empty();
-            var gtotal=$(".grandTotalamnt").val();
-            $("#pamount_by_method").val(gtotal);
-            $("#paidAmount").val(0);
-            $("#dueAmmount").val(gtotal);
-            $(".number:eq(0)").val(0);
-            $("#add_new_payment_type").prop('disabled',true);
-            
-        }else{
-            $("#add_new_payment_type").prop('disabled',false);
-        }
-        $("#pay-amount").text('0');
-        
-        var invoice_edit_page = $("#invoice_edit_page").val();
-        var is_credit_edit = $('#is_credit_edit').val();
-        if (invoice_edit_page == 1 && card_typesl == 0) {
-            $("#add_new_payment").empty();
-           
-            var base_url = $('#base_url').val();
-            var csrf_test_name = $('[name="csrf_test_name"]').val();
-            var gtotal=$(".grandTotalamnt").val();
-            var url= base_url + "invoice/invoice/bdtask_showpaymentmodal";
-            $.ajax({
-                type: "post",
-                url: url,
-                data:{csrf_test_name:csrf_test_name,is_credit_edit:is_credit_edit},
-                success: function(data) {
-                 $('#add_new_payment').append(data);
-                  $("#pamount_by_method").val(gtotal);
-                  $("#add_new_payment_type").prop('disabled',true);
-                }
-              }); 
-            
-        }
-    }
+  
 
 

@@ -767,6 +767,12 @@ class Invoice extends MX_Controller
                         $printdata       = $this->invoice_model->bdtask_invoice_pos_print_direct($invoice_id);
                         $data['details'] = $this->load->view('invoice/pos_print', $printdata, true);
                     }
+                    $base_url = base_url(); 
+
+                    echo '<script type="text/javascript">
+                    alert("Invoice details saved successfully");
+                    window.location.href = "' . $base_url . 'invoice_list";
+                   </script>';
                 } else {
                     $data['status']    = false;
                     $data['exception'] = 'Please Try Again';
@@ -776,7 +782,8 @@ class Invoice extends MX_Controller
                 $data['exception'] = validation_errors();
             }
         }
-        echo json_encode($data);
+       
+       
     }
 
     public function autoapprove($invoice_id)
@@ -790,10 +797,11 @@ class Invoice extends MX_Controller
         return true;
     }
 
-    public function bdtask_showpaymentmodal()
+    public function bdtask_showpaymentmodal($id = null)
     {
         $is_credit =  $this->input->post('is_credit_edit', TRUE);
         $data['is_credit'] = $is_credit;
+        $data['id'] = $id;
         if ($is_credit == 1) {
             # code...
             $data['all_pmethod'] = $this->invoice_model->pmethod_dropdown();
@@ -802,6 +810,33 @@ class Invoice extends MX_Controller
             $data['all_pmethod'] = $this->invoice_model->pmethod_dropdown_new();
         }
         $this->load->view('invoice/newpaymentveiw', $data);
+    }
+
+    public function checkCheque($chequeno = null)
+    {
+        $this->db->select('*');
+        $this->db->from('cheque');
+        $this->db->where('cheque_no', $chequeno);
+        $query = $this->db->get();
+        $result = $query->result_array();
+        echo  json_encode($result);
+    }
+
+
+    public function bdtask_showpaymentmodal1($id = null)
+    {
+
+        $is_credit =  $this->input->post('is_credit_edit', TRUE);
+        $data['is_credit'] = $is_credit;
+        $data['id'] = $id;
+        if ($is_credit == 1) {
+            # code...
+            $data['all_pmethod'] = $this->purchase_model->pmethod_dropdown();
+        } else {
+
+            $data['all_pmethod'] = $this->purchase_model->pmethod_dropdown_new();
+        }
+        $this->load->view('purchase/newpaymentveiw', $data);
     }
 
 
