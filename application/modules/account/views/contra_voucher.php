@@ -241,7 +241,7 @@
 
                     $("#exampleModal").modal('show');
 
-                    var url1 = $('#base_url').val() + "purchase/purchase/getallcheques";
+                    var url1 = $('#base_url').val() + "purchase/purchase/getallcheques2";
                     $.ajax({
                         type: "post",
                         url: url1,

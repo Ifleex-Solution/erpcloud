@@ -75,11 +75,24 @@ class Purchase extends MX_Controller
         $this->db->from('cheque');
         $this->db->join('customer_information', 'customer_information.customer_id = cheque.receivedfrom');
         $this->db->where('cheque.paidto', 0);
+        $this->db->where_in('cheque.status', ['Valid', 'Pending']);
+        $query = $this->db->get();
+        $result = $query->result_array();
+        echo json_encode($result);
+    }
+
+    public function getallcheques2()
+    {
+        $this->db->select('cheque.id, cheque.cheque_no, cheque.draftdate, cheque.effectivedate,cheque.description, cheque.amount,cheque.status, customer_information.customer_name,customer_information.customer_id');
+        $this->db->from('cheque');
+        $this->db->join('customer_information', 'customer_information.customer_id = cheque.receivedfrom');
+        $this->db->where('cheque.paidto', 0);
         $this->db->where('cheque.status', 'Valid');
         $query = $this->db->get();
         $result = $query->result_array();
         echo json_encode($result);
     }
+
 
 
     public function bdtask_purchase_list()

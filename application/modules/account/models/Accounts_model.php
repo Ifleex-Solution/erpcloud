@@ -784,8 +784,8 @@ class Accounts_model extends CI_Model
                     'type'               => '3rd Party',
                     'status'             => $input_date_obj <= $current_date_obj ? "Valid" : "Pending",
                     'description'        => $description[$i],
-                    'createddate'        =>  $current_datetime_obj->format('Y-m-d H:i:s'),
-                    'updatedate'         =>  $current_datetime_obj->format('Y-m-d H:i:s')
+                    'createddate'        => $this->input->post('dtpDate', TRUE),
+                    'updatedate'         => $this->input->post('dtpDate', TRUE)
                 );
                 $this->db->insert('cheque', $chequedata);
                 // if () {
@@ -1175,11 +1175,11 @@ class Accounts_model extends CI_Model
                 $chequeno = $this->input->post('chequeno');
                 $description = $this->input->post('description');
                 $chequedata = array(
-                    'depositeddate'  => $current_datetime_obj->format('Y-m-d H:i:s'),
+                    'depositeddate'  => $this->input->post('dtpDate'),
                     'depositedbank' => $dbtid,
                     'status'  => "Deposited",
                     'description'=> $description,
-                    'updatedate'=>  $current_datetime_obj->format('Y-m-d H:i:s')
+                    'updatedate'=>  $this->input->post('dtpDate')
                 );
 
                 $this->db->where('cheque_no', $chequeno);
@@ -4617,9 +4617,9 @@ class Accounts_model extends CI_Model
                         'type'               => 'Own',
                         'status'             => "Transferred",
                         'description'        => $description[$i],
-                        'createddate'        =>  $current_datetime_obj->format('Y-m-d H:i:s'),
-                        'transfered'        =>  $current_datetime_obj->format('Y-m-d H:i:s'),
-                        'updatedate'         =>  $current_datetime_obj->format('Y-m-d H:i:s')
+                        'createddate'        =>$this->input->post('dtpDate', TRUE),
+                        'transfered'        =>  $this->input->post('dtpDate', TRUE),
+                        'updatedate'         => $this->input->post('dtpDate', TRUE)
                     );
                     $this->db->insert('cheque', $chequedata);
                 } else {
@@ -4627,8 +4627,8 @@ class Accounts_model extends CI_Model
                         'paidto'  => $supplier_id,
                         'purchase_no' => $voucher_no,
                         'status'  => "Transferred",
-                        'transfered' =>  $current_datetime_obj->format('Y-m-d H:i:s'),
-                        'updatedate' =>  $current_datetime_obj->format('Y-m-d H:i:s')
+                        'transfered' => $this->input->post('dtpDate', TRUE),
+                        'updatedate' =>  $this->input->post('dtpDate', TRUE)
                     );
 
                     $this->db->where('cheque_no', $cheque_no);

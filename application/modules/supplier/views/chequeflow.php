@@ -20,12 +20,12 @@
                     ?>
                     <div class="form-group mr-2" style="margin-left: 10px;"> <!-- Added mr-2 for margin -->
                         <label class="mr-2" for="from_date">From Date</label>
-                        <input type="text" name="from_date" class="form-control datepicker" id="from_date" value="" placeholder="<?php echo display('start_date') ?>">
+                        <input type="text" name="from_date" class="form-control datepicker" id="from_date" value="<?php echo $today; ?>"  placeholder="<?php echo display('start_date') ?>">
                     </div>
 
                     <div class="form-group mr-2" style="margin-left: 10px;"> <!-- Added mr-2 for margin -->
                         <label class="mr-2" for="to_date">To Date</label>
-                        <input type="text" name="to_date" class="form-control datepicker" id="to_date" placeholder="<?php echo display('end_date') ?>" value="">
+                        <input type="text" name="to_date" class="form-control datepicker" id="to_date" placeholder="<?php echo display('end_date') ?>" value="<?php echo $today; ?>">
                     </div>
 
                     <div class="form-group mr-2" style="margin-left: 10px;"> <!-- Added mr-2 for margin -->

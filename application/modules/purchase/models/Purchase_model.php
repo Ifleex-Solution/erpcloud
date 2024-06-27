@@ -520,9 +520,9 @@ class Purchase_model extends CI_Model
                             'type'               => 'Own',
                             'status'             => "Transferred",
                             'description'        => $description[$i],
-                            'createddate'        =>  $current_datetime_obj->format('Y-m-d H:i:s'),
-                            'transfered'        =>  $current_datetime_obj->format('Y-m-d H:i:s'),
-                            'updatedate'         =>  $current_datetime_obj->format('Y-m-d H:i:s')
+                            'createddate'        =>  $this->input->post('purchase_date', TRUE),
+                            'transfered'        =>   $this->input->post('purchase_date', TRUE),
+                            'updatedate'         =>  $this->input->post('purchase_date', TRUE)
                         );
                         $this->db->insert('cheque', $chequedata);
 
@@ -531,8 +531,8 @@ class Purchase_model extends CI_Model
                             'paidto'  => $supplier_id1,
                             'purchase_no' => $purchase_id,
                             'status'  => "Transferred",
-                            'transfered'=>  $current_datetime_obj->format('Y-m-d H:i:s'),
-                            'updatedate'=>  $current_datetime_obj->format('Y-m-d H:i:s')
+                            'transfered'=>   $this->input->post('purchase_date', TRUE),
+                            'updatedate'=>  $this->input->post('purchase_date', TRUE)
                         );
 
                         $this->db->where('cheque_no', $cheque_no);
