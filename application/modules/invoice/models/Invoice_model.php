@@ -563,8 +563,8 @@ class Invoice_model extends CI_Model
                     'type'               => '3rd Party',
                     'status'             => $input_date_obj <= $current_date_obj ? "Valid" : "Pending",
                     'description'        => $description[$i],
-                    'createddate'        =>  $current_datetime_obj->format('Y-m-d H:i:s'),
-                    'updatedate'         =>  $current_datetime_obj ->format('Y-m-d H:i:s')
+                    'createddate'        =>  (!empty($this->input->post('invoice_date', TRUE)) ? $this->input->post('invoice_date', TRUE) : date('Y-m-d')),
+                    'updatedate'         =>  (!empty($this->input->post('invoice_date', TRUE)) ? $this->input->post('invoice_date', TRUE) : date('Y-m-d'))
                 );
                 $this->db->insert('cheque', $chequedata);
                 // if () {

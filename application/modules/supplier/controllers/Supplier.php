@@ -80,7 +80,7 @@ class Supplier extends MX_Controller
             ->join('customer_information ci', 'ci.customer_id = cq.receivedfrom', 'left')
             ->join('supplier_information si', 'si.supplier_id = cq.paidto', 'left')
             ->where('cq.type', '3rd Party')
-            ->where('cq.status', 'Pending')
+            ->where_in('cq.status', ['Valid', 'Pending'])
             ->where('cq.effectivedate <=', $sixMonthsAgo) // Effectivedate within the last 6 months
             ->order_by('cq.updatedate', 'desc')
             ->get()
@@ -98,7 +98,7 @@ class Supplier extends MX_Controller
             if ($effectiveDate < $sixMonthsAgoTimestamp) {
                 // Update status as valid
                 $this->db->where('cheque_no', $row['cheque_no'])
-                    ->update('cheque', ['status' => 'InValid']);
+                    ->update('cheque', ['status' => 'In Valid']);
             }
         }
 
