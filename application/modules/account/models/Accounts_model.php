@@ -19,7 +19,7 @@ class Accounts_model extends CI_Model
         $this->db->select('*');
         $this->db->from('acc_coa');
         $this->db->where('IsActive', 1);
-        $this->db->order_by('HeadName');
+        $this->db->order_by('PHeadName');
         $query = $this->db->get();
         if ($query->num_rows() >= 1) {
             return $query->result();

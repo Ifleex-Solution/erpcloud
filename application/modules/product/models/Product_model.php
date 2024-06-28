@@ -250,14 +250,14 @@ class Product_model extends CI_Model
         $this->db->limit($rowperpage, $start);
         $records = $this->db->get()->result();
 
-   
+
 
 
         $data = array();
         $sl = 1;
 
         foreach ($records as $record) {
-         
+
 
             $button = '';
             $base_url = base_url();
@@ -282,10 +282,8 @@ class Product_model extends CI_Model
                 'sl'               => $sl,
                 'product_name'     => $product_name,
                 'product_model'    => $record->product_model,
-                'supplier_name'    => $supplier,
                 'price'            => $record->price,
                 'purchase_p'       => $record->supplier_price,
-
                 'image'            => $image,
                 'button'           => $button,
 
@@ -301,6 +299,7 @@ class Product_model extends CI_Model
             "iTotalDisplayRecords" => $totalRecords,
             "aaData" => $data
         );
+
         return $response;
     }
 

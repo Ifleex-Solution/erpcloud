@@ -1298,11 +1298,6 @@
                                                         } ?>"><a href="<?php echo base_url('mail_setting') ?>"><?php echo display('mail_setting') ?> </a>
                                     </li>
                                 <?php } ?>
-                                <li class="treeview <?php if ($this->uri->segment('1') == "app_setting") {
-                                                        echo "active";
-                                                    } else {
-                                                        echo " ";
-                                                    } ?>"><a href="<?php echo base_url('app_setting') ?>"><?php echo display('app_setting') ?> </a></li>
                             </ul>
                         </li>
                     <?php } ?>

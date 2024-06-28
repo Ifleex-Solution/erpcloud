@@ -20,12 +20,12 @@
                     ?>
                     <div class="form-group mr-2" style="margin-left: 10px;"> <!-- Added mr-2 for margin -->
                         <label class="mr-2" for="from_date">From Date</label>
-                        <input type="text" name="from_date" class="form-control datepicker" id="from_date" value="<?php echo $today; ?>"  placeholder="<?php echo display('start_date') ?>">
+                        <input type="text" name="from_date" class="form-control datepicker" id="from_date" value="<?php echo date('Y-m-d', strtotime('first day of this month')); ?>" placeholder="<?php echo display('start_date') ?>">
                     </div>
 
                     <div class="form-group mr-2" style="margin-left: 10px;"> <!-- Added mr-2 for margin -->
                         <label class="mr-2" for="to_date">To Date</label>
-                        <input type="text" name="to_date" class="form-control datepicker" id="to_date" placeholder="<?php echo display('end_date') ?>" value="<?php echo $today; ?>">
+                        <input type="text" name="to_date" class="form-control datepicker" id="to_date" placeholder="<?php echo display('end_date') ?>" value="<?php echo date('Y-m-d', strtotime('last day of this month')); ?>">
                     </div>
 
                     <div class="form-group mr-2" style="margin-left: 10px;"> <!-- Added mr-2 for margin -->
@@ -249,10 +249,6 @@
 
                         },
                         {
-                            data: 'amount',
-
-                        },
-                        {
                             data: 'depositeddate',
 
                         },
@@ -262,6 +258,9 @@
                         },
                         {
                             data: 'updatedate',
+
+                        }, {
+                            data: 'amount',
 
                         },
 
@@ -300,11 +299,12 @@
                     '<th>Purchase Invoice No</th>' +
                     '<th>Purchase Invoice Date</th>' +
                     '<th>Cheque Transferred Date</th>' +
-                    '<th>Amount</th>' +
                     '<th>Deposited Date </th>' +
                     '<th>Deposited Bank</th>' +
                     '<th>Last Updated Date</th>' +
+                    '<th>Amount</th>' +
                     '<th></th>' +
+
                     '</tr>' +
                     '</thead>';
 
@@ -333,12 +333,14 @@
                         '<th>Purchase Invoice No</th>' +
                         '<th>Purchase Invoice Date</th>' +
                         '<th>Cheque Transferred Date</th>' +
-                        '<th>Amount</th>' +
+                        '<th>Deposited Date </th>' +
+                        '<th>Deposited Bank</th>' +
                         '<th>Last Updated Date</th>' +
+                        '<th>Amount</th>' +
                         '<th></th>' +
+
                         '</tr>' +
                         '</thead>';
-
                     $('#chequeList thead').replaceWith(newHeaderHtml);
                 });
 

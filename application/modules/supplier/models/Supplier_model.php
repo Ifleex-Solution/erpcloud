@@ -190,11 +190,12 @@ class Supplier_model extends CI_Model {
         }
 
 
-        
+        $supplier = '<a href="' . $base_url . 'supplier_ledgerinfo/' . $record->supplier_id . '">' . $record->supplier_name . '</a>';
+
                
             $data[] = array( 
                 'sl'               =>$sl,
-                'supplier_name'    =>$record->supplier_name,
+                'supplier_name'    => $supplier,
                 'address'          =>$record->address,
                 'address2'         =>$record->address2,
                 'mobile'           =>$record->mobile,
