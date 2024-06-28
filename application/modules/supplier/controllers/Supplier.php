@@ -98,7 +98,7 @@ class Supplier extends MX_Controller
             if ($effectiveDate < $sixMonthsAgoTimestamp) {
                 // Update status as valid
                 $this->db->where('cheque_no', $row['cheque_no'])
-                    ->update('cheque', ['status' => 'In Valid']);
+                    ->update('cheque', ['status' => 'Invalid']);
             }
         }
 

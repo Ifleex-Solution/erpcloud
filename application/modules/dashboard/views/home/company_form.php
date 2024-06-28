@@ -40,20 +40,22 @@
                   </div>
 
                   <div class="form-group row">
-                      <label for="email" class="col-sm-3 col-form-label"><?php echo display('email') ?> <i
-                              class="text-danger">*</i></label>
+                      <label for="email" class="col-sm-3 col-form-label"><?php echo display('email') ?>
+                       <!-- <i class="text-danger">*</i> -->
+                    </label>
                       <div class="col-sm-6">
                           <input type="email" tabindex="3" class="form-control" value="<?php echo $companys->email?>"
-                              name="email" placeholder="<?php echo display('email') ?>" required tabindex="4" />
+                              name="email" placeholder="<?php echo display('email') ?>"  tabindex="4" />
                       </div>
                   </div>
 
                   <div class="form-group row">
-                      <label for="bank_name" class="col-sm-3 col-form-label"><?php echo display('website') ?> <i
-                              class="text-danger">*</i></label>
+                      <label for="bank_name" class="col-sm-3 col-form-label"><?php echo display('website') ?> 
+                      <!-- <i        class="text-danger">*</i> -->
+                    </label>
                       <div class="col-sm-6">
                           <input type="url" tabindex="3" class="form-control" value="<?php echo $companys->website?>"
-                              name="website" placeholder="<?php echo display('website') ?>" required tabindex="5" />
+                              name="website" placeholder="<?php echo display('website') ?>"  tabindex="5" />
                       </div>
                   </div>
                   <div class="form-group row">

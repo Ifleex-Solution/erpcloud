@@ -240,6 +240,7 @@
                 chequedetail.innerHTML += "<p><b>Effective Date</b> : " + parsedData[0].effectivedate + "</p>";
 
                 if (parsedData[0].type == '3rd Party') {
+                    chequedetail.innerHTML += "<br/><h4><b>Sales Invoice  Details</h4>"
                     chequedetail.innerHTML += "<p><b>Received From</b> : " + parsedData[0].customer_name + "</p>";
                     chequedetail.innerHTML += "<p><b>Sales Invoice No</b> : " + parsedData[0].invoice + "</p>";
                     chequedetail.innerHTML += "<p><b>Sales Invoice Date</b> : " + parsedData[0].invoice_date + "</p>";
@@ -248,6 +249,7 @@
                 }
 
                 if (parsedData[0].chalan_no != null) {
+                    chequedetail.innerHTML += "<br/><h4><b>Pucharse Invoice  Details</h4>"
                     chequedetail.innerHTML += "<p><b>Transfered To</b> : " + parsedData[0].supplier_name + "</p>";
                     chequedetail.innerHTML += "<p><b>Purchase Invoice No</b> : " + parsedData[0].chalan_no + "</p>";
                     chequedetail.innerHTML += "<p><b>Purchase Invoice Date</b> : " + parsedData[0].purchase_date + "</p>";
@@ -255,18 +257,21 @@
                 }
 
 
-                chequedetail.innerHTML += "<p><b>Amount</b> : " + parsedData[0].amount + "</p>";
+
+                if (parsedData[0].chequestatus === 'Deposited') {
+                    chequedetail.innerHTML += "<br/><h4><b>Deposited  Details</h4>"
+                    chequedetail.innerHTML += "<p><b>Deposited Date</b> : " + parsedData[0].depositeddate + "</p>";
+                    chequedetail.innerHTML += "<p><b>Deposited To</b> : " + parsedData[0].bank2 + "</p>";
+
+                }
+
+                
+                chequedetail.innerHTML += "<br/><p><b>Amount</b> : " + parsedData[0].amount + "</p>";
 
                 chequedetail.innerHTML += "<p><b>Cheque Status</b> : " + parsedData[0].chequestatus + "</p>";
 
                 if (parsedData[0].chequestatus === 'Bounced') {
                     chequedetail.innerHTML += "<p><b>Bounced Date</b> : " + parsedData[0].updatedate + "</p>";
-                }
-
-                if (parsedData[0].chequestatus === 'Deposited') {
-                    chequedetail.innerHTML += "<p><b>Deposited Date</b> : " + parsedData[0].depositeddate + "</p>";
-                    chequedetail.innerHTML += "<p><b>Deposited To</b> : " + parsedData[0].bank2 + "</p>";
-
                 }
 
                 chequedetail.innerHTML += "<p><b>Last Updated Date</b> : " + parsedData[0].updatedate + "</p>";

@@ -1,5 +1,5 @@
 <!-- Manage Product report -->
-        <div class="row">
+<div class="row">
             <div class="col-sm-12">
                 <div class="panel panel-bd lobidrag">
                     <div class="panel-heading">
@@ -25,7 +25,6 @@
                                         <th><?php echo display('sl') ?></th>
                                         <th><?php echo display('product_name') ?></th>
                                         <th><?php echo display('product_model') ?></th>
-                                        <th><?php echo display('supplier_name') ?></th>
                                         <th><?php echo display('price') ?></th>
                                         <th><?php echo display('supplier_price') ?></th>
                                         <th><?php echo display('image') ?>s</th>
@@ -55,7 +54,7 @@
 
              "aaSorting": [[ 1, "asc" ]],
              "columnDefs": [
-                { "bSortable": false, "aTargets": [0,2,3,4,5,6,7] },
+                { "bSortable": false, "aTargets": [0,2,3,4,5,6] },
 
             ],
            'processing': true,
@@ -102,7 +101,6 @@
              { data: 'sl' },
              { data: 'product_name' },
              { data: 'product_model'},
-             { data: 'supplier_name' },
              { data: 'price' },
              { data: 'purchase_p' },
              

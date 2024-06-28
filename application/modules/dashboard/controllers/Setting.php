@@ -338,8 +338,8 @@ class Setting extends MX_Controller {
 		$this->form_validation->set_rules('company_name', 'Company Name','required|max_length[200]');
 		$this->form_validation->set_rules('address', 'Address','required|max_length[250]');
 		#------------------------#
-       	$this->form_validation->set_rules('email', 'Email Address', "required|valid_email|max_length[100]");
-       	$this->form_validation->set_rules('website', 'website','required|max_length[250]');
+       	// $this->form_validation->set_rules('email', 'Email Address', "required|valid_email|max_length[100]");
+       	// $this->form_validation->set_rules('website', 'website','required|max_length[250]');
 		$company_id  = $this->input->post('company_id',true);
 		$data=array(
 			'company_id' 	=> $company_id,
