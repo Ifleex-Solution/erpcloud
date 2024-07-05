@@ -693,6 +693,64 @@ class Accounts_model extends CI_Model
             $this->db->insert('acc_vaucher', $debitinsert);
             addActivityLog("debit_vaucher", "create", $vaucherNo, "acc_vaucher", 1, $debitinsert);
         }
+
+        $data = $this->db->select('HeadName')
+            ->from('acc_coa')
+            ->where('HeadCode', $reVID)
+            ->get()
+            ->row();
+
+        $data2 = $this->db->select('HeadName,id,PHeadName')
+            ->from('acc_coa')
+            ->where('HeadCode', $dAID[0])
+            ->get()
+            ->row();
+
+
+
+
+        $headName = $data->HeadName;
+        $PHeadName = $data->PHeadName;
+
+        $current_datetime_obj = new DateTime();
+        if ($headName == "3rd party cheque") {
+            $chequeno = $this->input->post('chequeno');
+            $description = $this->input->post('description');
+            $chequedata = array(
+                'paidto'  => $data2->id,
+                'status'  => "Transfered",
+                'description' => $description,
+                'updatedate' =>  $this->input->post('dtpDate')
+            );
+
+            $this->db->where('cheque_no', $chequeno);
+            $this->db->update('cheque', $chequedata);
+        } else if ($PHeadName == 'Cash at Bank') {
+            $chequeno = $this->input->post('chequeno');
+            $description = $this->input->post('description');
+            $effectivedate = $this->input->post('effectivedate');
+            $draftdate = $this->input->post('draftdate');
+
+
+            $chequedata = array(
+                'cheque_no'           => $chequeno,
+                'draftdate'          => $draftdate,
+                'effectivedate'      => $effectivedate,
+                'receivedfrom'       => 0,
+                'paidto'             =>   $data2->id,
+                'coano'              => $reVID,
+                'amount'             => $Debit[0],
+                'type'               => 'Own',
+                'status'             => "Transferred",
+                'description'        => $description,
+                'createddate'        =>  $this->input->post('dtpDate', TRUE),
+                'transfered'        =>   $this->input->post('dtpDate', TRUE),
+                'updatedate'         =>  $this->input->post('dtpDate', TRUE)
+            );
+            $this->db->insert('cheque', $chequedata);
+        }
+
+
         return true;
     }
 
@@ -1107,6 +1165,57 @@ class Accounts_model extends CI_Model
             $this->db->insert('acc_vaucher', $creditinsert);
             addActivityLog("credit_vaucher", "create", $vaucherNo, "acc_vaucher", 1, $creditinsert);
         }
+
+        $chequeno = $this->input->post('chequeno', TRUE);
+        $effectivedate = $this->input->post('effectivedate', TRUE);
+        $draftdate = $this->input->post('draftdate', TRUE);
+        $description = $this->input->post('description', TRUE);
+
+
+        $data2 = $this->db->select('HeadName,id,PHeadName')
+            ->from('acc_coa')
+            ->where('HeadCode', $dAID[0])
+            ->get()
+            ->row();
+
+            $logFilePath = 'logfile.log';
+            $fileHandle = fopen($logFilePath, 'a');
+            $logMessage = json_encode($data2);
+            fwrite($fileHandle, $logMessage . "\n");
+            fclose($fileHandle);
+
+
+        if ($chequeno != "") {
+
+            $input_date_obj = new DateTime($effectivedate);
+            $current_date_obj = new DateTime(date('Y-m-d'));
+
+            $current_datetime_obj = new DateTime();
+
+            $chequedata = array(
+                'cheque_no'           => $chequeno,
+                'draftdate'          => $draftdate,
+                'effectivedate'      => $effectivedate,
+                'receivedfrom'       =>  $data2->id,
+                'paidto'             => 0,
+                'coano'              => $reVID,
+                'amount'             => $Creit[0],
+                'type'               => '3rd Party',
+                'status'             => $input_date_obj <= $current_date_obj ? "Valid" : "Pending",
+                'description'        => $description,
+                'createddate'        => (!empty($this->input->post('dtpDate', TRUE)) ? $this->input->post('dtpDate', TRUE) : date('Y-m-d')),
+                'updatedate'         => (!empty($this->input->post('dtpDate', TRUE)) ? $this->input->post('dtpDate', TRUE) : date('Y-m-d'))
+            );
+
+            $logFilePath = 'logfile.log';
+            $fileHandle = fopen($logFilePath, 'a');
+            $logMessage = json_encode($chequedata);
+            fwrite($fileHandle, $logMessage . "\n");
+            fclose($fileHandle);
+
+
+            $this->db->insert('cheque', $chequedata);
+        }
         return true;
     }
 
@@ -1127,7 +1236,7 @@ class Accounts_model extends CI_Model
         $CreateBy = $this->session->userdata('id');
         $createdate = date('Y-m-d H:i:s');
 
-       
+
 
 
 
@@ -1178,8 +1287,8 @@ class Accounts_model extends CI_Model
                     'depositeddate'  => $this->input->post('dtpDate'),
                     'depositedbank' => $dbtid,
                     'status'  => "Deposited",
-                    'description'=> $description,
-                    'updatedate'=>  $this->input->post('dtpDate')
+                    'description' => $description,
+                    'updatedate' =>  $this->input->post('dtpDate')
                 );
 
                 $this->db->where('cheque_no', $chequeno);
@@ -4617,7 +4726,7 @@ class Accounts_model extends CI_Model
                         'type'               => 'Own',
                         'status'             => "Transferred",
                         'description'        => $description[$i],
-                        'createddate'        =>$this->input->post('dtpDate', TRUE),
+                        'createddate'        => $this->input->post('dtpDate', TRUE),
                         'transfered'        =>  $this->input->post('dtpDate', TRUE),
                         'updatedate'         => $this->input->post('dtpDate', TRUE)
                     );
