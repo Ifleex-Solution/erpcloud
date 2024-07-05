@@ -10,7 +10,7 @@
         <div class="panel panel-bd lobidrag">
             <input type="hidden" name="baseUrl" id="baseUrl" class="baseUrl" value="<?php echo base_url(); ?>" />
             <button type="button" id="btn-refresh" class="btn btn-success" style="margin-left: 30px;margin-top:20px;"><i class="fas fa-sync-alt"></i> Refresh Cheques</button>
-
+            <button type="button" id="btn-create" class="btn btn-success" style="margin-left: 30px;margin-top:20px;"><i class="fas fa-plus"></i>Add Cheque</button>
 
             <div class="panel-body">
                 <div class="table-responsive">
@@ -59,7 +59,110 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add Cheque Details</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group row">
+                    <label for="cheque_no" class="col-sm-4 col-form-label">Cheque No
+                        <i class="text-danger">*</i>
+                    </label>
+                    <div class="col-sm-8">
+                        <input type="text" tabindex="3" class="form-control" name="cheque_no[]" placeholder="Cheque No" id="chequeno" required />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="date" class="col-sm-4 col-form-label">Effective Date
+                    <i class="text-danger">*</i>
+                    </label>
+                    <div class="col-sm-8">
+                        <?php
+                        date_default_timezone_set('Asia/Colombo');
+
+                        $date = date('Y-m-d'); ?>
+                        <input type="date" tabindex="2" class="form-control" name="draft_date[]" value="<?php echo $date; ?>" id="effectivedate" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="date" class="col-sm-4 col-form-label">cheque received date
+                        <i class="text-danger">*</i>
+                    </label>
+                    <div class="col-sm-8">
+                        <?php
+                        date_default_timezone_set('Asia/Colombo');
+
+                        $date = date('Y-m-d'); ?>
+                        <input type="date" required tabindex="2" class="form-control" name="effective_date[]" value="<?php echo $date; ?>" id="chequereceiveddate" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="amount" class="col-sm-4 col-form-label">Amount
+                    <i class="text-danger">*</i>
+                    </label>
+                    <div class="col-sm-8">
+                        <input type="text" tabindex="3" class="form-control" name="amount[]" placeholder="Amount" id="amount" required />
+
+                    </div>
+                </div>
+                <button type="button" id="btn-save" class="btn btn-success" style="margin-left: 30px; margin-top: 20px;">
+                    <i class="fas fa-save"></i> Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
+    const btnCreate = document.getElementById('btn-create');
+
+    // Add click event listener
+    btnCreate.addEventListener('click', function() {
+        // Replace with your desired functionality
+        $("#exampleModal2").modal('show');
+    });
+
+
+    const btnSave = document.getElementById('btn-save');
+
+    // Add click event listener
+    btnSave.addEventListener('click', function() {
+        var base_url = $("#baseUrl").val();
+
+        if ($('#chequeno').val() === '') {
+            alert("Please enter the cheque number")
+        } else if ($('#effectivedate').val() === '') {
+            alert("Please enter the Effective Date")
+        } else if ($('#chequereceiveddate').val() === '') {
+            alert("Please enter the Cheque Received Date")
+        } else if ($('#amount').val() === '') {
+            alert("Please enter the Amount")
+        } else {
+            $.ajax({
+                type: "post",
+                url: base_url + 'supplier/supplier/savecheque',
+                data: {
+                    chequeno: $('#chequeno').val(),
+                    effectivedate: $('#effectivedate').val(),
+                    chequereceiveddate: $('#chequereceiveddate').val(),
+                    amount: $('#amount').val()
+                },
+                success: function(data1) {
+                    alert("Cheque Details Created Successfully")
+                    location.reload();
+                }
+            });
+
+        }
+
+        //console.log($('#chequeno').val())
+    });
+
     document.getElementById('btn-refresh').addEventListener('click', function() {
 
         var base_url = $("#baseUrl").val();
@@ -173,7 +276,7 @@
                         {
                             data: 'bank2'
                         },
-                        
+
                         {
                             data: 'amount'
                         },
@@ -265,7 +368,7 @@
 
                 }
 
-                
+
                 chequedetail.innerHTML += "<br/><p><b>Amount</b> : " + parsedData[0].amount + "</p>";
 
                 chequedetail.innerHTML += "<p><b>Cheque Status</b> : " + parsedData[0].chequestatus + "</p>";

@@ -129,6 +129,28 @@ class Supplier extends MX_Controller
         echo json_encode($result);
     }
 
+    public function savecheque()
+    {
+        $input_date_obj = new DateTime($this->input->post('effectivedate', true));
+        $current_date_obj = new DateTime(date('Y-m-d'));
+
+        $current_datetime_obj = new DateTime();
+
+        $chequedata = array(
+     
+            'cheque_no'           => $this->input->post('chequeno', true),       
+            'effectivedate'      => $this->input->post('effectivedate', true),
+            'amount'             =>$this->input->post('amount', true),
+            'type'               => '3rd Party',
+            'status'             => $input_date_obj <= $current_date_obj ? "Valid" : "Pending",
+            'createddate'        =>  (!empty($this->input->post('chequereceiveddate', TRUE)) ? $this->input->post('chequereceiveddate', TRUE) : date('Y-m-d')),
+            'updatedate'         =>  (!empty($this->input->post('chequereceiveddate', TRUE)) ? $this->input->post('chequereceiveddate', TRUE) : date('Y-m-d'))
+        );
+        $this->db->insert('cheque', $chequedata);
+        echo json_encode("save sucessfully");
+
+    }
+
     public function chequebydata()
     {
 
