@@ -79,7 +79,7 @@
                 </div>
                 <div class="form-group row">
                     <label for="date" class="col-sm-4 col-form-label">Effective Date
-                    <i class="text-danger">*</i>
+                        <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-8">
                         <?php
@@ -102,12 +102,48 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="amount" class="col-sm-4 col-form-label">Amount
-                    <i class="text-danger">*</i>
+                    <label for="bank_name" class="col-sm-4 col-form-label">Bank Name
+                        <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-8">
-                        <input type="text" tabindex="3" class="form-control" name="amount[]" placeholder="Amount" id="amount" required />
+                        <select tabindex="3" class="form-control" name="banks[]" id="banks" required>
 
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="branch_name" class="col-sm-4 col-form-label">Branch Name
+                        <i class="text-danger">*</i>
+                    </label>
+                    <div class="col-sm-8">
+                        <select tabindex="3" class="form-control" name="branch[]" id="branch" required>
+
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="customers_name" class="col-sm-4 col-form-label">Received From
+                        <i class="text-danger">*</i>
+                    </label>
+                    <div class="col-sm-8">
+                        <select tabindex="3" class="form-control" name="customers[]" id="customers" required>
+
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="amount" class="col-sm-4 col-form-label">Amount
+                        <i class="text-danger">*</i>
+                    </label>
+                    <div class="col-sm-8">
+                        <input type="number" tabindex="3" class="form-control" name="amount[]" placeholder="Amount" id="amount" required />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="description" class="col-sm-4 col-form-label">Description
+                    </label>
+                    <div class="col-sm-8">
+                        <textarea tabindex="3" class="form-control" name="description[]" placeholder="Description" id="description" ></textarea>
                     </div>
                 </div>
                 <button type="button" id="btn-save" class="btn btn-success" style="margin-left: 30px; margin-top: 20px;">
@@ -130,6 +166,29 @@
 
     const btnSave = document.getElementById('btn-save');
 
+
+    $('#banks').on('change', function() {
+        var base_url = $("#baseUrl").val();
+        var selectedValue = $(this).val();
+        $.ajax({
+            type: "post",
+            url: base_url + 'bank/bank/getBranchesById',
+            data: {
+                bank: selectedValue,
+            },
+            success: function(data1) {
+                var branches = JSON.parse(data1);
+                var $branchDropdown = $('#branch');
+                $branchDropdown.empty(); // Clear existing options
+                $branchDropdown.append('<option value="" disabled selected>Select Bank</option>'); // Add default option
+                $.each(branches, function(index, branch) {
+                    $branchDropdown.append('<option value="' + branch.id + '">' + branch.branchname + '</option>');
+                });
+            }
+        });
+
+    });
+
     // Add click event listener
     btnSave.addEventListener('click', function() {
         var base_url = $("#baseUrl").val();
@@ -140,9 +199,17 @@
             alert("Please enter the Effective Date")
         } else if ($('#chequereceiveddate').val() === '') {
             alert("Please enter the Cheque Received Date")
-        } else if ($('#amount').val() === '') {
+        } else if ($('#banks').val() ==null) {
+            alert("Please select the Bank")
+        }else if ($('#branch').val() == null) {
+            alert("Please select the Branch")
+        }else if ($('#customers').val() == null) {
+            alert("Please select the Received From")
+        }
+        else if ($('#amount').val() === '') {
             alert("Please enter the Amount")
-        } else {
+        }
+        else {
             $.ajax({
                 type: "post",
                 url: base_url + 'supplier/supplier/savecheque',
@@ -150,7 +217,11 @@
                     chequeno: $('#chequeno').val(),
                     effectivedate: $('#effectivedate').val(),
                     chequereceiveddate: $('#chequereceiveddate').val(),
-                    amount: $('#amount').val()
+                    amount: $('#amount').val(),
+                    bank:$('#banks').val(),
+                    branch:$('#branch').val(),
+                    receivedfrom:$('#customers').val(),
+                    description:$('#description').val()
                 },
                 success: function(data1) {
                     alert("Cheque Details Created Successfully")
@@ -160,7 +231,6 @@
 
         }
 
-        //console.log($('#chequeno').val())
     });
 
     document.getElementById('btn-refresh').addEventListener('click', function() {
@@ -288,7 +358,6 @@
                             "render": function(data, type, row) {
                                 // Check if row exists
                                 if (row) {
-                                    // console.log(row.draftdate)
                                     // // Encode row data to prevent errors in JSON stringification
                                     // var draftDateString = row.draftdate.toISOString(); // or use any desired date format
                                     // var effectiveDateString = row.effectivedate.toISOString();
@@ -304,6 +373,48 @@
                 });
             }
         });
+
+        $.ajax({
+            type: "post",
+            url: base_url + 'bank/bank/getAllBanks',
+            data: {
+                chequeno: $('#chequeno').val(),
+                effectivedate: $('#effectivedate').val(),
+                chequereceiveddate: $('#chequereceiveddate').val(),
+                amount: $('#amount').val()
+            },
+            success: function(data1) {
+                var banks = JSON.parse(data1);
+                var $banksDropdown = $('#banks');
+                $banksDropdown.empty(); // Clear existing options
+                $banksDropdown.append('<option value="" disabled selected>Select Bank</option>'); // Add default option
+                $.each(banks, function(index, bank) {
+                    $banksDropdown.append('<option value="' + bank.id + '">' + bank.bankname + '</option>');
+                });
+            }
+        });
+
+        $.ajax({
+            type: "post",
+            url: base_url + 'customer/customer/getAllTheCustomers',
+            data: {
+                chequeno: $('#chequeno').val(),
+                effectivedate: $('#effectivedate').val(),
+                chequereceiveddate: $('#chequereceiveddate').val(),
+                amount: $('#amount').val()
+            },
+            success: function(data2) {
+                var customers = JSON.parse(data2);
+                var $customersDropdown = $('#customers');
+                $customersDropdown.empty(); // Clear existing options
+                $customersDropdown.append('<option value="" disabled selected></option>'); // Add default option
+                $.each(customers, function(index, customer) {
+                    $customersDropdown.append('<option value="' + customer.customer_id + '">' + customer.customer_name + '</option>');
+                });
+            }
+        });
+
+
 
 
 
@@ -327,7 +438,6 @@
             },
             success: function(data) {
                 var parsedData = JSON.parse(data);
-                console.log(parsedData);
 
 
                 var chequedetail = document.getElementById("chequedetail");
