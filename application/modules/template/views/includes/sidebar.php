@@ -1002,7 +1002,7 @@
                                                 echo "active";
                                             } else {
                                                 echo " ";
-                                            } ?>"><a href="<?php echo base_url('3rdpartybanks') ?>">Manage Banks (3rd Party)</a></li>
+                                            } ?>"><a href="<?php echo base_url('3rdpartybanks') ?>">Manage Bank (3rd Party)</a></li>
                     <?php } ?>
 
                     
@@ -1011,7 +1011,7 @@
                                                 echo "active";
                                             } else {
                                                 echo " ";
-                                            } ?>"><a href="<?php echo base_url('3rdpartybranches') ?>">Manage Branches (3rd Party)</a></li>
+                                            } ?>"><a href="<?php echo base_url('3rdpartybranches') ?>">Manage Branch (3rd Party)</a></li>
                     <?php } ?>
 
 
