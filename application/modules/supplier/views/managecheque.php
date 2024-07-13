@@ -635,7 +635,7 @@
                     chequedetail.innerHTML += "<p><b>Amount</b> : " + parsedData[0].amount + "</p>";
                     chequedetail.innerHTML += "<p><b>Cheque Status</b> : " + parsedData[0].chequestatus + "</p>";
                     if (parsedData[0].chequestatus === 'Bounced') {
-                        chequedetail.innerHTML += "<p><b>Bounced Date</b> : " + parsedData[0].updatedate + "</p>";
+                        chequedetail.innerHTML += "<p><b>Bounced  Date</b> : " + parsedData[0].updatedate + "</p>";
                     }
                     chequedetail.innerHTML += "<p><b>Last Updated Date</b> : " + parsedData[0].updatedate + "</p>";
                 } else {
