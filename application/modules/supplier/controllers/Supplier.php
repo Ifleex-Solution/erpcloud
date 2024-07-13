@@ -52,15 +52,12 @@ class Supplier extends MX_Controller
     {
 
         // $query = $this->db->get();
-
-
         $result = $this->db->select('cq.*, ci.*, si.*, cq.status AS chequestatus,ac1.HeadName as bank2')
             ->from('cheque cq')
             ->join('customer_information ci', 'ci.customer_id = cq.receivedfrom', 'left')
             ->join('supplier_information si', 'si.supplier_id = cq.paidto', 'left')
             ->join('acc_coa ac1', 'ac1.HeadCode = cq.depositedbank', 'left')
-
-            ->order_by('cq.updatedate', 'desc')
+            ->order_by('cq.id', 'desc')
             ->get()
             ->result_array();
 
@@ -90,11 +87,7 @@ class Supplier extends MX_Controller
         foreach ($result as $row) {
             $effectiveDate = strtotime($row['effectivedate']);
             $sixMonthsAgoTimestamp = strtotime($sixMonthsAgo);
-            $logFilePath = 'logfile.log';
-            $fileHandle = fopen($logFilePath, 'a');
-            fwrite($fileHandle,"\nsix month : ".$sixMonthsAgoTimestamp);
-            fclose($fileHandle);
-           
+
             if ($effectiveDate < $sixMonthsAgoTimestamp) {
                 // Update status as valid
                 $this->db->where('cheque_no', $row['cheque_no'])
@@ -123,7 +116,7 @@ class Supplier extends MX_Controller
             }
         }
 
-       
+
 
 
         echo json_encode($result);
@@ -135,23 +128,101 @@ class Supplier extends MX_Controller
         $current_date_obj = new DateTime(date('Y-m-d'));
 
         $chequedata = array(
-            'cheque_no'           => $this->input->post('chequeno', true),       
+            'cheque_no'           => $this->input->post('chequeno', true),
             'effectivedate'      => $this->input->post('effectivedate', true),
-            'amount'             =>$this->input->post('amount', true),
+            'amount'             => $this->input->post('amount', true),
             'type'               => '3rd Party',
             'status'             => $input_date_obj <= $current_date_obj ? "Valid" : "Pending",
-            'createddate'        =>  (!empty($this->input->post('chequereceiveddate', TRUE)) ? $this->input->post('chequereceiveddate', TRUE) : date('Y-m-d')),
-            'updatedate'         =>  (!empty($this->input->post('chequereceiveddate', TRUE)) ? $this->input->post('chequereceiveddate', TRUE) : date('Y-m-d')),
+            'createddate'        => (!empty($this->input->post('chequereceiveddate', TRUE)) ? $this->input->post('chequereceiveddate', TRUE) : date('Y-m-d')),
+            'updatedate'         => (!empty($this->input->post('chequereceiveddate', TRUE)) ? $this->input->post('chequereceiveddate', TRUE) : date('Y-m-d')),
             'bankId  ' => $this->input->post('bank', true),
             'branchId ' => $this->input->post('branch', true),
-            'receivedfrom '=> $this->input->post('receivedfrom', true),
-            'description '=> $this->input->post('description', true),
-            'ismanual ' =>"yes"
-         );
+            'receivedfrom ' => $this->input->post('receivedfrom', true),
+            'description ' => $this->input->post('description', true),
+            'ismanual ' => "yes"
+        );
         $this->db->insert('cheque', $chequedata);
         echo json_encode("save sucessfully");
-
     }
+
+    public function deletecheque()
+    {
+        $id = $this->input->post('id', true);
+        $this->db->where('id', $id);
+        $this->db->delete('cheque');
+        if ($this->db->affected_rows() > 0) {
+            echo json_encode("Deleted successfully");
+        } else {
+            echo json_encode("No changes made or delte failed");
+        }
+    }
+
+    public function holdcheque()
+    {
+
+        $chequedata = array(
+            'status' => "Hold",
+        );
+        $this->db->where('id', $this->input->post('id', true));
+        $this->db->update('cheque', $chequedata);
+
+        if ($this->db->affected_rows() > 0) {
+            echo json_encode("Update successfully");
+        } else {
+            echo json_encode("No changes made or update failed");
+        }
+    }
+
+    public function unholdcheque()
+    {
+        $sixMonthsAgo = date('Y-m-d', strtotime('-6 months'));
+        $effectiveDate = strtotime($this->input->post('effectivedate', true));
+        $sixMonthsAgoTimestamp = strtotime($sixMonthsAgo);
+        if ($effectiveDate < $sixMonthsAgoTimestamp) {
+            $this->db->where('id', $this->input->post('id', true))
+                ->update('cheque', ['status' => 'Invalid']);
+        }else{
+            $current_date_obj =strtotime(date('Y-m-d'));
+            $this->db->where('id', $this->input->post('id', true));
+            $this->db->update('cheque',  ['status' => $effectiveDate <= $current_date_obj ? "Valid" : "Pending"]);
+        }
+
+        if ($this->db->affected_rows() > 0) {
+            echo json_encode("Update successfully");
+        } else {
+            echo json_encode("No changes made or update failed");
+        }
+    }
+
+
+
+    public function updatecheque()
+    {
+        $input_date_obj = new DateTime($this->input->post('effectivedate', true));
+        $current_date_obj = new DateTime(date('Y-m-d'));
+
+        $chequedata = array(
+            'cheque_no'           => $this->input->post('chequeno', true),
+            'effectivedate'      => $this->input->post('effectivedate', true),
+            'amount'             => $this->input->post('amount', true),
+            'status'             => $input_date_obj <= $current_date_obj ? "Valid" : "Pending",
+            'createddate'        => (!empty($this->input->post('chequereceiveddate', TRUE)) ? $this->input->post('chequereceiveddate', TRUE) : date('Y-m-d')),
+            'updatedate'         => (!empty($this->input->post('chequereceiveddate', TRUE)) ? $this->input->post('chequereceiveddate', TRUE) : date('Y-m-d')),
+            'bankId  ' => $this->input->post('bank', true),
+            'branchId ' => $this->input->post('branch', true),
+            'receivedfrom ' => $this->input->post('receivedfrom', true),
+            'description ' => $this->input->post('description', true),
+        );
+        $this->db->where('id', $this->input->post('id', true));
+        $this->db->update('cheque', $chequedata);
+
+        if ($this->db->affected_rows() > 0) {
+            echo json_encode("Update successfully");
+        } else {
+            echo json_encode("No changes made or update failed");
+        }
+    }
+
 
     public function chequebydata()
     {
@@ -194,13 +265,16 @@ class Supplier extends MX_Controller
 
         // $query = $this->db->get();
         // $postData = $this->input->post();
-        $result = $this->db->select('cq.cheque_no, cq.type, ac.HeadName, cq.draftdate, cq.effectivedate, ci.customer_name, i.invoice, i.date as invoice_date, cq.createddate, si.supplier_name, pi.chalan_no, pi.purchase_date, cq.transfered, cq.amount, cq.updatedate, cq.status AS chequestatus,cq.depositeddate,ac1.HeadName as bank2')
+        $result = $this->db->select('cq.id,cq.cheque_no, cq.type, ac.HeadName, cq.draftdate, cq.effectivedate, ci.customer_name, ci.customer_id , i.invoice, i.date as invoice_date, cq.createddate, si.supplier_name, pi.chalan_no, pi.purchase_date, cq.transfered, cq.amount, cq.updatedate, 
+        cq.status AS chequestatus,cq.amount,cq.description,cq.depositeddate,cq.bankId,cq.branchId,ac1.HeadName as bank2,ba.bankname,br.branchname,cq.ismanual')
             ->from('cheque cq')
             ->join('customer_information ci', 'ci.customer_id = cq.receivedfrom', 'left')
             ->join('supplier_information si', 'si.supplier_id = cq.paidto', 'left')
             ->join('invoice i', 'i.invoice_id = cq.sales_no', 'left')
             ->join('product_purchase pi', 'pi.id = cq.purchase_no', 'left')
             ->join('acc_coa ac', 'ac.HeadCode = cq.coano', 'left')
+            ->join('3rdpartybank ba', 'ba.id = cq.bankId', 'left')
+            ->join('3rdpartybranch br', 'br.id = cq.branchId', 'left')
             ->join('acc_coa ac1', 'ac1.HeadCode = cq.depositedbank', 'left')
             ->where('cq.id', $id)
 

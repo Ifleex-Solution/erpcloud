@@ -71,7 +71,7 @@ class Purchase extends MX_Controller
 
     public function getallcheques()
     {
-        $this->db->select('cheque.id, cheque.cheque_no, cheque.draftdate, cheque.effectivedate,cheque.description, cheque.amount,cheque.status, customer_information.customer_name,customer_information.customer_id');
+        $this->db->select('cheque.id, cheque.cheque_no, cheque.draftdate, cheque.effectivedate,cheque.description, cheque.amount,cheque.status, customer_information.customer_name,customer_information.customer_id,cheque.ismanual');
         $this->db->from('cheque');
         $this->db->join('customer_information', 'customer_information.customer_id = cheque.receivedfrom');
         $this->db->where('cheque.paidto', 0);
