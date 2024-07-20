@@ -57,6 +57,7 @@ class Supplier extends MX_Controller
             ->join('customer_information ci', 'ci.customer_id = cq.receivedfrom', 'left')
             ->join('supplier_information si', 'si.supplier_id = cq.paidto', 'left')
             ->join('acc_coa ac1', 'ac1.HeadCode = cq.depositedbank', 'left')
+            ->where_in('cq.status', ['Valid', 'Pending','Transfered','Deposited','InValid','Hold'])
             ->order_by('cq.id', 'desc')
             ->get()
             ->result_array();
@@ -247,6 +248,10 @@ class Supplier extends MX_Controller
         }
         if ($this->input->post('status', true) != "All") {
             $this->db->where('cq.status', $this->input->post('status', true));
+        }else{
+            $this->db->where_in('cq.status', ['Valid', 'Pending','Transfered','Deposited','InValid','Hold']);
+
+
         }
 
         if ($this->input->post('type', true) != "All") {

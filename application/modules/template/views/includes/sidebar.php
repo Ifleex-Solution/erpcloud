@@ -1435,13 +1435,6 @@
         <!-- custom menu end -->
 
 
-        <?php if ($this->session->userdata('isAdmin')) { ?>
-            <li class="treeview"><a href="<?php echo base_url('addon/module/index') ?>"><i class="fa fa-adn"></i>
-                    <span><?php echo display('addon'); ?></span></a></li>
-
-
-        <?php } ?>
-
 
 
     </ul>

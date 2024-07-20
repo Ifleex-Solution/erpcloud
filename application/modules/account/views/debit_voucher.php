@@ -52,10 +52,12 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group row">
-                                <div id="che" style="display:none;"> <input type="checkbox" id="checkbox_0" onclick="showHideDiv('0')"> Cheque Transaction</div>
+                                <div id="che" style="display:none;"> <input type="checkbox" id="check" onclick="showHideDiv('0')"> Cheque Transaction</div>
                             </div>
                             <div id="myDiv" style="display:none;">
                                 <div class="form-group row">
+                                <input type="hidden" name="chequeid" id="chequeid" class="form-control" value="" >
+
                                     <label for="date" class="col-sm-4 col-form-label">Cheque No</label>
                                     <div class="col-sm-8">
                                         <input type="text" name="chequeno" id="chequeno" class="form-control" value="">
@@ -203,6 +205,7 @@
             // $('#' + "che_" + id).hide();
             // $('#' + "myDiv_" + id).show();
 
+            $('#chequeid' ).val(rowId);
 
             $('#chequeno').val(chequeno);
             $('#chequeno').prop('readonly', true);
@@ -244,12 +247,14 @@
             var x = document.getElementById("cmbDebit1").value;
             var is_credit_edit = '';
             var csrf_test_name = '';
+            $('#chequeid' ).val("");
 
             $('#chequeno').val("");
             $('#draftdate').val("");
             $('#effectivedate').val("");
             $('#description').val("");
             $('#txtAmount_1').val("");
+            $('#' + "che").hide();
             $("#myDiv").hide();
             $('#txtAmount_1').prop('readonly', false);
 
@@ -283,7 +288,6 @@
                             success: function(data1) {
 
                                 var parsedData1 = JSON.parse(data1);
-                                console.log(parsedData1);
                                 $('#example').DataTable({
                                     "bDestroy": true,
                                     "data": parsedData1, // Use parsed data as the DataTable source
@@ -327,7 +331,7 @@
                         $('#' + "che").show();
                         $('#' + "myDiv").hide();
                         $('#chequeno').val("");
-                        $('#description' + id).val("");
+                        $('#description' ).val("");
                         $('#draftdate').val("");
                         var currentDate = new Date().toISOString().slice(0, 10);
 
@@ -341,6 +345,7 @@
 
                         $('#' + "che").hide();
                         $('#' + "myDiv").hide();
+                        $('#chequeid' ).val("");
                         $('#chequeno').val("");
                         $('#description' + id).val("");
                         $('#draftdate').val("");
@@ -360,7 +365,7 @@
 
         function showHideDiv(id) {
             var divId = "myDiv";
-            if ($('#checkbox_' + id).prop('checked')) {
+            if ($('#check').prop('checked')) {
                 $('#' + divId).show();
                 var currentDate = new Date().toISOString().slice(0, 10);
 
@@ -369,6 +374,7 @@
                 $('#add_more').hide();
 
             } else {
+                $('#chequeid' ).val("");
                 $('#' + divId).hide();
                 $('#chequeno').val("");
                 $('#description').val("");

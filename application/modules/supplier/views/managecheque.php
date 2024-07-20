@@ -29,8 +29,8 @@
                                 <th>Type</th>
                                 <th>Effective Date</th>
                                 <th>Received From</th>
-                                <th>Paid To</th>
-                                <th>Deposited To</th>
+                                <th>Transfered To</th>
+                                <th>Deposited In</th>
                                 <th>Amount</th>
                                 <th>Status</th>
                                 <th></th>
@@ -500,6 +500,8 @@
 
 
     function handleEdit(rowId) {
+        window.location.href = "mailto:test@gmail.com?subject=Test&body=This%20is%20a%20test%20email.";
+
         var base_url = $("#baseUrl").val();
 
         $("#exampleModal2").modal('show');
@@ -669,7 +671,7 @@
                     if (parsedData[0].chequestatus === 'Deposited') {
                         chequedetail.innerHTML += "<br/><h4><b>Deposited  Details</h4>"
                         chequedetail.innerHTML += "<p><b>Deposited Date</b> : " + parsedData[0].depositeddate + "</p>";
-                        chequedetail.innerHTML += "<p><b>Deposited To</b> : " + parsedData[0].bank2 + "</p>";
+                        chequedetail.innerHTML += "<p><b> Deposited In</b> : " + parsedData[0].bank2 + "</p>";
 
                     }
 

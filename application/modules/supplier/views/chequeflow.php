@@ -91,7 +91,7 @@
                                     <th>Sales Invoice No</th>
                                     <th>Sales invoice Date</th>
                                     <th>Cheque Received Date</th>
-                                    <th>Paid To</th>
+                                    <th>Transfered To</th>
                                     <th>Purchase Invoice No</th>
                                     <th>Purchase Invoice Date</th>
                                     <th>Cheque Transferred Date</th>
