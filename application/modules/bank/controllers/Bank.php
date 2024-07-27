@@ -214,12 +214,23 @@ class Bank extends MX_Controller
 
     public function savebranch()
     {
-        $branchData = array(
-            'bankid'           => $this->input->post('bank', true),
-            'branchname'      => $this->input->post('branchname', true)
-        );
-        $this->db->insert('3rdpartybranch', $branchData);
-        echo json_encode("save sucessfully");
+        $this->db->select('*');
+        $this->db->from('3rdpartybranch');
+        $this->db->where('bankid', $this->input->post('bank', true));
+        $this->db->where('branchname', $this->input->post('branchname', true));
+
+        $query = $this->db->get();
+        $row_count = $query->num_rows();
+        if ($row_count > 0) {
+            echo json_encode('Branch Detail Already There');
+        } else {
+            $branchData = array(
+                'bankid'           => $this->input->post('bank', true),
+                'branchname'      => $this->input->post('branchname', true)
+            );
+            $this->db->insert('3rdpartybranch', $branchData);
+            echo json_encode('Saved Sucessfully');
+        }
     }
 
     public function savebank()

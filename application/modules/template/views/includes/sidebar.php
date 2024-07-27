@@ -257,7 +257,7 @@
 
 
         <!-- cheque part -->
-        <?php if ($this->permission1->method('managecheque', 'read')->access() || $this->permission1->method('chequeflowreport', 'create')->access() ) { ?>
+        <?php if ($this->permission1->method('manage_cheque', 'read')->access() || $this->permission1->method('cheque_flow__report', 'create')->access() ) { ?>
             <li class="treeview <?php echo (($this->uri->segment(1) == "managecheque" || $this->uri->segment(1) == "chequeflowreport") ? "active" : '') ?>">
                 <a href="javascript:void(0)">
                     <i class="metismenu-icon fa fa-user-secret"></i> <span>Cheque</span>
@@ -267,7 +267,7 @@
                 </a>
 
                 <ul class="treeview-menu">
-                    <?php if ($this->permission1->method('managecheque', 'create')->access()) { ?>
+                    <?php if ($this->permission1->method('manage_cheque', 'create')->access()) { ?>
                         <li class="<?php echo (($this->uri->segment(1) == "managecheque") ? "active" : '') ?>">
                             <a href="<?php echo base_url('managecheque') ?>" class="<?php echo (($this->uri->segment(1) == "managecheque") ? "active" : null) ?>">
                                 Manage Cheque
@@ -276,7 +276,7 @@
 
                         </li>
                     <?php } ?>
-                     <?php if ($this->permission1->method('chequeflowreport', 'create')->access()) { ?>
+                     <?php if ($this->permission1->method('cheque_flow_report', 'create')->access()) { ?>
                         <li class="<?php echo (($this->uri->segment(1) == "chequeflowreport") ? "active" : '') ?>">
                             <a href="<?php echo base_url('chequeflowreport') ?>" class="<?php echo (($this->uri->segment(1) == "chequeflowreport") ? "active" : null) ?>">
                                Cheque Flow Report

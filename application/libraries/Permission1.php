@@ -46,6 +46,7 @@ class Permission1
 
 	public function method($module = null, $method = null)
 	{
+		
 		$module = (($module!=null)?strtolower($module):$this->ci->uri->segment(1));
 		$method = strtolower($method);
 

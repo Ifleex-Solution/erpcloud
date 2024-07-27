@@ -2285,6 +2285,8 @@ class Accounts extends MX_Controller
   //Create Credit Voucher
   public function store_credit_voucher()
   {
+
+       
     $finyear = $this->input->post('finyear', true);
     if ($finyear <= 0) {
       $this->session->set_flashdata('exception', 'Please Create Financial Year First From Accounts > Financial Year.');
@@ -2299,6 +2301,8 @@ class Accounts extends MX_Controller
         $date = $this->input->post('dtpDate', true);
         $startfdate = $financialyears->startDate;
         $crdate = date("Y-m-d");
+
+      
         if ($startfdate > $date) {
           $this->session->set_flashdata('error_message',  display('please_try_again'));
           redirect("credit_voucher");
@@ -2308,6 +2312,7 @@ class Accounts extends MX_Controller
           redirect("credit_voucher");
           exit;
         } else {
+         
           if ($this->accounts_model->insert_creditvoucher()) {
             $this->session->set_flashdata('message', display('save_successfully'));
             redirect('credit_voucher/');

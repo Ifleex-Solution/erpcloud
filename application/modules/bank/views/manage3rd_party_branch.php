@@ -99,8 +99,12 @@
                     branchname: $('#branchname').val()
                 },
                 success: function(data1) {
-                    alert("Branch Details Created Successfully")
-                    location.reload();
+                    alert(JSON.parse(data1) )
+
+                    if(JSON.parse(data1)==="Saved Sucessfully"){
+                        location.reload();
+                    }
+
                 }
             });
 

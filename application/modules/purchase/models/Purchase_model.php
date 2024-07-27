@@ -484,6 +484,7 @@ class Purchase_model extends CI_Model
                 $new = $this->autoapprove($purchase_id);
             }
 
+            $chequeId = $this->input->post('chequeid', TRUE);
             $chequeno = $this->input->post('cheque_no', TRUE);
             $effectivedate = $this->input->post('effective_date', TRUE);
             $draftdate = $this->input->post('draft_date', TRUE);
@@ -534,8 +535,8 @@ class Purchase_model extends CI_Model
                             'transfered'=>   $this->input->post('purchase_date', TRUE),
                             'updatedate'=>  $this->input->post('purchase_date', TRUE)
                         );
-
-                        $this->db->where('cheque_no', $cheque_no);
+                    
+                        $this->db->where('id', $chequeId[$i]);
                         $this->db->update('cheque', $chequedata);
                     }
 

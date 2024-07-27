@@ -263,6 +263,7 @@
                                                 <i class="text-danger">*</i>
                                             </label>
                                             <div class="col-sm-8">
+                                                <input type="hidden" name="chequeid[]" id="chequeid_0" class="form-control" value="">
                                                 <input type="text" tabindex="3" class="form-control" name="cheque_no[]" placeholder="Cheque No" id="cheque_no_0" required />
                                             </div>
                                         </div>
@@ -421,6 +422,7 @@
             $('#' + divId).hide();
             $('#cheque_no_' + id).val("");
             $('#description' + id).val("");
+            $('#chequeid_' + id).val("");
 
 
         }
@@ -449,7 +451,7 @@
         }
 
 
-       // var elements2 = document.getElementsByName("multipaytype[]");
+        // var elements2 = document.getElementsByName("multipaytype[]");
 
         // for (var j = 0; j < elements2.length; j++) {
         //     if(elements2[j].value ==""){
@@ -495,6 +497,8 @@
         }
         $('#' + "che_" + id).hide();
         $('#' + "myDiv_" + id).show();
+
+        $('#chequeid_' + id).val(rowId);
 
 
         $('#cheque_no_' + id).val(chequeno);
@@ -552,7 +556,7 @@
 
 
                     if (parsedData[0].HeadName === '3rd party cheque') {
-
+                        $('#chequeid_' + id).val("");
                         $('#cheque_no_' + id).val("");
                         $('#description' + id).val("");
                         $("#exampleModal").modal('show');
@@ -610,6 +614,8 @@
 
 
                     } else if (parsedData[0].PHeadName === 'Cash at Bank') {
+                        $('#chequeid_' + id).val("");
+
                         $('#' + "che_" + id).show();
                         $('#' + "myDiv_" + id).hide();
                         $('#cheque_no_' + id).val("");
@@ -623,6 +629,8 @@
                     } else {
                         $('#' + "che_" + id).hide();
                         $('#' + "myDiv_" + id).hide();
+                        $('#chequeid_' + id).val("");
+
                         $('#cheque_no_' + id).val("");
                         $('#description' + id).val("");
                         $('#draft_date' + id).val("");

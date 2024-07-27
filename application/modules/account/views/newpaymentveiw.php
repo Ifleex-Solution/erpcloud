@@ -18,7 +18,7 @@
            <!-- <button class="btn btn-danger" onclick="removeMethod(this,
            <?php
             // echo $rand_num
-             ?>
+            ?>
            )"><i class="fa fa-trash"></i></button> -->
          </div>
        </div>
@@ -33,7 +33,7 @@
                  <i class="text-danger">*</i>
                </label>
                <div class="col-sm-8">
-                 <input type="text" tabindex="3" class="form-control" name="cheque_no[]" placeholder="Cheque No" id="cheque_no_<?php echo $rand_num; ?>"  />
+                 <input type="text" tabindex="3" class="form-control" name="cheque_no[]" placeholder="Cheque No" id="cheque_no_<?php echo $rand_num; ?>" />
                </div>
              </div>
              <div class="form-group row">
@@ -68,6 +68,24 @@
 
                </div>
              </div>
+             <div class="form-group row">
+               <label for="bank_name" class="col-sm-4 col-form-label">Bank Name
+                 <i class="text-danger">*</i>
+               </label>
+               <div class="col-sm-8">
+                 <select tabindex="3" class="form-control" name="banks[]" id="banks_<?php echo $id; ?>" onchange="onChangeBank(<?php echo $id; ?>, this)" required> </select>
+               </div>
+             </div>
+             <div class="form-group row">
+               <label for="branch_name" class="col-sm-4 col-form-label">Branch Name
+                 <i class="text-danger">*</i>
+               </label>
+               <div class="col-sm-8">
+                 <select tabindex="3" class="form-control" name="branch[]" id="branch_<?php echo $id; ?>" required>
+
+                 </select>
+               </div>
+             </div>
            </div>
          </div>
        </div>
@@ -79,5 +97,27 @@
              placeholder: "Select option",
              allowClear: true
            });
+         });
+
+         $.ajax({
+           type: "post",
+           url: base_url + 'bank/bank/getAllBanks',
+           data: {
+             chequeno: $('#chequeno').val(),
+             effectivedate: $('#effectivedate').val(),
+             chequereceiveddate: $('#chequereceiveddate').val(),
+             amount: $('#amount').val()
+           },
+           success: function(data1) {
+             banks = JSON.parse(data1);
+             var $banksDropdown = $('#banks_<?php echo json_decode($id); ?>');
+             $banksDropdown.empty(); // Clear existing options
+             $banksDropdown.append('<option value="" disabled selected>Select Bank</option>'); // Add default option
+             $.each(banks, function(index, bank) {
+               $banksDropdown.append('<option value="' + bank.id + '">' + bank.bankname + '</option>');
+             });
+
+
+           }
          });
        </script>

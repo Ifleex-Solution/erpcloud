@@ -2,7 +2,7 @@
 <script src="<?php echo base_url() ?>my-assets/js/admin_js/invoice.js" type="text/javascript"></script>
 
 
-
+<input type="hidden" name="baseUrl2" id="baseUrl2" class="baseUrl" value="<?php echo base_url(); ?>" />
 <!--Add Invoice -->
 <div class="row">
     <div class="col-sm-12">
@@ -30,9 +30,9 @@
                                                                                         echo display('customer_name') . '/' . display('phone');
                                                                                         ?> <i class="text-danger">*</i></label>
                             <div class="col-sm-6">
-                                <input type="text" size="100" name="customer_name" class=" form-control" placeholder='<?php echo display('customer_name') . '/' . display('phone') ?>' id="customer_name" tabindex="1" onkeyup="customer_autocomplete()" value="<?php echo $customer_name ?>" />
 
-                                <input id="autocomplete_customer_id" class="customer_hidden_value abc" type="hidden" name="customer_id" value="<?php echo $customer_id ?>">
+                                <select tabindex="3" class="form-control" name="customer_id" id="customer_id" required>
+                                </select>
                             </div>
                             <?php if ($this->permission1->method('add_customer', 'create')->access()) { ?>
                                 <div class=" col-sm-3">
@@ -319,6 +319,26 @@
 
                                             </div>
                                         </div>
+                                        <div class="form-group row">
+                                            <label for="bank_name" class="col-sm-4 col-form-label">Bank Name
+                                                <i class="text-danger">*</i>
+                                            </label>
+                                            <div class="col-sm-8">
+                                            <select tabindex="3" class="form-control" name="banks[]" id="banks_0" onchange="onChangeBank(0, this)" > </select>
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="branch_name" class="col-sm-4 col-form-label">Branch Name
+                                                <i class="text-danger">*</i>
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <select tabindex="3" class="form-control" name="branch[]" id="branch_0" >
+
+                                                </select>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -433,7 +453,15 @@
                 if ($('#cheque_no_' + j).val() === '') {
                     alert("Please enter the cheque no")
                     return false;
-                } else {
+                }else if ($('#banks_' + j).val() ==null) {
+                    alert("Please select the bank")
+                    return false;
+                } else if ($('#branch_' + j).val() ==null) {
+                    alert("Please select the branch")
+                    return false;
+                } 
+                
+                else {
 
                     let a = await checkCheque(j);
                     if (!a) {
@@ -453,7 +481,73 @@
 
         return true;
     }
+    var base_url = $("#baseUrl2").val();
 
+    $.ajax({
+        type: "post",
+        url: base_url + 'bank/bank/getAllBanks',
+        data: {
+            chequeno: $('#chequeno').val(),
+            effectivedate: $('#effectivedate').val(),
+            chequereceiveddate: $('#chequereceiveddate').val(),
+            amount: $('#amount').val()
+        },
+        success: function(data1) {
+            banks = JSON.parse(data1);
+            var $banksDropdown = $('#banks_0');
+            $banksDropdown.empty(); // Clear existing options
+            $banksDropdown.append('<option value="" disabled selected>Select Bank</option>'); // Add default option
+            $.each(banks, function(index, bank) {
+                $banksDropdown.append('<option value="' + bank.id + '">' + bank.bankname + '</option>');
+            });
+
+
+        }
+    });
+
+    $.ajax({
+        type: "post",
+        url: base_url + 'invoice/invoice/getAllCustomers',
+        data: {
+            chequeno: $('#chequeno').val(),
+            effectivedate: $('#effectivedate').val(),
+            chequereceiveddate: $('#chequereceiveddate').val(),
+            amount: $('#amount').val()
+        },
+        success: function(data1) {
+           var customers = JSON.parse(data1);
+           var $customerDropdown = $('#customer_id');
+            $customerDropdown.empty(); // Clear existing options
+            $customerDropdown.append('<option value="" disabled selected>Select Customer</option>'); // Add default option
+            $.each(customers, function(index, customer) {
+                $customerDropdown.append('<option value="' + customer.customer_id  + '">' + customer.customer_name + '</option>');
+            });
+
+
+        }
+    });
+
+    function onChangeBank(id, selectElement) {
+        var selectedValue = selectElement.value;
+        $.ajax({
+            type: "post",
+            url: base_url + 'bank/bank/getBranchesById',
+            data: {
+                bank: selectedValue,
+            },
+            success: function(data1) {
+                var branches = JSON.parse(data1);
+                var $branchDropdown = $('#branch_' + id);
+                $branchDropdown.empty(); // Clear existing options
+                $branchDropdown.append('<option value="" disabled selected>Select Bank</option>'); // Add default option
+                $.each(branches, function(index, branch) {
+                    $branchDropdown.append('<option value="' + branch.id + '">' + branch.branchname + '</option>');
+                });
+
+
+            }
+        });
+    }
 
     // ******* new payment add start *******
     $(document).on('click', '#add_new_payment_type', function() {

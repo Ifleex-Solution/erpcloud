@@ -343,7 +343,7 @@
         var base_url = $("#baseUrl").val();
         var csrf_test_name = '';
         var is_credit_edit = '';
-
+        console.log(base_url)
 
         $.ajax({
             type: "post",
@@ -361,7 +361,7 @@
                     ordering: false,
                     "data": parsedData1,
                     "columns": [{
-                            data: 'id'
+                            data: 'seq'
                         },
                         {
                             data: 'cheque_no'
@@ -435,17 +435,15 @@
                             "data": null,
                             "render": function(data, type, row) {
                                 // Check if row exists
-                                if (row.ismanual === "yes") {
-                                    if (row.chequestatus === "Hold") {
-                                        return '<button class="btn btn-warning btn-sm mr-2" onclick="handleUnHold(' + row.id + ',\'' + row.effectivedate + '\')" data-toggle="tooltip" data-placement="left" title="Unhold"><i class="fas fa-play" aria-hidden="true"></i></button>';
+                                // if (row.ismanual === "yes") {
+                                if (row.chequestatus === "Hold") {
+                                    return '<button class="btn btn-warning btn-sm mr-2" onclick="handleUnHold(' + row.id + ',\'' + row.effectivedate + '\')" data-toggle="tooltip" data-placement="left" title="Unhold"><i class="fas fa-play" aria-hidden="true"></i></button>';
 
-                                    } else {
-                                        return '<button class="btn btn-warning btn-sm mr-2" onclick="handleOnHold(' + row.id + ')" data-toggle="tooltip" data-placement="left" title="Hold"><i class="fas fa-pause" aria-hidden="true"></i></button>';
-
-                                    }
                                 } else {
-                                    return ''; // Return empty string if row is null or undefined
+                                    return '<button class="btn btn-warning btn-sm mr-2" onclick="handleOnHold(' + row.id + ')" data-toggle="tooltip" data-placement="left" title="Hold"><i class="fas fa-pause" aria-hidden="true"></i></button>';
+
                                 }
+
                             }
                         }
 
@@ -500,7 +498,6 @@
 
 
     function handleEdit(rowId) {
-        window.location.href = "mailto:test@gmail.com?subject=Test&body=This%20is%20a%20test%20email.";
 
         var base_url = $("#baseUrl").val();
 
@@ -649,18 +646,25 @@
                     chequedetail.innerHTML += "<p><b>Draft Date</b> : " + parsedData[0].draftdate + "</p>";
                     chequedetail.innerHTML += "<p><b>Effective Date</b> : " + parsedData[0].effectivedate + "</p>";
 
-                    if (parsedData[0].type == '3rd Party') {
-                        chequedetail.innerHTML += "<br/><h4><b>Sales Invoice  Details</h4>"
+                    if (parsedData[0].customer_name != null) {
                         chequedetail.innerHTML += "<p><b>Received From</b> : " + parsedData[0].customer_name + "</p>";
+                    }
+                    if (parsedData[0].supplier_name != null) {
+                        chequedetail.innerHTML += "<p><b>Transfered To</b> : " + parsedData[0].supplier_name + "</p>";
+                    }
+
+                    if (parsedData[0].invoice != null) {
+                        chequedetail.innerHTML += "<br/><h4><b>Sales Invoice  Details</h4>"
                         chequedetail.innerHTML += "<p><b>Sales Invoice No</b> : " + parsedData[0].invoice + "</p>";
                         chequedetail.innerHTML += "<p><b>Sales Invoice Date</b> : " + parsedData[0].invoice_date + "</p>";
                         chequedetail.innerHTML += "<p><b>Cheque Received Date</b> : " + parsedData[0].createddate + "</p>";
 
                     }
 
+
+
                     if (parsedData[0].chalan_no != null) {
                         chequedetail.innerHTML += "<br/><h4><b>Pucharse Invoice  Details</h4>"
-                        chequedetail.innerHTML += "<p><b>Transfered To</b> : " + parsedData[0].supplier_name + "</p>";
                         chequedetail.innerHTML += "<p><b>Purchase Invoice No</b> : " + parsedData[0].chalan_no + "</p>";
                         chequedetail.innerHTML += "<p><b>Purchase Invoice Date</b> : " + parsedData[0].purchase_date + "</p>";
                         chequedetail.innerHTML += "<p><b>Cheque Transferred Date</b> : " + parsedData[0].transfered + "</p>";

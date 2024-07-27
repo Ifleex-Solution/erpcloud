@@ -688,10 +688,11 @@ class Accounts_model extends CI_Model
             if ($headName == "3rd party cheque") {
                 $description = $this->input->post('description');
                 $chequedata = array(
-                    'paidto'  => $data2->id,
-                    'status'  => "Approval",
+                    'paidto'  => $subtype[0] != null ? $subtype[0] :  $data2->id,
+                    'status'  => "Pending Approval",
                     'description' => $description,
-                    'updatedate' =>  $this->input->post('dtpDate')
+                    'updatedate' =>  $this->input->post('dtpDate'),
+                    'paymentvoucher' => $subtype[0] != null ? 2 : 1
                 );
 
                 $this->db->where('id', $chequeid);
@@ -708,15 +709,16 @@ class Accounts_model extends CI_Model
                     'draftdate'          => $draftdate,
                     'effectivedate'      => $effectivedate,
                     'receivedfrom'       => 0,
-                    'paidto'             =>   $data2->id,
+                    'paidto'             =>  $subtype[0] != null ? $subtype[0] :  $data2->id,
                     'coano'              => $reVID,
                     'amount'             => $Debit[0],
                     'type'               => 'Own',
-                    'status'             => "Approval",
+                    'status'             => "Pending Approval",
                     'description'        => $description,
                     'createddate'        =>  $this->input->post('dtpDate', TRUE),
                     'transfered'        =>   $this->input->post('dtpDate', TRUE),
-                    'updatedate'         =>  $this->input->post('dtpDate', TRUE)
+                    'updatedate'         =>  $this->input->post('dtpDate', TRUE),
+                    'paymentvoucher' => $subtype[0] != null ? 2 : 1
                 );
                 $this->db->insert('cheque', $chequedata);
                 $chequeid = $this->db->insert_id();
@@ -1098,6 +1100,11 @@ class Accounts_model extends CI_Model
     // Insert Debit voucher  
     public function insert_creditvoucher()
     {
+        $logFilePath = 'logfile.log';
+        $fileHandle = fopen($logFilePath, 'a');
+        fwrite($fileHandle, "\nBatch No : ");
+        fclose($fileHandle);
+
         $maxid = $this->getMaxFieldNumber('id', 'acc_vaucher', 'Vtype', 'CV', 'VNo');
         $vaucherNo = "CV-" . ($maxid + 1);
         $fyear = financial_year();
@@ -1115,6 +1122,8 @@ class Accounts_model extends CI_Model
         $Narration = addslashes(trim($this->input->post('txtRemarks', true)));
         $CreateBy = $this->session->userdata('id');
         $createdate = date('Y-m-d H:i:s');
+
+
 
 
         for ($i = 0; $i < count($dAID); $i++) {
@@ -1140,13 +1149,10 @@ class Accounts_model extends CI_Model
             $effectivedate = $this->input->post('effectivedate', TRUE);
             $draftdate = $this->input->post('draftdate', TRUE);
             $description = $this->input->post('description', TRUE);
-
-
-            $data2 = $this->db->select('HeadName,id,PHeadName')
-                ->from('acc_coa')
-                ->where('HeadCode', $dAID[0])
-                ->get()
-                ->row();
+            $banks = $this->input->post('draftdate', TRUE);
+            $branch = $this->input->post('description', TRUE);
+            $banks = $this->input->post('banks', TRUE);
+            $branch = $this->input->post('branch', TRUE);
 
 
             $insert_id = 0;
@@ -1154,6 +1160,12 @@ class Accounts_model extends CI_Model
 
             if ($chequeno != "") {
 
+
+                $data2 = $this->db->select('HeadName,id,PHeadName')
+                    ->from('acc_coa')
+                    ->where('HeadCode', $dAID[0])
+                    ->get()
+                    ->row();
                 $input_date_obj = new DateTime($effectivedate);
                 $current_date_obj = new DateTime(date('Y-m-d'));
 
@@ -1163,15 +1175,18 @@ class Accounts_model extends CI_Model
                     'cheque_no'           => $chequeno,
                     'draftdate'          => $draftdate,
                     'effectivedate'      => $effectivedate,
-                    'receivedfrom'       =>  $data2->id,
+                    'receivedfrom'       => $subtype[0] != null ? $subtype[0] :  $data2->id,
                     'paidto'             => 0,
                     'coano'              => $reVID,
                     'amount'             => $Creit[0],
                     'type'               => '3rd Party',
-                    'status'             =>  "Approval",
+                    'status'             =>  "Pending Approval",
                     'description'        => $description,
                     'createddate'        => (!empty($this->input->post('dtpDate', TRUE)) ? $this->input->post('dtpDate', TRUE) : date('Y-m-d')),
-                    'updatedate'         => (!empty($this->input->post('dtpDate', TRUE)) ? $this->input->post('dtpDate', TRUE) : date('Y-m-d'))
+                    'updatedate'         => (!empty($this->input->post('dtpDate', TRUE)) ? $this->input->post('dtpDate', TRUE) : date('Y-m-d')),
+                    'bankId ' => $banks[$i],
+                    'branchId' => $branch[$i],
+                    'receiptvoucher' => $subtype[0] != null ? 2 : 1
                 );
 
                 $this->db->insert('cheque', $chequedata);
@@ -1226,11 +1241,6 @@ class Accounts_model extends CI_Model
         $CreateBy = $this->session->userdata('id');
         $createdate = date('Y-m-d H:i:s');
 
-
-
-
-
-
         for ($i = 0; $i < count($dAID); $i++) {
             $dbtid = $dAID[$i];
             $Damnt = $Debit[$i];
@@ -1276,7 +1286,7 @@ class Accounts_model extends CI_Model
                 $chequedata = array(
                     'depositeddate'  => $this->input->post('dtpDate'),
                     'depositedbank' => $dbtid,
-                    'status'  => "Approval",
+                    'status'  => "Pending Approval",
                     'description' => $description,
                     'updatedate' =>  $this->input->post('dtpDate')
                 );
@@ -1976,29 +1986,29 @@ class Accounts_model extends CI_Model
                             'status'  => "Deposited"
                         );
 
-                        $this->db->where('id',$chequeData->id);
+                        $this->db->where('id', $chequeData->id);
                         $this->db->update('cheque', $chequedata);
-                    }else  if ($chequeData->paidto  !== null && $chequeData->paidto  != 0) {
+                    } else  if ($chequeData->paidto  !== null && $chequeData->paidto  != 0) {
                         $chequedata = array(
                             'status'  => "Transfered"
                         );
 
-                        $this->db->where('id',$chequeData->id);
+                        $this->db->where('id', $chequeData->id);
                         $this->db->update('cheque', $chequedata);
-                    }else{
+                    } else {
                         $input_date_obj = new DateTime($chequeData->effectivedate);
-                        $current_date_obj = new DateTime(date('Y-m-d'));  
+                        $current_date_obj = new DateTime(date('Y-m-d'));
                         $chequedata = array(
                             'status'  => $input_date_obj <= $current_date_obj ? "Valid" : "Pending",
                         );
 
-                        $this->db->where('id',$chequeData->id);
+                        $this->db->where('id', $chequeData->id);
                         $this->db->update('cheque', $chequedata);
                     }
                 }
 
 
-                
+
                 $transationinsert = array(
                     'vid'            =>  $row->id,
                     'fyear'          =>  $row->fyear,
@@ -2069,7 +2079,6 @@ class Accounts_model extends CI_Model
         );
         return $this->db->where('VNo', $id)
             ->update('acc_vaucher', $upData);
-    
     }
 
     //debit update voucher
