@@ -72,7 +72,7 @@
           <i class="text-danger">*</i>
         </label>
         <div class="col-sm-8">
-          <select tabindex="3" class="form-control" name="banks[]" id="banks_<?php echo $id; ?>" onchange="onChangeBank(<?php echo $id; ?>, this)" required> </select>
+          <select tabindex="3" class="form-control" name="banks[]" id="banks_<?php echo $id; ?>" onchange="onChangeBank(<?php echo $id; ?>, this)" > </select>
         </div>
       </div>
       <div class="form-group row">
@@ -80,7 +80,7 @@
           <i class="text-danger">*</i>
         </label>
         <div class="col-sm-8">
-          <select tabindex="3" class="form-control" name="branch[]" id="branch_<?php echo $id; ?>" required>
+          <select tabindex="3" class="form-control" name="branch[]" id="branch_<?php echo $id; ?>" >
 
           </select>
         </div>
