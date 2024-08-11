@@ -16,6 +16,6 @@ jobs:
     - name: Sync files via FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
-        server: ${{ secrets.TIMEXDEV_HOST  }}
+         server: ${{ secrets.TIMEXDEV_HOST  }}
         username: ${{ secrets.TIMEXDEV_USER  }}
         password: ${{secrets.TIMEXDEV_PASSWORD }}
