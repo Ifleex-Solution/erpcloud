@@ -31,7 +31,7 @@
     <div class="tab-content">
         <div class="tab-pane fade active in" id="home">
             <div class="row">
-                <div class="col-sm-12 col-md-6">
+                <div class="col-sm-12 col-md-4">
 
                     <div class="row">
                         <div class="col-xs-4 col-sm-3 col-md-4 col-lg-3 col-xl-2">
@@ -135,7 +135,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-6">
+                <div class="col-sm-12 col-md-8">
                     <form class="form-inline mb-3">
                         <div class="form-group">
                             <input type="text" id="add_item" class="form-control"
@@ -148,7 +148,7 @@
                             <input type="text" class="form-control" id="add_item_m" placeholder="Manual Input barcode">
                         </div>
                     </form>
-                    <?php echo form_open_multipart('invoice/invoice/bdtask_manual_sales_insert', array('class' => 'form-vertical', 'id' => 'gui_sale_insert', 'name' => 'insert_pos_invoice')) ?>
+                    <?php echo form_open_multipart('invoice/invoice/bdtask_manual_possales_insert', array('class' => 'form-vertical', 'id' => 'gui_sale_insert', 'name' => 'insert_pos_invoice')) ?>
                     <div class="d-flex align-items-center mb-5">
                         <div class="input-group mr-3">
                             <input type="text" class="form-control customerSelection" id="customer_name"
