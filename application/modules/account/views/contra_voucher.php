@@ -52,6 +52,8 @@
                         <div class="col-md-6">
                             <div id="myDiv" style="display:none;">
                                 <div class="form-group row">
+                                <input type="hidden" name="chequeid" id="chequeid" class="form-control" value="" >
+
                                     <label for="date" class="col-sm-4 col-form-label">Cheque No</label>
                                     <div class="col-sm-8">
                                         <input type="text" name="chequeno" id="chequeno" class="form-control" value="">
@@ -177,6 +179,8 @@
         // $('#' + "che_" + id).hide();
         // $('#' + "myDiv_" + id).show();
 
+        $('#chequeid' ).val(rowId);
+
 
         $('#chequeno' ).val(chequeno);
         $('#chequeno').prop('readonly', true);
@@ -213,7 +217,7 @@
         var x = document.getElementById("cmbDebit").value;
         var is_credit_edit = '';
         var csrf_test_name = '';
-
+        $('#chequeid' ).val("");
         $('#chequeno' ).val("");
         $('#draftdate' ).val("");
         $('#effectivedate' ).val("");

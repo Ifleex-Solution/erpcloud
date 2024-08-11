@@ -540,6 +540,8 @@ class Invoice_model extends CI_Model
         $effectivedate = $this->input->post('effective_date', TRUE);
         $draftdate = $this->input->post('draft_date', TRUE);
         $description = $this->input->post('description', TRUE);
+        $banks = $this->input->post('banks', TRUE);
+        $branch = $this->input->post('branch', TRUE);
 
 
         $i = 0;
@@ -563,8 +565,10 @@ class Invoice_model extends CI_Model
                     'type'               => '3rd Party',
                     'status'             => $input_date_obj <= $current_date_obj ? "Valid" : "Pending",
                     'description'        => $description[$i],
-                    'createddate'        =>  (!empty($this->input->post('invoice_date', TRUE)) ? $this->input->post('invoice_date', TRUE) : date('Y-m-d')),
-                    'updatedate'         =>  (!empty($this->input->post('invoice_date', TRUE)) ? $this->input->post('invoice_date', TRUE) : date('Y-m-d'))
+                    'createddate'        => (!empty($this->input->post('invoice_date', TRUE)) ? $this->input->post('invoice_date', TRUE) : date('Y-m-d')),
+                    'updatedate'         => (!empty($this->input->post('invoice_date', TRUE)) ? $this->input->post('invoice_date', TRUE) : date('Y-m-d')),
+                    'bankId ' => $banks[$i],
+                    'branchId' => $branch[$i]
                 );
                 $this->db->insert('cheque', $chequedata);
                 // if () {

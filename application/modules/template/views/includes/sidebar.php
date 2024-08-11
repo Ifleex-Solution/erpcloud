@@ -257,7 +257,7 @@
 
 
         <!-- cheque part -->
-        <?php if ($this->permission1->method('managecheque', 'read')->access() || $this->permission1->method('chequeflowreport', 'create')->access() ) { ?>
+        <?php if ($this->permission1->method('manage_cheque', 'read')->access() || $this->permission1->method('cheque_flow__report', 'create')->access() ) { ?>
             <li class="treeview <?php echo (($this->uri->segment(1) == "managecheque" || $this->uri->segment(1) == "chequeflowreport") ? "active" : '') ?>">
                 <a href="javascript:void(0)">
                     <i class="metismenu-icon fa fa-user-secret"></i> <span>Cheque</span>
@@ -267,7 +267,7 @@
                 </a>
 
                 <ul class="treeview-menu">
-                    <?php if ($this->permission1->method('managecheque', 'create')->access()) { ?>
+                    <?php if ($this->permission1->method('manage_cheque', 'create')->access()) { ?>
                         <li class="<?php echo (($this->uri->segment(1) == "managecheque") ? "active" : '') ?>">
                             <a href="<?php echo base_url('managecheque') ?>" class="<?php echo (($this->uri->segment(1) == "managecheque") ? "active" : null) ?>">
                                 Manage Cheque
@@ -276,7 +276,7 @@
 
                         </li>
                     <?php } ?>
-                     <?php if ($this->permission1->method('chequeflowreport', 'create')->access()) { ?>
+                     <?php if ($this->permission1->method('cheque_flow_report', 'create')->access()) { ?>
                         <li class="<?php echo (($this->uri->segment(1) == "chequeflowreport") ? "active" : '') ?>">
                             <a href="<?php echo base_url('chequeflowreport') ?>" class="<?php echo (($this->uri->segment(1) == "chequeflowreport") ? "active" : null) ?>">
                                Cheque Flow Report
@@ -966,9 +966,9 @@
         <!-- Human resource management menu end -->
 
         <!-- Bank menu start -->
-        <?php if ($this->permission1->method('add_bank', 'create')->access() || $this->permission1->method('bank_list', 'read')->access()) { ?>
+        <?php if ($this->permission1->method('add_bank', 'create')->access() || $this->permission1->method('bank_list', 'read')->access()||$this->permission1->method('3rdpartybanks', 'read')->access()||$this->permission1->method('3rdpartybranches', 'read')->access()) { ?>
             <li class="treeview <?php
-                                if ($this->uri->segment('1') == ("bank_form") || $this->uri->segment('1') == ("bank_list") || $this->uri->segment('1') == ("bank_ledger") || $this->uri->segment('1') == ("bank_transaction")) {
+                                if ($this->uri->segment('1') == ("bank_form") || $this->uri->segment('1') == ("bank_list") || $this->uri->segment('1') == ("bank_ledger") || $this->uri->segment('1') == ("bank_transaction")|| $this->uri->segment('1') == ("3rdpartybanks")|| $this->uri->segment('1') == ("3rdpartybranches")) {
                                     echo "active";
                                 } else {
                                     echo " ";
@@ -986,7 +986,7 @@
                                                 echo "active";
                                             } else {
                                                 echo " ";
-                                            } ?>"><a href="<?php echo base_url('bank_form') ?>"><?php echo display('add_new_bank') ?></a></li>
+                                            } ?>"><a href="<?php echo base_url('bank_form') ?>"><?php echo display('add_new_bank') ?> (Own)</a></li>
                     <?php } ?>
 
                     <?php if ($this->permission1->method('bank_list', 'read')->access()) { ?>
@@ -994,8 +994,27 @@
                                                 echo "active";
                                             } else {
                                                 echo " ";
-                                            } ?>"><a href="<?php echo base_url('bank_list') ?>"><?php echo display('manage_bank') ?></a></li>
+                                            } ?>"><a href="<?php echo base_url('bank_list') ?>"><?php echo display('manage_bank') ?> (Own)</a></li>
                     <?php } ?>
+
+                    <?php if ($this->permission1->method('3rdpartybanks', 'read')->access()) { ?>
+                        <li class="treeview <?php if ($this->uri->segment('1') == ("3rdpartybanks")) {
+                                                echo "active";
+                                            } else {
+                                                echo " ";
+                                            } ?>"><a href="<?php echo base_url('3rdpartybanks') ?>">Manage Bank (3rd Party)</a></li>
+                    <?php } ?>
+
+                    
+                    <?php if ($this->permission1->method('3rdpartybranches', 'read')->access()) { ?>
+                        <li class="treeview <?php if ($this->uri->segment('1') == ("3rdpartybranches")) {
+                                                echo "active";
+                                            } else {
+                                                echo " ";
+                                            } ?>"><a href="<?php echo base_url('3rdpartybranches') ?>">Manage Branch (3rd Party)</a></li>
+                    <?php } ?>
+
+
 
 
 
@@ -1415,13 +1434,6 @@
 
         <!-- custom menu end -->
 
-
-        <?php if ($this->session->userdata('isAdmin')) { ?>
-            <li class="treeview"><a href="<?php echo base_url('addon/module/index') ?>"><i class="fa fa-adn"></i>
-                    <span><?php echo display('addon'); ?></span></a></li>
-
-
-        <?php } ?>
 
 
 

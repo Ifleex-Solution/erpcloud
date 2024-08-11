@@ -50,19 +50,42 @@ class Supplier extends MX_Controller
 
     public function getallcheques()
     {
+        $this->db->query("SET @rownum := 0");
+        $query = $this->db->query("
+            SELECT 
+                @rownum := @rownum + 1 AS seq,
+                cq.id,
+                cq.cheque_no,
+                cq.type,
+                cq.effectivedate,
+                CASE 
+                    WHEN cq.receiptvoucher = 2 THEN receive2.name 
+                    WHEN cq.receiptvoucher = 1 THEN receive1.HeadName 
+                    ELSE ci.customer_name 
+                END AS customer_name,
+                CASE 
+                    WHEN cq.paymentvoucher = 2 THEN paid2.name 
+                    WHEN cq.paymentvoucher = 1 THEN paid1.HeadName 
+                    ELSE si.supplier_name 
+                END AS supplier_name,
+                cq.status AS chequestatus,
+                ac1.HeadName AS bank2,
+                FORMAT(cq.amount, 0) AS amount,
+                cq.ismanual
+            FROM 
+                cheque cq
+                LEFT JOIN customer_information ci ON ci.customer_id = cq.receivedfrom
+                LEFT JOIN supplier_information si ON si.supplier_id = cq.paidto
+                LEFT JOIN acc_coa ac1 ON ac1.HeadCode = cq.depositedbank
+                LEFT JOIN acc_coa receive1 ON receive1.id = cq.receivedfrom
+                LEFT JOIN acc_subcode receive2 ON receive2.id = cq.receivedfrom
+                LEFT JOIN acc_coa paid1 ON paid1.id = cq.paidto
+                LEFT JOIN acc_subcode paid2 ON paid2.id = cq.paidto
+            ORDER BY 
+                cq.id DESC
+        ");
 
-        // $query = $this->db->get();
-
-
-        $result = $this->db->select('cq.*, ci.*, si.*, cq.status AS chequestatus,ac1.HeadName as bank2')
-            ->from('cheque cq')
-            ->join('customer_information ci', 'ci.customer_id = cq.receivedfrom', 'left')
-            ->join('supplier_information si', 'si.supplier_id = cq.paidto', 'left')
-            ->join('acc_coa ac1', 'ac1.HeadCode = cq.depositedbank', 'left')
-
-            ->order_by('cq.updatedate', 'desc')
-            ->get()
-            ->result_array();
+        $result = $query->result_array();
 
 
         echo json_encode($result);
@@ -90,11 +113,7 @@ class Supplier extends MX_Controller
         foreach ($result as $row) {
             $effectiveDate = strtotime($row['effectivedate']);
             $sixMonthsAgoTimestamp = strtotime($sixMonthsAgo);
-            $logFilePath = 'logfile.log';
-            $fileHandle = fopen($logFilePath, 'a');
-            fwrite($fileHandle,"\nsix month : ".$sixMonthsAgoTimestamp);
-            fclose($fileHandle);
-           
+
             if ($effectiveDate < $sixMonthsAgoTimestamp) {
                 // Update status as valid
                 $this->db->where('cheque_no', $row['cheque_no'])
@@ -123,7 +142,7 @@ class Supplier extends MX_Controller
             }
         }
 
-       
+
 
 
         echo json_encode($result);
@@ -134,55 +153,179 @@ class Supplier extends MX_Controller
         $input_date_obj = new DateTime($this->input->post('effectivedate', true));
         $current_date_obj = new DateTime(date('Y-m-d'));
 
-        $current_datetime_obj = new DateTime();
-
         $chequedata = array(
-     
-            'cheque_no'           => $this->input->post('chequeno', true),       
+            'cheque_no'           => $this->input->post('chequeno', true),
             'effectivedate'      => $this->input->post('effectivedate', true),
-            'amount'             =>$this->input->post('amount', true),
+            'amount'             => $this->input->post('amount', true),
             'type'               => '3rd Party',
             'status'             => $input_date_obj <= $current_date_obj ? "Valid" : "Pending",
-            'createddate'        =>  (!empty($this->input->post('chequereceiveddate', TRUE)) ? $this->input->post('chequereceiveddate', TRUE) : date('Y-m-d')),
-            'updatedate'         =>  (!empty($this->input->post('chequereceiveddate', TRUE)) ? $this->input->post('chequereceiveddate', TRUE) : date('Y-m-d'))
+            'createddate'        => (!empty($this->input->post('chequereceiveddate', TRUE)) ? $this->input->post('chequereceiveddate', TRUE) : date('Y-m-d')),
+            'updatedate'         => (!empty($this->input->post('chequereceiveddate', TRUE)) ? $this->input->post('chequereceiveddate', TRUE) : date('Y-m-d')),
+            'bankId  ' => $this->input->post('bank', true),
+            'branchId ' => $this->input->post('branch', true),
+            'receivedfrom ' => $this->input->post('receivedfrom', true),
+            'description ' => $this->input->post('description', true),
+            'ismanual ' => "yes"
         );
         $this->db->insert('cheque', $chequedata);
         echo json_encode("save sucessfully");
-
     }
+
+    public function deletecheque()
+    {
+        $id = $this->input->post('id', true);
+        $this->db->where('id', $id);
+        $this->db->delete('cheque');
+        if ($this->db->affected_rows() > 0) {
+            echo json_encode("Deleted successfully");
+        } else {
+            echo json_encode("No changes made or delte failed");
+        }
+    }
+
+    public function holdcheque()
+    {
+
+        $chequedata = array(
+            'status' => "Hold",
+        );
+        $this->db->where('id', $this->input->post('id', true));
+        $this->db->update('cheque', $chequedata);
+
+        if ($this->db->affected_rows() > 0) {
+            echo json_encode("Update successfully");
+        } else {
+            echo json_encode("No changes made or update failed");
+        }
+    }
+
+    public function unholdcheque()
+    {
+        $sixMonthsAgo = date('Y-m-d', strtotime('-6 months'));
+        $effectiveDate = strtotime($this->input->post('effectivedate', true));
+        $sixMonthsAgoTimestamp = strtotime($sixMonthsAgo);
+        if ($effectiveDate < $sixMonthsAgoTimestamp) {
+            $this->db->where('id', $this->input->post('id', true))
+                ->update('cheque', ['status' => 'Invalid']);
+        } else {
+            $current_date_obj = strtotime(date('Y-m-d'));
+            $this->db->where('id', $this->input->post('id', true));
+            $this->db->update('cheque',  ['status' => $effectiveDate <= $current_date_obj ? "Valid" : "Pending"]);
+        }
+
+        if ($this->db->affected_rows() > 0) {
+            echo json_encode("Update successfully");
+        } else {
+            echo json_encode("No changes made or update failed");
+        }
+    }
+
+
+
+    public function updatecheque()
+    {
+        $input_date_obj = new DateTime($this->input->post('effectivedate', true));
+        $current_date_obj = new DateTime(date('Y-m-d'));
+
+        $chequedata = array(
+            'cheque_no'           => $this->input->post('chequeno', true),
+            'effectivedate'      => $this->input->post('effectivedate', true),
+            'amount'             => $this->input->post('amount', true),
+            'status'             => $input_date_obj <= $current_date_obj ? "Valid" : "Pending",
+            'createddate'        => (!empty($this->input->post('chequereceiveddate', TRUE)) ? $this->input->post('chequereceiveddate', TRUE) : date('Y-m-d')),
+            'updatedate'         => (!empty($this->input->post('chequereceiveddate', TRUE)) ? $this->input->post('chequereceiveddate', TRUE) : date('Y-m-d')),
+            'bankId  ' => $this->input->post('bank', true),
+            'branchId ' => $this->input->post('branch', true),
+            'receivedfrom ' => $this->input->post('receivedfrom', true),
+            'description ' => $this->input->post('description', true),
+        );
+        $this->db->where('id', $this->input->post('id', true));
+        $this->db->update('cheque', $chequedata);
+
+        if ($this->db->affected_rows() > 0) {
+            echo json_encode("Update successfully");
+        } else {
+            echo json_encode("No changes made or update failed");
+        }
+    }
+
 
     public function chequebydata()
     {
 
 
-        $result = $this->db->select('cq.cheque_no, cq.type, cq.status AS chequestatus, ac.HeadName, cq.draftdate, cq.effectivedate, ci.customer_name, i.invoice, i.date as invoice_date, cq.createddate, si.supplier_name, pi.chalan_no, pi.purchase_date, cq.transfered, cq.amount, cq.updatedate,cq.depositeddate,ac1.HeadName as bank2')
-            ->from('cheque cq')
-            ->join('customer_information ci', 'ci.customer_id = cq.receivedfrom', 'left')
-            ->join('supplier_information si', 'si.supplier_id = cq.paidto', 'left')
-            ->join('invoice i', 'i.invoice_id = cq.sales_no', 'left')
-            ->join('product_purchase pi', 'pi.id = cq.purchase_no', 'left')
-            ->join('acc_coa ac', 'ac.HeadCode = cq.coano', 'left')
-            ->join('acc_coa ac1', 'ac1.HeadCode = cq.depositedbank', 'left')
-            ->order_by('cq.updatedate', 'desc');
+        $sql = "
+        SELECT 
+            cq.cheque_no, 
+            cq.type, 
+            cq.status AS chequestatus, 
+            ac.HeadName, 
+            cq.draftdate, 
+            cq.effectivedate, 
+            CASE 
+                WHEN cq.receiptvoucher = 2 THEN receive2.name 
+                WHEN cq.receiptvoucher = 1 THEN receive1.HeadName 
+                ELSE ci.customer_name 
+            END AS customer_name, 
+            i.invoice, 
+            i.date AS invoice_date, 
+            cq.createddate, 
+            CASE 
+                WHEN cq.paymentvoucher = 2 THEN paid2.name 
+                WHEN cq.paymentvoucher = 1 THEN paid1.HeadName 
+                ELSE si.supplier_name 
+            END AS supplier_name, 
+            pi.chalan_no, 
+            pi.purchase_date, 
+            cq.transfered, 
+            cq.amount, 
+            cq.updatedate,
+            cq.depositeddate,
+            ac1.HeadName AS bank2
+        FROM 
+            cheque cq
+            LEFT JOIN customer_information ci ON ci.customer_id = cq.receivedfrom
+            LEFT JOIN supplier_information si ON si.supplier_id = cq.paidto
+            LEFT JOIN invoice i ON i.invoice_id = cq.sales_no
+            LEFT JOIN product_purchase pi ON pi.id = cq.purchase_no
+            LEFT JOIN acc_coa ac ON ac.HeadCode = cq.coano
+            LEFT JOIN acc_coa ac1 ON ac1.HeadCode = cq.depositedbank
+            LEFT JOIN acc_coa receive1 ON receive1.id = cq.receivedfrom
+            LEFT JOIN acc_subcode receive2 ON receive2.id = cq.receivedfrom
+            LEFT JOIN acc_coa paid1 ON paid1.id = cq.paidto
+            LEFT JOIN acc_subcode paid2 ON paid2.id = cq.paidto
+    ";
+
+        // Apply filters based on user input
+        $filters = array();
 
         if ($this->input->post('fromdate', true) != "") {
-            $this->db->where('cq.updatedate >=', $this->input->post('fromdate', true));
+            $filters[] = "cq.updatedate >= '" . $this->db->escape_str($this->input->post('fromdate', true)) . "'";
         }
 
         if ($this->input->post('todate', true) != "") {
-            $this->db->where('cq.updatedate <=', $this->input->post('todate', true));
+            $filters[] = "cq.updatedate <= '" . $this->db->escape_str($this->input->post('todate', true)) . "'";
         }
+
         if ($this->input->post('status', true) != "All") {
-            $this->db->where('cq.status', $this->input->post('status', true));
+            $filters[] = "cq.status = '" . $this->db->escape_str($this->input->post('status', true)) . "'";
         }
 
         if ($this->input->post('type', true) != "All") {
-            $this->db->where('cq.type', $this->input->post('type', true));
+            $filters[] = "cq.type = '" . $this->db->escape_str($this->input->post('type', true)) . "'";
         }
 
+        // Add filters to the SQL query
+        if (!empty($filters)) {
+            $sql .= " WHERE " . implode(' AND ', $filters);
+        }
 
+        // Add ordering
+        $sql .= " ORDER BY cq.updatedate DESC;";
 
-        $result = $this->db->get()->result_array();
+        // Execute the query
+        $query = $this->db->query($sql);
+        $result = $query->result_array();
 
         echo json_encode($result);
     }
@@ -192,18 +335,71 @@ class Supplier extends MX_Controller
 
         // $query = $this->db->get();
         // $postData = $this->input->post();
-        $result = $this->db->select('cq.cheque_no, cq.type, ac.HeadName, cq.draftdate, cq.effectivedate, ci.customer_name, i.invoice, i.date as invoice_date, cq.createddate, si.supplier_name, pi.chalan_no, pi.purchase_date, cq.transfered, cq.amount, cq.updatedate, cq.status AS chequestatus,cq.depositeddate,ac1.HeadName as bank2')
-            ->from('cheque cq')
-            ->join('customer_information ci', 'ci.customer_id = cq.receivedfrom', 'left')
-            ->join('supplier_information si', 'si.supplier_id = cq.paidto', 'left')
-            ->join('invoice i', 'i.invoice_id = cq.sales_no', 'left')
-            ->join('product_purchase pi', 'pi.id = cq.purchase_no', 'left')
-            ->join('acc_coa ac', 'ac.HeadCode = cq.coano', 'left')
-            ->join('acc_coa ac1', 'ac1.HeadCode = cq.depositedbank', 'left')
-            ->where('cq.id', $id)
+        $sql = "
+        SELECT 
+            cq.id,
+            cq.cheque_no,
+            cq.type,
+            ac.HeadName AS coano_name,
+            cq.draftdate,
+            cq.effectivedate, 
+            CASE 
+                WHEN cq.receiptvoucher = 2 THEN receive2.name 
+                WHEN cq.receiptvoucher = 1 THEN receive1.HeadName 
+                ELSE ci.customer_name 
+            END AS customer_name,
+            CASE 
+                WHEN cq.receiptvoucher = 2 THEN receive2.id 
+                WHEN cq.receiptvoucher = 1 THEN receive1.id 
+                ELSE ci.customer_id 
+            END AS customer_id,
+            i.invoice,
+            i.date AS invoice_date,
+            cq.createddate,
+            CASE 
+            WHEN cq.paymentvoucher = 2 THEN paid2.name 
+            WHEN cq.paymentvoucher = 1 THEN paid1.HeadName 
+            ELSE si.supplier_name 
+        END AS supplier_name,
+            pi.chalan_no,
+            pi.purchase_date,
+            cq.transfered,
+            cq.amount,
+            cq.updatedate,
+            cq.status AS chequestatus,
+            cq.description,
+            cq.depositeddate,
+            cq.bankId,
+            cq.branchId,
+            ac1.HeadName AS bank2,
+            ba.bankname,
+            br.branchname,
+            cq.ismanual
+        FROM 
+            cheque cq
+            LEFT JOIN customer_information ci ON ci.customer_id = cq.receivedfrom
+            LEFT JOIN supplier_information si ON si.supplier_id = cq.paidto
+            LEFT JOIN acc_coa receive1 ON receive1.id = cq.receivedfrom
+            LEFT JOIN acc_subcode receive2 ON receive2.id = cq.receivedfrom
+            LEFT JOIN acc_coa paid1 ON paid1.id = cq.paidto
+            LEFT JOIN acc_subcode paid2 ON paid2.id = cq.paidto
+            LEFT JOIN invoice i ON i.invoice_id = cq.sales_no
+            LEFT JOIN product_purchase pi ON pi.id = cq.purchase_no
+            LEFT JOIN acc_coa ac ON ac.HeadCode = cq.coano
+            LEFT JOIN `3rdpartybank` ba ON ba.id = cq.bankId
+            LEFT JOIN `3rdpartybranch` br ON br.id = cq.branchId
+            LEFT JOIN acc_coa ac1 ON ac1.HeadCode = cq.depositedbank
+        WHERE 
+            cq.id = ?
+        ORDER BY 
+            cq.id DESC;
+    ";
 
-            ->get()
-            ->result_array();
+        // Execute the query with the provided ID
+        $query = $this->db->query($sql, array($id));
+
+        // Fetch the results
+        $result = $query->result_array();
 
 
         echo json_encode($result);

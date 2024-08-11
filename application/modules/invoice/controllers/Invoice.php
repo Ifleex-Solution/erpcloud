@@ -617,6 +617,8 @@ class Invoice extends MX_Controller
         echo modules::run('template/layout', $data);
     }
 
+   
+
 
     public function bdtask_download_invoice($invoice_id = null)
     {
@@ -767,7 +769,7 @@ class Invoice extends MX_Controller
                         $printdata       = $this->invoice_model->bdtask_invoice_pos_print_direct($invoice_id);
                         $data['details'] = $this->load->view('invoice/pos_print', $printdata, true);
                     }
-                    $base_url = base_url(); 
+                    $base_url = base_url();
 
                     echo '<script type="text/javascript">
                     alert("Invoice details saved successfully");
@@ -782,8 +784,6 @@ class Invoice extends MX_Controller
                 $data['exception'] = validation_errors();
             }
         }
-       
-       
     }
 
     public function autoapprove($invoice_id)
@@ -809,7 +809,20 @@ class Invoice extends MX_Controller
 
             $data['all_pmethod'] = $this->invoice_model->pmethod_dropdown_new();
         }
+
+        //$data['banks'] = $this->getAllBanks();
+
         $this->load->view('invoice/newpaymentveiw', $data);
+    }
+
+    public function getAllCustomers()
+    {
+        $this->db->select('customer_id,customer_name');
+        $this->db->from('customer_information');
+        $this->db->order_by('customer_name', 'ASC');
+        $query = $this->db->get();
+        $result = $query->result_array();
+        echo json_encode($result);
     }
 
     public function checkCheque($chequeno = null)

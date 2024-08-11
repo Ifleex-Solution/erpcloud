@@ -8,6 +8,8 @@
                     </h4>
                 </div>
             </div>
+            <input type="hidden" name="baseUrl2" id="baseUrl2" class="baseUrl" value="<?php echo base_url(); ?>" />
+
             <div class="panel-body">
 
                 <?php echo  form_open_multipart('account/accounts/store_credit_voucher') ?>
@@ -58,13 +60,13 @@
                             <div class="form-group row">
                                 <label for="date" class="col-sm-4 col-form-label">Cheque No</label>
                                 <div class="col-sm-8">
-                                    <input type="text" name="chequeno" id="chequeno" class="form-control" value="">
+                                    <input type="text" name="chequeno" id="chequeno" class="form-control" value="" >
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="effectivedate" class="col-sm-4 col-form-label"> Effective Date</label>
                                 <div class="col-sm-8">
-                                    <input type="text" name="effectivedate" id="effectivedate" class="form-control datepicker" value="<?php echo  date('Y-m-d') ?>">
+                                    <input type="text" name="effectivedate" id="effectivedate" class="form-control datepicker" value="<?php echo  date('Y-m-d') ?>" required>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -77,6 +79,25 @@
                                 <label for="description" class="col-sm-4 col-form-label"> <?php echo display('description') ?></label>
                                 <div class="col-sm-8">
                                     <textarea name="description" id="description" class="form-control"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="bank_name" class="col-sm-4 col-form-label">Bank Name
+                                    <i class="text-danger">*</i>
+                                </label>
+                                <div class="col-sm-8">
+                                    <select tabindex="3" class="form-control" name="banks[]" id="banks_0" onchange="onChangeBank(0, this)" > </select>
+
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="branch_name" class="col-sm-4 col-form-label">Branch Name
+                                    <i class="text-danger">*</i>
+                                </label>
+                                <div class="col-sm-8">
+                                    <select tabindex="3" class="form-control" name="branch[]" id="branch_0" >
+
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -158,140 +179,208 @@
 <script src="<?php echo base_url() ?>assets/dist/jstree.min.js"></script>
 <script src="<?php echo base_url('assets/dist/account.js') ?>" type="text/javascript"></script>
 <script>
-        function handleTableClick(rowId, customerId, amount, chequeno, draftdate, effectivedate, description) {
-            // Parse JSON string back to object
-            // rowData = JSON.parse(rowData);
-            // Handle click here
-            // if (id == 0) {
-            //     $('#pamount_by_method').val(amount);
-            //     $('#pamount_by_method').prop('readonly', true);
+    function handleTableClick(rowId, customerId, amount, chequeno, draftdate, effectivedate, description) {
+        // Parse JSON string back to object
+        // rowData = JSON.parse(rowData);
+        // Handle click here
+        // if (id == 0) {
+        //     $('#pamount_by_method').val(amount);
+        //     $('#pamount_by_method').prop('readonly', true);
 
 
-            // } else {
-            //     $('#pamount_by_method' + id).val(amount);
-            //     $('#pamount_by_method' + id).prop('readonly', true);
+        // } else {
+        //     $('#pamount_by_method' + id).val(amount);
+        //     $('#pamount_by_method' + id).prop('readonly', true);
 
 
-            // }
-            // $('#' + "che_" + id).hide();
-            // $('#' + "myDiv_" + id).show();
+        // }
+        // $('#' + "che_" + id).hide();
+        // $('#' + "myDiv_" + id).show();
 
 
-            $('#chequeno').val(chequeno);
-            $('#chequeno').prop('readonly', true);
+        $('#chequeno').val(chequeno);
+        $('#chequeno').prop('readonly', true);
 
-            $('#draftdate').val(draftdate);
-            $('#draftdate').prop('readonly', true);
-
-
-            $('#effectivedate').val(effectivedate);
-            $('#effectivedate').prop('readonly', true);
+        $('#draftdate').val(draftdate);
+        $('#draftdate').prop('readonly', true);
 
 
-
-            $('#description').val(description);
-            $('#txtAmount_1').val(amount);
-            $('#txtAmount_1').prop('readonly', true);
+        $('#effectivedate').val(effectivedate);
+        $('#effectivedate').prop('readonly', true);
 
 
 
-            // $('#effectivedate' ).prop('readonly', true);
+        $('#description').val(description);
+        $('#txtAmount_1').val(amount);
+        $('#txtAmount_1').prop('readonly', true);
 
 
 
-            $("#myDiv").show();
-            $("#exampleModal").modal('hide');
+        // $('#effectivedate' ).prop('readonly', true);
+
+
+
+        $("#myDiv").show();
+        $("#exampleModal").modal('hide');
 
 
 
 
-            // You can access properties of rowData as needed
-        }
-        $(document).on('change', '#cmbDebit1', function() {
-            $('#add_more').show();
-            $('#chequeno').prop('readonly', false);
-            // $('#description' + id).prop('readonly', false);
-            $('#draftdate').prop('readonly', false);
-            $('#effectivedate').prop('readonly', false);
+        // You can access properties of rowData as needed
+    }
+    $(document).on('change', '#cmbDebit1', function() {
+        $('#add_more').show();
+        $('#chequeno').prop('readonly', false);
+        // $('#description' + id).prop('readonly', false);
+        $('#draftdate').prop('readonly', false);
+        $('#effectivedate').prop('readonly', false);
 
-            var x = document.getElementById("cmbDebit1").value;
-            var is_credit_edit = '';
-            var csrf_test_name = '';
+        var x = document.getElementById("cmbDebit1").value;
+        var is_credit_edit = '';
+        var csrf_test_name = '';
 
-            $('#chequeno').val("");
-            $('#draftdate').val("");
-          //  $('#effectivedate').val("");
-            $('#description').val("");
-            $('#txtAmount_1').val("");
-            $("#myDiv").hide();
-            $('#txtAmount_1').prop('readonly', false);
-
-
-
-            var url = $('#base_url').val() + "purchase/purchase/bdtask_typeofthepayment/" + x;
-            $.ajax({
-                type: "post",
-                url: url,
-                data: {
-                    is_credit_edit: is_credit_edit,
-                    csrf_test_name: csrf_test_name
-                },
-                success: function(data) {
-                    var parsedData = JSON.parse(data);
+        $('#chequeno').val("");
+        $('#draftdate').val("");
+        //  $('#effectivedate').val("");
+        $('#description').val("");
+        $('#txtAmount_1').val("");
+        $("#myDiv").hide();
+        $('#txtAmount_1').prop('readonly', false);
 
 
 
-                    if (parsedData[0].HeadName === '3rd party cheque') {
-                        $('#' + "che").hide();
-                        $('#add_more').hide();
-
-                        $('#' + "myDiv").show();
-                        $('#chequeno').val("");
-                        $('#description' + id).val("");
-                        $('#draftdate').val("");
-                        var currentDate = new Date().toISOString().slice(0, 10);
-
-                        // Set the value of the input field with id 'effectivedate'
-                        document.getElementById('effectivedate').value = currentDate;
-
-                       
-                    } else {
-
-                        $('#' + "che").hide();
-                        $('#' + "myDiv").hide();
-                        $('#chequeno').val("");
-                        $('#description' + id).val("");
-                        $('#draftdate').val("");
-                        var currentDate = new Date().toISOString().slice(0, 10);
-
-                        // Set the value of the input field with id 'effectivedate'
-                        document.getElementById('effectivedate').value = currentDate;
+        var url = $('#base_url').val() + "purchase/purchase/bdtask_typeofthepayment/" + x;
+        $.ajax({
+            type: "post",
+            url: url,
+            data: {
+                is_credit_edit: is_credit_edit,
+                csrf_test_name: csrf_test_name
+            },
+            success: function(data) {
+                var parsedData = JSON.parse(data);
 
 
-                    }
+
+                if (parsedData[0].HeadName === '3rd party cheque') {
+                    $('#' + "che").hide();
+                    $('#add_more').hide();
+
+                    $('#' + "myDiv").show();
+                    $('#chequeno').val("");
+                    $('#description' + id).val("");
+                    $('#draftdate').val("");
+                    var currentDate = new Date().toISOString().slice(0, 10);
+
+                    // Set the value of the input field with id 'effectivedate'
+                    document.getElementById('effectivedate').value = currentDate;
+
+
+                } else {
+
+                    $('#' + "che").hide();
+                    $('#' + "myDiv").hide();
+                    $('#chequeno').val("");
+                    $('#description' + id).val("");
+                    $('#draftdate').val("");
+                    var currentDate = new Date().toISOString().slice(0, 10);
+
+                    // Set the value of the input field with id 'effectivedate'
+                    document.getElementById('effectivedate').value = currentDate;
 
 
                 }
-            });
-        });
-
-
-        function showHideDiv(id) {
-            var divId = "myDiv";
-            if ($('#checkbox_' + id).prop('checked')) {
-                $('#' + divId).show();
-                var currentDate = new Date().toISOString().slice(0, 10);
-
-                // Set the value of the input field with id 'effectivedate'
-                document.getElementById('effectivedate').value = currentDate;
-                $('#add_more').hide();
-
-            } else {
-                $('#' + divId).hide();
-                $('#chequeno').val("");
-                $('#description').val("");
 
 
             }
+        });
+    });
+
+    var base_url = $("#baseUrl2").val();
+
+    $.ajax({
+        type: "post",
+        url: base_url + 'bank/bank/getAllBanks',
+        data: {
+            chequeno: $('#chequeno').val(),
+            effectivedate: $('#effectivedate').val(),
+            chequereceiveddate: $('#chequereceiveddate').val(),
+            amount: $('#amount').val()
+        },
+        success: function(data1) {
+            banks = JSON.parse(data1);
+            var $banksDropdown = $('#banks_0');
+            $banksDropdown.empty(); // Clear existing options
+            $banksDropdown.append('<option value="" disabled selected>Select Bank</option>'); // Add default option
+            $.each(banks, function(index, bank) {
+                $banksDropdown.append('<option value="' + bank.id + '">' + bank.bankname + '</option>');
+            });
+
+
         }
-    </script>
+    });
+
+    $.ajax({
+        type: "post",
+        url: base_url + 'invoice/invoice/getAllCustomers',
+        data: {
+            chequeno: $('#chequeno').val(),
+            effectivedate: $('#effectivedate').val(),
+            chequereceiveddate: $('#chequereceiveddate').val(),
+            amount: $('#amount').val()
+        },
+        success: function(data1) {
+            var customers = JSON.parse(data1);
+            var $customerDropdown = $('#customer_id');
+            $customerDropdown.empty(); // Clear existing options
+            $customerDropdown.append('<option value="" disabled selected>Select Customer</option>'); // Add default option
+            $.each(customers, function(index, customer) {
+                $customerDropdown.append('<option value="' + customer.customer_id + '">' + customer.customer_name + '</option>');
+            });
+
+
+        }
+    });
+
+    function onChangeBank(id, selectElement) {
+        var selectedValue = selectElement.value;
+        $.ajax({
+            type: "post",
+            url: base_url + 'bank/bank/getBranchesById',
+            data: {
+                bank: selectedValue,
+            },
+            success: function(data1) {
+                var branches = JSON.parse(data1);
+                var $branchDropdown = $('#branch_' + id);
+                $branchDropdown.empty(); // Clear existing options
+                $branchDropdown.append('<option value="" disabled selected>Select Bank</option>'); // Add default option
+                $.each(branches, function(index, branch) {
+                    $branchDropdown.append('<option value="' + branch.id + '">' + branch.branchname + '</option>');
+                });
+
+
+            }
+        });
+    }
+
+
+    function showHideDiv(id) {
+        var divId = "myDiv";
+        if ($('#checkbox_' + id).prop('checked')) {
+            $('#' + divId).show();
+            var currentDate = new Date().toISOString().slice(0, 10);
+
+            // Set the value of the input field with id 'effectivedate'
+            document.getElementById('effectivedate').value = currentDate;
+            $('#add_more').hide();
+
+        } else {
+            $('#' + divId).hide();
+            $('#chequeno').val("");
+            $('#description').val("");
+
+
+        }
+    }
+</script>
